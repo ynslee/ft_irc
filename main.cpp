@@ -54,12 +54,11 @@ int serverSetup(char **av)
 // create socket: using serverinfo from get addrinfo() to call socket()
 	for (p = serverinfo; p != NULL; p = p->ai_next)
 	{
-		if ((socketfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol) == -1))
+		if ((socketfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1)
 			continue ;
-		// std::cout << "socket: " << strerror(errno) << std::endl;
 		std::cout << socketfd << std::endl;
 // to manage error “Address already in use.”
-		if (setsockopt(socketfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes) == -1))
+		if (setsockopt(socketfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)) == -1)
 		{
 			std::cerr << "Could not set socket to be reusable: error in setsockopt()" << strerror(errno) << std::endl;
 			return (-1);
