@@ -6,7 +6,7 @@
 /*   By: yoonslee <yoonslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:31:40 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/06 15:37:42 by yoonslee         ###   ########.fr       */
+/*   Updated: 2024/02/06 19:09:13 by yoonslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,12 @@ int Server::acceptPendingConnections(int socketfd, struct sockaddr_storage their
 	socklen_t addr_len;
 	int new_fd;
 	char s[INET6_ADDRSTRLEN];
+	std::vector<pollfd> pollfds;
+	pollfd server_pollfd;
 
+	server_pollfd.fd = socketfd;
+	std::cout << socketfd << std::endl;
+	server_pollfd.events = POLLIN;
 	while (1)
 	{
 		addr_len = sizeof(their_addr);
@@ -103,6 +108,8 @@ int Server::acceptPendingConnections(int socketfd, struct sockaddr_storage their
 			// std::perror("Could not create a newfd in accept()");
 			continue;
 		}
+		
+		std::cout << "hello " << new_fd << std::endl;
 		inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof(s));
 		std::cout << "Got connected with " << s << std::endl;
 		if (sendRecv(new_fd, socketfd) == -1)

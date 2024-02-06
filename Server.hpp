@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpelaez- <jpelaez-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: yoonslee <yoonslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:28:14 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/06 16:55:24 by jpelaez-         ###   ########.fr       */
+/*   Updated: 2024/02/06 19:13:32 by yoonslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 #include <signal.h>
 #include <errno.h>
 #include <csignal>
+#include <sys/poll.h>
 
 #define MAXCLIENTS 32
 
@@ -38,7 +39,7 @@ class Server
     private:
     std::string port;
     std::string password;
-        
+
     public:
     Server(std::string port, std::string password);
     Server();
