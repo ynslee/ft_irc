@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Server.hpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yoonslee <yoonslee@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/05 16:28:14 by jpelaez-          #+#    #+#             */
+/*   Updated: 2024/02/06 15:20:42 by yoonslee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
@@ -23,12 +35,14 @@
 class Server
 {
     private:
-    uint16_t port;
+    std::string port;
     std::string password;
         
     public:
-    Server(char **argv);
-    int serverSetup(char **argv);
+    Server(std::string port, std::string password);
+    Server();
+    ~Server();
+    int serverSetup(std::string prt, std::string password);
     int acceptPendingConnections(int socketfd, struct sockaddr_storage their_addr);
 };
 
