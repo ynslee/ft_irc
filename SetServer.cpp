@@ -6,7 +6,7 @@
 /*   By: yoonslee <yoonslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:31:40 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/06 19:09:13 by yoonslee         ###   ########.fr       */
+/*   Updated: 2024/02/06 19:51:45 by yoonslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,13 @@ int Server::acceptPendingConnections(int socketfd, struct sockaddr_storage their
 	server_pollfd.fd = socketfd;
 	std::cout << socketfd << std::endl;
 	server_pollfd.events = POLLIN;
+	pollfds.push_back(server_pollfd);
 	while (1)
 	{
+		if (poll((pollfd *)&pollfds[0], (unsigned int)pollfds.size(), 0) == -1){
+			std::cerr << "Error in poll()" << std::endl;
+			break;
+		}
 		addr_len = sizeof(their_addr);
 		new_fd = accept(socketfd, (struct sockaddr *)&their_addr, &addr_len); // ready to communicate on socket descriptor new_fd!
 		if (new_fd == -1)
@@ -108,13 +113,42 @@ int Server::acceptPendingConnections(int socketfd, struct sockaddr_storage their
 			// std::perror("Could not create a newfd in accept()");
 			continue;
 		}
-		
-		std::cout << "hello " << new_fd << std::endl;
-		inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof(s));
-		std::cout << "Got connected with " << s << std::endl;
-		if (sendRecv(new_fd, socketfd) == -1)
-			std::perror("Error in send()");
-		close(new_fd);
+		server_pollfd.fd = new_fd;
+		server_pollfd.events = POLLIN | POLLOUT;
+		pollfds.push_back(server_pollfd);
+		// inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof(s));
+		// std::cout << "Got connected with " << s << std::endl;
+		std::vector<pollfd>::iterator it = pollfds.begin();
+		while(1)
+		{
+			if(it->revents & POLLIN)
+			{
+				if (it->fd == socketfd){
+					if(pollfds.size() < MAXCLIENTS + 1)
+					{
+						server_pollfd.fd = new_fd;
+						server_pollfd.events = POLLIN | POLLOUT;
+						pollfds.push_back(server_pollfd);
+						continue;
+					}
+				}
+				else{
+					if (sendRecv(new_fd, socketfd) == -1){
+						std::perror("Error in send()");
+						break;
+					}
+				}
+			}
+			else if (it->revents & POLLOUT)
+			{
+				break ;
+			}
+			else if (it->revents & POLLERR)
+			{
+				break ;
+			}
+			it++;
+		}
 		return (0);
 		// else 
 		// 	break ;
@@ -129,36 +163,34 @@ int Server::sendRecv(int new_fd, int socketfd)
 {
 	// std::cout << "came to sendrecv()" << std::endl;
 	char buf[80];
-	std::cout << "new fd: " << new_fd << std::endl;
-	// std::cout << "socket fd: " << socketfd << std::endl;
-	std::cerr << std::strerror(errno) << '\n';
-	while (1)
-	{
-		int rc = recv(new_fd, buf, sizeof(buf), 0);
+	// std::cout << "new fd: " << new_fd << std::endl;
+	// // std::cout << "socket fd: " << socketfd << std::endl;
+	// std::cerr << std::strerror(errno) << '\n';
+	memset(buf, 0, sizeof(buf));
+	int readcount = recv(new_fd, buf, sizeof(buf), 0);
 		// std::cout << rc << " RC" << std::endl;
-		if (rc < 0)
+	if (readcount < 0)
+	{
+		if (errno != EWOULDBLOCK) // no data to read
 		{
-			if (errno != EWOULDBLOCK) // no data to read
-			{
-				std::cerr << "Error in recv()" << std::endl;
-				break ;
-			}
+			std::cerr << "Error in recv()" << std::endl;
+			return (-1);
 		}
-		if (rc == 0)
+	}
+	if (readcount == 0)
+	{
+		std::cerr << "Peer has closed connection" << std::endl;
+		return (1);
+	}
+	if (readcount > 0)
+	{
+		std::cout << buf << std::endl;
+		int len = readcount;
+		readcount = send(new_fd, buf, len, 0);
+		if (readcount == -1)
 		{
-			std::cerr << "Peer has closed connection" << std::endl;
-			return (1);
-		}
-		if (rc > 0)
-		{
-			std::cout << buf << std::endl;
-			int len = rc;
-			rc = send(new_fd, buf, len, 0);
-			if (rc == -1)
-			{
-				std::cerr << "Error in send()" << std::endl;
-				return (-1);
-			}
+			std::cerr << "Error in send()" << std::endl;
+			return (-1);
 		}
 	}
 	return (-1);
