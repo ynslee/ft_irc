@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SetServer.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpelaez- <jpelaez-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: yoonslee <yoonslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:31:40 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/06 14:04:17 by jpelaez-         ###   ########.fr       */
+/*   Updated: 2024/02/06 15:37:42 by yoonslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,26 +85,77 @@ int Server::serverSetup(std::string prt, std::string password)
 		std::cerr << "Error in listen()" << std::endl;
 		return (-1);
 	}
+	return (acceptPendingConnections(socketfd, their_addr));
+}
 
-// accept pending connections
+//accepting pending connections
+int Server::acceptPendingConnections(int socketfd, struct sockaddr_storage their_addr){
+	socklen_t addr_len;
+	int new_fd;
+	char s[INET6_ADDRSTRLEN];
+
 	while (1)
 	{
 		addr_len = sizeof(their_addr);
 		new_fd = accept(socketfd, (struct sockaddr *)&their_addr, &addr_len); // ready to communicate on socket descriptor new_fd!
 		if (new_fd == -1)
 		{
-			std::cout << "Could not create a newfd in accept()" << std::endl;
-			continue ;
+			// std::perror("Could not create a newfd in accept()");
+			continue;
 		}
-		else 
-			break ;
+		inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof(s));
+		std::cout << "Got connected with " << s << std::endl;
+		if (sendRecv(new_fd, socketfd) == -1)
+			std::perror("Error in send()");
+		close(new_fd);
+		return (0);
+		// else 
+		// 	break ;
 	}
-	inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof(s));
-	std::cout << "Got connected with " << s << std::endl;
+	// std::cout << "Got connected with " << s << std::endl;
 	std::cout << "Came at the end of server set up" << std::endl;
+	free(s);
 	return (0);
 }
 
+int Server::sendRecv(int new_fd, int socketfd)
+{
+	// std::cout << "came to sendrecv()" << std::endl;
+	char buf[80];
+	std::cout << "new fd: " << new_fd << std::endl;
+	// std::cout << "socket fd: " << socketfd << std::endl;
+	std::cerr << std::strerror(errno) << '\n';
+	while (1)
+	{
+		int rc = recv(new_fd, buf, sizeof(buf), 0);
+		// std::cout << rc << " RC" << std::endl;
+		if (rc < 0)
+		{
+			if (errno != EWOULDBLOCK) // no data to read
+			{
+				std::cerr << "Error in recv()" << std::endl;
+				break ;
+			}
+		}
+		if (rc == 0)
+		{
+			std::cerr << "Peer has closed connection" << std::endl;
+			return (1);
+		}
+		if (rc > 0)
+		{
+			std::cout << buf << std::endl;
+			int len = rc;
+			rc = send(new_fd, buf, len, 0);
+			if (rc == -1)
+			{
+				std::cerr << "Error in send()" << std::endl;
+				return (-1);
+			}
+		}
+	}
+	return (-1);
+}
 
 Server::Server(std::string port, std::string password): port(port), password(password)
 {
@@ -121,15 +172,17 @@ Server::Server(std::string port, std::string password): port(port), password(pas
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
+		return ;
 	}
 	try
 	{
-		if(password.empty())
-			throw std::runtime_error("Empty password");
+		if(password.empty() == true)
+			throw std::exception();
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
+		std::cerr << "password is empty" << '\n';
+		return ;
 	}
     try
 	{
@@ -139,15 +192,14 @@ Server::Server(std::string port, std::string password): port(port), password(pas
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
+		return ;
 	}
 }
 
 Server::Server(): port(), password()
 {
-	
 }
 
 Server::~Server()
 {
-	
 }
