@@ -6,7 +6,7 @@
 /*   By: jpelaez- <jpelaez-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:28:14 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/05 17:08:51 by jpelaez-         ###   ########.fr       */
+/*   Updated: 2024/02/06 13:43:52 by jpelaez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,14 @@
 class Server
 {
     private:
-    uint16_t port;
+    std::string port;
     std::string password;
         
     public:
-    Server(char **argv);
-    int serverSetup(char **argv);
+    Server(std::string port, std::string password);
+    Server();
+    ~Server();
+    int serverSetup(std::string prt, std::string password);
 };
 
 #endif

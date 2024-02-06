@@ -6,7 +6,7 @@
 /*   By: jpelaez- <jpelaez-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:31:40 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/05 16:48:38 by jpelaez-         ###   ########.fr       */
+/*   Updated: 2024/02/06 13:44:37 by jpelaez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void *get_in_addr(struct sockaddr *sa)
 	return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
-int Server::serverSetup(char **av)
+int Server::serverSetup(std::string prt, std::string password)
 {
 	int status, socketfd, new_fd;
 	struct addrinfo hints, *p;
@@ -31,7 +31,7 @@ int Server::serverSetup(char **av)
 
 	// std::cout << "av[1] " << av[1] << std::endl;
 	std::stringstream ss;
-	ss << av[1];
+	ss << prt;
 	std::string str = ss.str();
 	const char *port = str.c_str();
 	std::cout << "port " << port << std::endl;
@@ -106,16 +106,28 @@ int Server::serverSetup(char **av)
 }
 
 
-Server::Server(char **argv)
+Server::Server(std::string port, std::string password): port(port), password(password)
 {
     /// check some error stuff;
+
+    
     try
 	{
-		if (serverSetup(argv) < 0)
+		if (serverSetup(port,password) < 0)
 			std::cerr << "Could not set server up" << std::endl;
 	}
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
 	}
+}
+
+Server::Server(): port(port), password(password)
+{
+	
+}
+
+Server::~Server()
+{
+	
 }
