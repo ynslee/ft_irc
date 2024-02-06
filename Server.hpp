@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoonslee <yoonslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpelaez- <jpelaez-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:28:14 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/06 15:35:26 by yoonslee         ###   ########.fr       */
+/*   Updated: 2024/02/06 16:55:24 by jpelaez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 #include <arpa/inet.h>
 #include <signal.h>
 #include <errno.h>
+#include <csignal>
 
 #define MAXCLIENTS 32
 
