@@ -6,7 +6,7 @@
 /*   By: jpelaez- <jpelaez-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:31:40 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/06 13:44:37 by jpelaez-         ###   ########.fr       */
+/*   Updated: 2024/02/06 14:04:17 by jpelaez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,11 +110,31 @@ Server::Server(std::string port, std::string password): port(port), password(pas
 {
     /// check some error stuff;
 
-    
+	int port_number;
+
+	port_number = std::stoi(port);
+	try
+	{
+		if(port_number < 1024 || port_number > 65535)
+			throw std::runtime_error("Invalid port number");
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+	try
+	{
+		if(password.empty())
+			throw std::runtime_error("Empty password");
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
     try
 	{
 		if (serverSetup(port,password) < 0)
-			std::cerr << "Could not set server up" << std::endl;
+			throw std::runtime_error("Could not set server up");
 	}
 	catch(const std::exception& e)
 	{
@@ -122,7 +142,7 @@ Server::Server(std::string port, std::string password): port(port), password(pas
 	}
 }
 
-Server::Server(): port(port), password(password)
+Server::Server(): port(), password()
 {
 	
 }
