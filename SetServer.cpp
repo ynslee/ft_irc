@@ -6,7 +6,7 @@
 /*   By: yoonslee <yoonslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:31:40 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/07 15:10:46 by yoonslee         ###   ########.fr       */
+/*   Updated: 2024/02/07 15:18:22 by yoonslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,8 +150,6 @@ int Server::acceptPendingConnections(int socketfd, struct sockaddr_storage their
 							break;
 						}
 					}
-					else
-						std::perror("send: can't find client Id");
 				}
 			}
 			else if (it->revents & POLLERR)
@@ -211,7 +209,7 @@ int Server::send_msg(int new_fd)
 	int send_readcount = send(new_fd, msg, len, 0);
 	if (send_readcount == -1)
 	{
-		std::cerr << "Error in send()" << std::endl;
+		// std::cerr << "Error in send()" << std::endl;
 		return (-1);
 	}
 	std::cout << send_readcount << " bytes sent" << std::endl;
