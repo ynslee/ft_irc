@@ -6,7 +6,7 @@
 /*   By: yoonseonlee <yoonseonlee@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:31:40 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/08 00:32:31 by yoonseonlee      ###   ########.fr       */
+/*   Updated: 2024/02/08 00:36:31 by yoonseonlee      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int Server::serverSetup(std::string prt, std::string password)
 	poll_fd.fd = socketfd;	
 	poll_fd.events = POLLIN;
 	this->pfds.push_back(poll_fd);
-	std::cout << this->pfds[0].fd << std::endl;
+	std::cout << "listner socket is :" <<this->pfds[0].fd << std::endl;
 	return (0);
 }
 
@@ -163,7 +163,7 @@ int Server::acceptPendingConnections()
 	poll_fd.events = POLLIN | POLLOUT;
 	this->pfds.push_back(poll_fd);
 	inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof(s));
-	std::cout << "New conection from" << s << "on socket" << new_fd << std::endl;
+	std::cout << "New conection from" << s << "on socket :" << new_fd << std::endl;
 	this->pollfd_count = this->pfds.size();
 	return (0);
 }
