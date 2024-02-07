@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoonslee <yoonslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yoonseonlee <yoonseonlee@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:28:14 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/07 15:02:27 by yoonslee         ###   ########.fr       */
+/*   Updated: 2024/02/08 00:00:32 by yoonseonlee      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define SERVER_HPP
 
 #include <iostream>
-#include <string>
 #include <exception>
 #include <fstream>
 #include <sstream>
@@ -31,7 +30,7 @@
 #include <signal.h>
 #include <errno.h>
 #include <csignal>
-#include <sys/poll.h>
+#include <poll.h>
 
 #define MAXCLIENTS 32
 
@@ -40,19 +39,23 @@ class Server
     private:
     std::string port;
     std::string password;
-    int client_id;
-
-    public:
+    std::vector<struct pollfd> pfds;
+    int pollfd_count;
     std::string message;
+        
+    public:
     Server(std::string port, std::string password);
     Server();
     ~Server();
     const int getClientId();
     void    setClientId(const int id);
+    const std::string getMessage();
+    void    setMessage(const std::string msg);
     int serverSetup(std::string prt, std::string password);
-    int acceptPendingConnections(int socketfd, struct sockaddr_storage their_addr);
+    int acceptPendingConnections();
     int recieve_msg(int new_fd);
     int send_msg(int new_fd);
+    int poll_loop();
 };
 
 #endif
