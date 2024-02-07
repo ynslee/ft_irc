@@ -6,7 +6,7 @@
 /*   By: yoonslee <yoonslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:31:40 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/06 19:51:45 by yoonslee         ###   ########.fr       */
+/*   Updated: 2024/02/07 15:10:46 by yoonslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,80 +95,88 @@ int Server::acceptPendingConnections(int socketfd, struct sockaddr_storage their
 	char s[INET6_ADDRSTRLEN];
 	std::vector<pollfd> pollfds;
 	pollfd server_pollfd;
+	pollfd client_pollfd;
 
 	server_pollfd.fd = socketfd;
-	std::cout << socketfd << std::endl;
 	server_pollfd.events = POLLIN;
 	pollfds.push_back(server_pollfd);
 	while (1)
 	{
-		if (poll((pollfd *)&pollfds[0], (unsigned int)pollfds.size(), 0) == -1){
+		// std::cout << "pollfds size " << pollfds.size() << std::endl;
+		if (poll((pollfd *)&pollfds[0], pollfds.size(), 0) == -1){
 			std::cerr << "Error in poll()" << std::endl;
 			break;
 		}
-		addr_len = sizeof(their_addr);
-		new_fd = accept(socketfd, (struct sockaddr *)&their_addr, &addr_len); // ready to communicate on socket descriptor new_fd!
-		if (new_fd == -1)
-		{
-			// std::perror("Could not create a newfd in accept()");
-			continue;
-		}
-		server_pollfd.fd = new_fd;
-		server_pollfd.events = POLLIN | POLLOUT;
-		pollfds.push_back(server_pollfd);
 		// inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof(s));
 		// std::cout << "Got connected with " << s << std::endl;
 		std::vector<pollfd>::iterator it = pollfds.begin();
-		while(1)
+		while(it != pollfds.end())
 		{
-			if(it->revents & POLLIN)
+			// std::cout <<  "iterator pollfds' fd is " << it->fd << std::endl;
+			if(it->revents & (POLLIN))
 			{
+				// std::cout << "iterator pollfds' fd is " << it->fd << std::endl;
 				if (it->fd == socketfd){
 					if(pollfds.size() < MAXCLIENTS + 1)
 					{
-						server_pollfd.fd = new_fd;
-						server_pollfd.events = POLLIN | POLLOUT;
-						pollfds.push_back(server_pollfd);
-						continue;
+						addr_len = sizeof(their_addr);
+						new_fd = accept(socketfd, (struct sockaddr *)&their_addr, &addr_len); // ready to communicate on socket descriptor new_fd!
+						if (new_fd == -1)
+						{
+							// std::perror("Could not create a newfd in accept()");
+							continue;
+						}
+						fcntl(new_fd, F_SETFL, O_NONBLOCK);
+						std::cout << "new_fd is "  << new_fd << std::endl;
+						client_pollfd.fd = new_fd;
+						client_pollfd.events = POLLIN | POLLOUT;
+						pollfds.push_back(client_pollfd);
 					}
 				}
-				else{
-					if (sendRecv(new_fd, socketfd) == -1){
-						std::perror("Error in send()");
+				else
+				{
+					if (recieve_msg(it->fd) == -1){
+						// std::perror("Error in recv()");
 						break;
 					}
 				}
 			}
 			else if (it->revents & POLLOUT)
 			{
-				break ;
+				for (int i = 0; i < pollfds.size(); i++){
+					if (it->fd == getClientId()){
+						if (send_msg(it->fd) == -1){
+							// std::perror("Error in send()");
+							break;
+						}
+					}
+					else
+						std::perror("send: can't find client Id");
+				}
 			}
 			else if (it->revents & POLLERR)
 			{
-				break ;
+				return (-1);
 			}
 			it++;
 		}
-		return (0);
-		// else 
-		// 	break ;
 	}
 	// std::cout << "Got connected with " << s << std::endl;
 	std::cout << "Came at the end of server set up" << std::endl;
-	free(s);
+	// free(s);
 	return (0);
 }
 
-int Server::sendRecv(int new_fd, int socketfd)
+int Server::recieve_msg(int new_fd)
 {
 	// std::cout << "came to sendrecv()" << std::endl;
 	char buf[80];
-	// std::cout << "new fd: " << new_fd << std::endl;
-	// // std::cout << "socket fd: " << socketfd << std::endl;
-	// std::cerr << std::strerror(errno) << '\n';
+	int readcount;
+
 	memset(buf, 0, sizeof(buf));
-	int readcount = recv(new_fd, buf, sizeof(buf), 0);
-		// std::cout << rc << " RC" << std::endl;
+	this->message.clear();
+	readcount = recv(new_fd, buf, sizeof(buf), 0);
+	// std::cout << rc << " RC" << std::endl;
 	if (readcount < 0)
 	{
 		if (errno != EWOULDBLOCK) // no data to read
@@ -177,24 +185,41 @@ int Server::sendRecv(int new_fd, int socketfd)
 			return (-1);
 		}
 	}
-	if (readcount == 0)
+	else if (readcount == 0)
 	{
 		std::cerr << "Peer has closed connection" << std::endl;
 		return (1);
 	}
-	if (readcount > 0)
+	else
 	{
 		std::cout << buf << std::endl;
-		int len = readcount;
-		readcount = send(new_fd, buf, len, 0);
-		if (readcount == -1)
-		{
-			std::cerr << "Error in send()" << std::endl;
-			return (-1);
-		}
+		std::stringstream ss;
+		ss << buf;
+		ss >> this->message;
+		setClientId(new_fd);
+		return (0);
 	}
 	return (-1);
 }
+
+int Server::send_msg(int new_fd)
+{
+	if (this->message.empty() == true)
+		return (0);
+	int len = this->message.length();
+	const char *msg = this->message.c_str();
+	int send_readcount = send(new_fd, msg, len, 0);
+	if (send_readcount == -1)
+	{
+		std::cerr << "Error in send()" << std::endl;
+		return (-1);
+	}
+	std::cout << send_readcount << " bytes sent" << std::endl;
+	msg = NULL;
+	this->message.clear();
+	return (0);
+}
+
 
 Server::Server(std::string port, std::string password): port(port), password(password)
 {
@@ -241,4 +266,12 @@ Server::Server(): port(), password()
 
 Server::~Server()
 {
+}
+
+const int Server::getClientId(){
+	return(this->client_id);
+}
+
+void	Server::setClientId(const int id){
+	this->client_id = id;
 }

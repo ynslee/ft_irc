@@ -6,7 +6,7 @@
 /*   By: yoonslee <yoonslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:28:14 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/06 19:13:32 by yoonslee         ###   ########.fr       */
+/*   Updated: 2024/02/07 15:02:27 by yoonslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define SERVER_HPP
 
 #include <iostream>
+#include <string>
 #include <exception>
 #include <fstream>
 #include <sstream>
@@ -39,14 +40,19 @@ class Server
     private:
     std::string port;
     std::string password;
+    int client_id;
 
     public:
+    std::string message;
     Server(std::string port, std::string password);
     Server();
     ~Server();
+    const int getClientId();
+    void    setClientId(const int id);
     int serverSetup(std::string prt, std::string password);
     int acceptPendingConnections(int socketfd, struct sockaddr_storage their_addr);
-    int sendRecv(int new_fd, int socketfd);
+    int recieve_msg(int new_fd);
+    int send_msg(int new_fd);
 };
 
 #endif
