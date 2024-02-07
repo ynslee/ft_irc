@@ -6,7 +6,7 @@
 /*   By: yoonseonlee <yoonseonlee@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:28:14 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/08 00:00:32 by yoonseonlee      ###   ########.fr       */
+/*   Updated: 2024/02/08 00:25:44 by yoonseonlee      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ class Server
     std::vector<struct pollfd> pfds;
     int pollfd_count;
     std::string message;
+    int client_id;
         
     public:
     Server(std::string port, std::string password);
@@ -50,7 +51,7 @@ class Server
     const int getClientId();
     void    setClientId(const int id);
     const std::string getMessage();
-    void    setMessage(const std::string msg);
+    void    setMessage(const char* msg);
     int serverSetup(std::string prt, std::string password);
     int acceptPendingConnections();
     int recieve_msg(int new_fd);

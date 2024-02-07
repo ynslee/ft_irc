@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SetServer.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoonslee <yoonslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yoonseonlee <yoonseonlee@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:31:40 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/07 15:18:22 by yoonslee         ###   ########.fr       */
+/*   Updated: 2024/02/08 00:32:31 by yoonseonlee      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int Server::serverSetup(std::string prt, std::string password)
 	{
 		if ((socketfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1)
 			continue ;
-		std::cout << socketfd << std::endl;
+		// std::cout << socketfd << std::endl;
 // to manage error “Address already in use.”
 		if (setsockopt(socketfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)) == -1)
 		{
@@ -85,83 +85,86 @@ int Server::serverSetup(std::string prt, std::string password)
 		std::cerr << "Error in listen()" << std::endl;
 		return (-1);
 	}
-	return (acceptPendingConnections(socketfd, their_addr));
+	struct pollfd poll_fd;
+	poll_fd.fd = socketfd;	
+	poll_fd.events = POLLIN;
+	this->pfds.push_back(poll_fd);
+	std::cout << this->pfds[0].fd << std::endl;
+	return (0);
 }
 
-//accepting pending connections
-int Server::acceptPendingConnections(int socketfd, struct sockaddr_storage their_addr){
-	socklen_t addr_len;
-	int new_fd;
-	char s[INET6_ADDRSTRLEN];
-	std::vector<pollfd> pollfds;
-	pollfd server_pollfd;
-	pollfd client_pollfd;
-
-	server_pollfd.fd = socketfd;
-	server_pollfd.events = POLLIN;
-	pollfds.push_back(server_pollfd);
-	while (1)
+int Server::poll_loop()
+{
+	int poll_count;
+	this->pollfd_count =  this->pfds.size();
+	// std::cout << this->pollfd_count << std::endl;
+	
+	while(42)
 	{
-		// std::cout << "pollfds size " << pollfds.size() << std::endl;
-		if (poll((pollfd *)&pollfds[0], pollfds.size(), 0) == -1){
-			std::cerr << "Error in poll()" << std::endl;
-			break;
-		}
-		// inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof(s));
-		// std::cout << "Got connected with " << s << std::endl;
-		std::vector<pollfd>::iterator it = pollfds.begin();
-		while(it != pollfds.end())
+		poll_count = poll(&this->pfds[0], this->pollfd_count, 0);
+		if (poll_count == -1)
 		{
-			// std::cout <<  "iterator pollfds' fd is " << it->fd << std::endl;
-			if(it->revents & (POLLIN))
+			std::cerr << "Poll Error" << std::endl;
+			return (-1);
+		}
+		for(int i = 0; i < this->pollfd_count; i++)
+		{
+			if(this->pfds[i].revents & POLLIN)
 			{
-				// std::cout << "iterator pollfds' fd is " << it->fd << std::endl;
-				if (it->fd == socketfd){
-					if(pollfds.size() < MAXCLIENTS + 1)
+				if(this->pollfd_count < MAXCLIENTS + 1){
+					if(this->pfds[i].fd == this->pfds[0].fd)
 					{
-						addr_len = sizeof(their_addr);
-						new_fd = accept(socketfd, (struct sockaddr *)&their_addr, &addr_len); // ready to communicate on socket descriptor new_fd!
-						if (new_fd == -1)
-						{
-							// std::perror("Could not create a newfd in accept()");
-							continue;
-						}
-						fcntl(new_fd, F_SETFL, O_NONBLOCK);
-						std::cout << "new_fd is "  << new_fd << std::endl;
-						client_pollfd.fd = new_fd;
-						client_pollfd.events = POLLIN | POLLOUT;
-						pollfds.push_back(client_pollfd);
+						if(acceptPendingConnections())
+							return(-1);
 					}
-				}
-				else
-				{
-					if (recieve_msg(it->fd) == -1){
-						// std::perror("Error in recv()");
-						break;
-					}
-				}
+					else
+					{
+						if(recieve_msg(this->pfds[i].fd) == -1)
+							return(-1);
+					}	
+				}	
 			}
-			else if (it->revents & POLLOUT)
-			{
-				for (int i = 0; i < pollfds.size(); i++){
-					if (it->fd == getClientId()){
-						if (send_msg(it->fd) == -1){
+			else if (this->pfds[i].revents & POLLOUT){
+				for (int i = 0; i < this->pollfd_count; i++){
+					if (this->pfds[i].fd == getClientId()){
+						if (send_msg(this->pfds[i].fd) == -1){
 							// std::perror("Error in send()");
 							break;
 						}
-					}
+					}		
 				}
 			}
-			else if (it->revents & POLLERR)
+			else if (this->pfds[i].revents & POLLERR)
 			{
 				return (-1);
 			}
-			it++;
 		}
 	}
-	// std::cout << "Got connected with " << s << std::endl;
-	std::cout << "Came at the end of server set up" << std::endl;
-	// free(s);
+	return(0);
+}
+
+int Server::acceptPendingConnections()
+{
+	struct sockaddr_storage their_addr;
+	socklen_t addr_len;
+	int new_fd;
+	char s[INET6_ADDRSTRLEN];
+	struct pollfd poll_fd;
+	
+	addr_len = sizeof(their_addr);
+	new_fd = accept(this->pfds[0].fd, (struct sockaddr *)&their_addr, &addr_len); // ready to communicate on socket descriptor new_fd!
+	if (new_fd == -1)
+	{
+		std::perror("Could not create a newfd in accept()");
+		return(-1);
+	}
+	fcntl(new_fd, F_SETFL, O_NONBLOCK);
+	poll_fd.fd = new_fd;	
+	poll_fd.events = POLLIN | POLLOUT;
+	this->pfds.push_back(poll_fd);
+	inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof(s));
+	std::cout << "New conection from" << s << "on socket" << new_fd << std::endl;
+	this->pollfd_count = this->pfds.size();
 	return (0);
 }
 
@@ -191,9 +194,7 @@ int Server::recieve_msg(int new_fd)
 	else
 	{
 		std::cout << buf << std::endl;
-		std::stringstream ss;
-		ss << buf;
-		ss >> this->message;
+		setMessage(buf);
 		setClientId(new_fd);
 		return (0);
 	}
@@ -272,4 +273,8 @@ const int Server::getClientId(){
 
 void	Server::setClientId(const int id){
 	this->client_id = id;
+}
+
+void    Server::setMessage(const char* msg){
+	this->message = msg;
 }
