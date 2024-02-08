@@ -1,16 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   SetServer.cpp                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yoonslee <yoonslee@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/05 16:31:40 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/08 10:57:04 by yoonslee         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../includes/Server.hpp"
+
 
 void *get_in_addr(struct sockaddr *sa)
 {
@@ -203,8 +193,8 @@ int Server::send_msg(int new_fd)
 		// std::cerr << "Error in send()" << std::endl;
 		return (-1);
 	}
-	std::cout << send_readcount << " bytes sent" << std::endl;
-	msg = NULL;
+	// std::cout << send_readcount << " bytes sent" << std::endl;
+	// msg = NULL;
 	this->message.clear();
 	return (0);
 }
