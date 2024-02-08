@@ -6,7 +6,7 @@
 #    By: yoonslee <yoonslee@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 16:26:39 by jpelaez-          #+#    #+#              #
-#    Updated: 2024/02/07 08:24:22 by yoonslee         ###   ########.fr        #
+#    Updated: 2024/02/08 10:51:12 by yoonslee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,20 +14,27 @@ NAME = ft_irc
 
 SRC = main.cpp SetServer.cpp
 
-OBJECT = $(SRC:.cpp=.o)
-HEADER = Server.hpp\
+DIR_SRCS = srcs/
+DIR_OBJS = objs/
 
-FLAGS = -Wall -Wextra -Werror #-fsanitize=address
+OBJS = $(SRC:%.cpp=${DIR_OBJS}%.o)
+HEADER = Server.hpp
+
+FLAGS = -Wall -Wextra -Werror -MMD -MP -g3 -c #-fsanitize=address
 CC = c++
-INCLUDES = -Iincludes -I
+INCLUDES = -I includes/
 
 all: $(NAME)
 
-$(NAME): $(OBJECT) $(HEADER)
-		$(CC) $(INCLUDES) $(FLAGS) $(OBJECT) -o $(NAME)
+$(NAME): $(OBJS)
+		$(CC) $^ -o $@
+
+${OBJS} : ${DIR_OBJS}%.o : ${DIR_SRCS}%.cpp
+	mkdir -p ${DIR_OBJS}
+	${CC} ${FLAGS} ${INCLUDES} $< -o $@
 
 clean:
-	rm -f $(OBJECT) 
+	rm -rf ${DIR_OBJS} 
 
 fclean: clean
 	   rm -f $(NAME)

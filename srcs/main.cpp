@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jhusso <jhusso@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yoonslee <yoonslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:33:50 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/08 09:46:53 by jhusso           ###   ########.fr       */
+/*   Updated: 2024/02/08 10:48:08 by yoonslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#include "../includes/Server.hpp"
 
 void sig_handler(int signal)
 {

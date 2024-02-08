@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   SetServer.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jhusso <jhusso@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yoonslee <yoonslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:31:40 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/08 10:17:36 by jhusso           ###   ########.fr       */
+/*   Updated: 2024/02/08 10:57:04 by yoonslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#include "../includes/Server.hpp"
 
 void *get_in_addr(struct sockaddr *sa)
 {
@@ -19,15 +19,12 @@ void *get_in_addr(struct sockaddr *sa)
 	return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
-int Server::serverSetup(std::string prt, std::string password)
+int Server::serverSetup(std::string prt)
 {
-	int status, socketfd, new_fd;
+	int status, socketfd;
 	struct addrinfo hints, *p;
 	struct addrinfo *serverinfo;
-	struct sockaddr_storage their_addr;
-	socklen_t addr_len;
 	int yes = 1;
-	char s[INET6_ADDRSTRLEN];
 
 	const char *port = prt.c_str();
 	std::cout << "port " << port << std::endl;
@@ -241,7 +238,7 @@ Server::Server(std::string port, std::string password): port(port), password(pas
 	}
 	try
 	{
-		if (serverSetup(port,password) < 0)
+		if (serverSetup(port) < 0)
 			throw std::runtime_error("Could not set server up");
 	}
 	catch(const std::exception& e)
@@ -256,7 +253,7 @@ Server::~Server()
 {
 }
 
-const int Server::getClientId()
+int Server::getClientId()
 {
 	return(this->client_id);
 }
