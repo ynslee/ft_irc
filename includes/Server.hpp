@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jhusso <jhusso@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yoonslee <yoonslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:28:14 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/08 09:50:21 by jhusso           ###   ########.fr       */
+/*   Updated: 2024/02/08 10:55:00 by yoonslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,10 @@ class Server
 	public:
 		Server(std::string port, std::string password);
 		~Server();
-		const int getClientId();
+		int getClientId();
 		void setClientId(const int id);
 		void setMessage(const char* msg);
-		int serverSetup(std::string prt, std::string password);
+		int serverSetup(std::string prt);
 		int acceptPendingConnections();
 		int recieve_msg(int new_fd);
 		int send_msg(int new_fd);
