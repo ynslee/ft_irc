@@ -1,11 +1,7 @@
-#ifndef CLIENT_HPP
-# define CLIENT_HPP
 
-# include "Common.hpp"
+#include "Client.hpp"
 
-class Client{
-	private:
-		int				_client_fd;
+Client::Client(int new_fd): _client_fd(new_fd){
 		std::string		_readbuf;
 		std::string		_sendbuf;
 		bool			_to_deconnect;
@@ -16,13 +12,4 @@ class Client{
 		bool			_connection_password;
 		bool			_registrationDone;
 		bool			_welcomeSent;
-	
-	public:
-	Client(int fd);
-	~Client();
-
-	//write setters getters
-
-};
-
-#endif
+}
