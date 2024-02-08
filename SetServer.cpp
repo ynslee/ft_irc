@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SetServer.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoonseonlee <yoonseonlee@student.42.fr>    +#+  +:+       +#+        */
+/*   By: jhusso <jhusso@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:31:40 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/08 00:36:31 by yoonseonlee      ###   ########.fr       */
+/*   Updated: 2024/02/08 10:17:36 by jhusso           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,35 +23,28 @@ int Server::serverSetup(std::string prt, std::string password)
 {
 	int status, socketfd, new_fd;
 	struct addrinfo hints, *p;
-	struct addrinfo *serverinfo; // points to a linked list of results
+	struct addrinfo *serverinfo;
 	struct sockaddr_storage their_addr;
 	socklen_t addr_len;
 	int yes = 1;
 	char s[INET6_ADDRSTRLEN];
 
-	// std::cout << "av[1] " << av[1] << std::endl;
-	std::stringstream ss;
-	ss << prt;
-	std::string str = ss.str();
-	const char *port = str.c_str();
+	const char *port = prt.c_str();
 	std::cout << "port " << port << std::endl;
 
 // SETTING UP getaddrinfo()
-// that does all kinds of good stuff for you,
-// including DNS and service name lookups, and fills out the structs you need
-
 	std::memset(&hints, 0, sizeof(hints));	// to empty the struct
 	hints.ai_family = AF_UNSPEC;		// IPv4 or IPv6 agnostic
 	hints.ai_socktype = SOCK_STREAM;	// TCP sockets
 	hints.ai_flags = AI_PASSIVE;		// to fill in IP
-	if ((status = getaddrinfo(NULL, port, &hints, &serverinfo)) != 0) // error management!
+	if ((status = getaddrinfo(NULL, port, &hints, &serverinfo)) != 0)
 	{
 		std::cerr << "Error in getaddrinfo: " << gai_strerror(status) << std::endl;
 		return (-1);
 	}
 
-// loop trough possible socket addresess and coonect to first possible one
-// create socket: using serverinfo from get addrinfo() to call socket()
+// loop trough possible socket addresess and connect to first possible one
+// create socket
 	for (p = serverinfo; p != NULL; p = p->ai_next)
 	{
 		if ((socketfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1)
@@ -63,7 +56,6 @@ int Server::serverSetup(std::string prt, std::string password)
 			std::cerr << "Could not set socket to be reusable: error in setsockopt()" << strerror(errno) << std::endl;
 			return (-1);
 		}
-// set non-blocking flag and bind to an ip and port
 		fcntl(socketfd, F_SETFL, O_NONBLOCK);
 		if (bind(socketfd, serverinfo->ai_addr, serverinfo->ai_addrlen) == -1)
 		{
@@ -79,14 +71,13 @@ int Server::serverSetup(std::string prt, std::string password)
 		return (-1);
 	}
 
-// mark socket for listening IN A LOOP??
 	if (listen(socketfd, MAXCLIENTS) == -1)
 	{
 		std::cerr << "Error in listen()" << std::endl;
 		return (-1);
 	}
 	struct pollfd poll_fd;
-	poll_fd.fd = socketfd;	
+	poll_fd.fd = socketfd;
 	poll_fd.events = POLLIN;
 	this->pfds.push_back(poll_fd);
 	std::cout << "listner socket is :" <<this->pfds[0].fd << std::endl;
@@ -96,9 +87,9 @@ int Server::serverSetup(std::string prt, std::string password)
 int Server::poll_loop()
 {
 	int poll_count;
-	this->pollfd_count =  this->pfds.size();
+	this->pollfd_count = this->pfds.size();
 	// std::cout << this->pollfd_count << std::endl;
-	
+
 	while(42)
 	{
 		poll_count = poll(&this->pfds[0], this->pollfd_count, 0);
@@ -111,7 +102,8 @@ int Server::poll_loop()
 		{
 			if(this->pfds[i].revents & POLLIN)
 			{
-				if(this->pollfd_count < MAXCLIENTS + 1){
+				if(this->pollfd_count < MAXCLIENTS + 1)
+				{
 					if(this->pfds[i].fd == this->pfds[0].fd)
 					{
 						if(acceptPendingConnections())
@@ -121,17 +113,20 @@ int Server::poll_loop()
 					{
 						if(recieve_msg(this->pfds[i].fd) == -1)
 							return(-1);
-					}	
-				}	
+					}
+				}
 			}
 			else if (this->pfds[i].revents & POLLOUT){
-				for (int i = 0; i < this->pollfd_count; i++){
-					if (this->pfds[i].fd == getClientId()){
-						if (send_msg(this->pfds[i].fd) == -1){
+				for (int i = 0; i < this->pollfd_count; i++)
+				{
+					if (this->pfds[i].fd == getClientId())
+					{
+						if (send_msg(this->pfds[i].fd) == -1)
+						{
 							// std::perror("Error in send()");
 							break;
 						}
-					}		
+					}
 				}
 			}
 			else if (this->pfds[i].revents & POLLERR)
@@ -150,16 +145,16 @@ int Server::acceptPendingConnections()
 	int new_fd;
 	char s[INET6_ADDRSTRLEN];
 	struct pollfd poll_fd;
-	
+
 	addr_len = sizeof(their_addr);
-	new_fd = accept(this->pfds[0].fd, (struct sockaddr *)&their_addr, &addr_len); // ready to communicate on socket descriptor new_fd!
+	new_fd = accept(this->pfds[0].fd, (struct sockaddr *)&their_addr, &addr_len);
 	if (new_fd == -1)
 	{
 		std::perror("Could not create a newfd in accept()");
 		return(-1);
 	}
 	fcntl(new_fd, F_SETFL, O_NONBLOCK);
-	poll_fd.fd = new_fd;	
+	poll_fd.fd = new_fd;
 	poll_fd.events = POLLIN | POLLOUT;
 	this->pfds.push_back(poll_fd);
 	inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof(s));
@@ -170,14 +165,12 @@ int Server::acceptPendingConnections()
 
 int Server::recieve_msg(int new_fd)
 {
-	// std::cout << "came to sendrecv()" << std::endl;
 	char buf[80];
 	int readcount;
 
 	memset(buf, 0, sizeof(buf));
 	this->message.clear();
 	readcount = recv(new_fd, buf, sizeof(buf), 0);
-	// std::cout << rc << " RC" << std::endl;
 	if (readcount < 0)
 	{
 		if (errno != EWOULDBLOCK) // no data to read
@@ -222,8 +215,7 @@ int Server::send_msg(int new_fd)
 
 Server::Server(std::string port, std::string password): port(port), password(password)
 {
-    /// check some error stuff;
-
+	/// check some error stuff;
 	int port_number;
 
 	port_number = std::stoi(port);
@@ -234,7 +226,7 @@ Server::Server(std::string port, std::string password): port(port), password(pas
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
+		std::cerr << e.what() << std::endl;
 		return ;
 	}
 	try
@@ -244,37 +236,37 @@ Server::Server(std::string port, std::string password): port(port), password(pas
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << "password is empty" << '\n';
+		std::cerr << "password is empty" << std::endl;
 		return ;
 	}
-    try
+	try
 	{
 		if (serverSetup(port,password) < 0)
 			throw std::runtime_error("Could not set server up");
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
+		std::cerr << e.what() << std::endl;
 		return ;
 	}
 }
 
-Server::Server(): port(), password()
-{
-}
 
 Server::~Server()
 {
 }
 
-const int Server::getClientId(){
+const int Server::getClientId()
+{
 	return(this->client_id);
 }
 
-void	Server::setClientId(const int id){
+void Server::setClientId(const int id)
+{
 	this->client_id = id;
 }
 
-void    Server::setMessage(const char* msg){
+void Server::setMessage(const char* msg)
+{
 	this->message = msg;
 }

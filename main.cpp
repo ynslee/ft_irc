@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoonseonlee <yoonseonlee@student.42.fr>    +#+  +:+       +#+        */
+/*   By: jhusso <jhusso@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:33:50 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/08 00:29:18 by yoonseonlee      ###   ########.fr       */
+/*   Updated: 2024/02/08 09:46:53 by jhusso           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,17 @@ int main(int argc, char **argv)
 	}
 	signal(SIGINT, sig_handler);
 	Server New_server(argv[1], argv[2]);
-    try
+	try
 	{
 		if (New_server.poll_loop() < 0)
 			throw std::runtime_error("Poll");
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
+		std::cerr << e.what() << std::endl;
 		return (1);
 	}
 
-	// Should we pulling here?? 
+	// Should we pulling here??
 	return (0);
 }
