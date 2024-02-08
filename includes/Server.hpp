@@ -1,38 +1,9 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Server.hpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yoonslee <yoonslee@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/05 16:28:14 by jpelaez-          #+#    #+#             */
-/*   Updated: 2024/02/08 10:55:00 by yoonslee         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
-#include <iostream>
-#include <exception>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <algorithm>
-#include <iterator>
-#include <unistd.h>
-#include <sys/types.h>
-#include <netdb.h>
-#include <sys/socket.h>
-#include <sys/wait.h>
-#include <fcntl.h>
-#include <arpa/inet.h>
-#include <signal.h>
-#include <errno.h>
-#include <csignal>
-#include <poll.h>
-
-#define MAXCLIENTS 32
+# define MAXCLIENTS 32
+# include "Common.hpp"
 
 class Server
 {
