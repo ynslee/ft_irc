@@ -6,9 +6,8 @@
 class Client{
 	private:
 		int				_client_fd;
-		std::string		_readbuf;
-		std::string		_sendbuf;
-		bool			_to_deconnect;
+		char*			_readbuf;
+		char*			_sendbuf;
 		std::string		_nickname;
 		std::string		_username;
 		std::string		_realname;
