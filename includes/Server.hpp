@@ -7,6 +7,18 @@
 
 class Server
 {
+	enum coommand {
+		PASS,
+		NICK,
+		USER,
+		JOIN,
+		INVITE,
+		KICK,
+		TOPIC,
+		MODE
+		// what else?
+	} ;
+
 	private:
 		Server();
 		std::string port;
