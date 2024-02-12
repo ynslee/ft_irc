@@ -8,17 +8,11 @@ Client::Client(){};
  * @param new_fd socket fd
  * @param _mode mode for USER, CHANNEL
  */
-Client::Client(int new_fd): _client_fd(new_fd), _readbuf(NULL), _sendbuf(NULL){ 
+Client::Client(int new_fd): _client_fd(new_fd){ 
 		_registerationDone = false;
-		_to_deconnect = false;
 }
 
-Client::~Client(){
-	if(_readbuf)
-		delete(_readbuf);
-	if(_sendbuf)
-		delete(_sendbuf);
-}
+Client::~Client(){}
 
 Client::Client(Client const &other){
 	*this = other;
@@ -29,8 +23,6 @@ Client	&Client::operator=(Client const &other){
 	if (this != &other){
 		_nickname = other._nickname;
 		_username = other._username;
-		_readbuf = other._readbuf;
-		_sendbuf = other._sendbuf;
 		_mode = other._mode;
 	}
 }
@@ -43,5 +35,18 @@ void	Client::setNickName(std::string new_name)
 {
 	_nickname = new_name;
 }
-void	setUserName(std::string new_user);
-void	setRealName(std::string new_real);
+void	Client::setUserName(std::string new_user){
+	_username = new_user;
+}
+void	Client::setRealName(std::string new_real){
+	_realname = new_real;
+}
+
+void 	Client::setReadbuf(std::string buf){
+	_readbuf = buf;
+}
+
+const std::string	&Client::getNickName(void){return(_nickname);}
+const std::string	&Client::getUserName(void){return(_username);}
+const std::string	&Client::getRealName(void){return(_realname);}
+const int	&Client::getSocketFd(void){return(_client_fd);}

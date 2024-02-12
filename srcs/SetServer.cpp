@@ -1,4 +1,5 @@
 
+
 #include "../includes/Server.hpp"
 #include "../includes/Client.hpp"
 
@@ -135,6 +136,7 @@ int Server::acceptPendingConnections()
 	int new_fd;
 	char s[INET6_ADDRSTRLEN];
 	struct pollfd poll_fd;
+	// Client new_client(new_fd); 
 
 	addr_len = sizeof(their_addr);
 	new_fd = accept(this->pfds[0].fd, (struct sockaddr *)&their_addr, &addr_len);
@@ -146,10 +148,11 @@ int Server::acceptPendingConnections()
 	fcntl(new_fd, F_SETFL, O_NONBLOCK);
 	poll_fd.fd = new_fd;
 	poll_fd.events = POLLIN | POLLOUT;
-	Client new_client(new_fd);
+	// Client new_client(new_fd);
 	this->pfds.push_back(poll_fd);
 	inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof(s));
 	std::cout << "New conection from" << s << "on socket :" << new_fd << std::endl;
+	_clients.insert(std::make_pair(new_fd, new Client(new_fd)));
 	this->pollfd_count = this->pfds.size();
 	return (0);
 }
@@ -158,6 +161,7 @@ int Server::recieve_msg(int new_fd, int i)
 {
 	char buf[80];
 	int readcount;
+	std::string msg;
 
 	memset(buf, 0, sizeof(buf));
 	this->message.clear();
@@ -180,8 +184,19 @@ int Server::recieve_msg(int new_fd, int i)
 	else
 	{
 		std::cout << buf << std::endl;
-		setMessage(buf);
-		setClientId(new_fd);
+		std::map<int, Client*>::iterator it;
+		for(it=_clients.begin(); it!=_clients.end(); it++)
+		{
+			int key = it->first;
+			if(key == new_fd)
+			{
+				std::stringstream ss;
+				ss << buf;
+				ss >> msg;
+				it->second->setReadbuf(msg);
+				msg.clear();
+			}
+		}
 		return (0);
 	}
 	return (-1);

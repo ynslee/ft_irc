@@ -4,10 +4,13 @@
 
 # define MAXCLIENTS 32
 # include "Common.hpp"
+# include "Client.hpp"
+
+class Client;
 
 class Server
 {
-	enum coommand {
+	enum command {
 		PASS,
 		NICK,
 		USER,
@@ -17,7 +20,7 @@ class Server
 		TOPIC,
 		MODE
 		// what else?
-	} ;
+	};
 
 	private:
 		Server();
@@ -27,6 +30,7 @@ class Server
 		int pollfd_count;
 		std::string message;
 		int client_id;
+		std::map<int, Client*>	_clients;
 
 	public:
 		Server(std::string port, std::string password);
