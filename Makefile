@@ -6,11 +6,11 @@
 #    By: yoonslee <yoonslee@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 16:26:39 by jpelaez-          #+#    #+#              #
-#    Updated: 2024/02/08 10:51:12 by yoonslee         ###   ########.fr        #
+#    Updated: 2024/02/12 14:01:48 by yoonslee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = ft_irc
+NAME = ircserv
 
 SRC = main.cpp SetServer.cpp
 
