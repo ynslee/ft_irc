@@ -99,7 +99,7 @@ int Server::poll_loop()
 					}
 					else
 					{
-						if(recieve_msg(this->pfds[i].fd) == -1)
+						if(recieve_msg(this->pfds[i].fd, i) == -1)
 							return(-1);
 					}
 				}
@@ -123,6 +123,8 @@ int Server::poll_loop()
 			}
 		}
 	}
+	for(int i = 0; i < this->pollfd_count; i++)
+		close(this->pfds[i].fd);
 	return(0);
 }
 
@@ -152,7 +154,7 @@ int Server::acceptPendingConnections()
 	return (0);
 }
 
-int Server::recieve_msg(int new_fd)
+int Server::recieve_msg(int new_fd, int i)
 {
 	char buf[80];
 	int readcount;
@@ -165,13 +167,15 @@ int Server::recieve_msg(int new_fd)
 		if (errno != EWOULDBLOCK) // no data to read
 		{
 			std::cerr << "Error in recv()" << std::endl;
+			shut_down_server(i, new_fd);
 			return (-1);
 		}
 	}
 	else if (readcount == 0)
 	{
 		std::cerr << "Peer has closed connection" << std::endl;
-		return (1);
+		shut_down_server(i, new_fd);
+		return (0);
 	}
 	else
 	{

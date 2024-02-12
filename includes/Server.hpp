@@ -24,9 +24,10 @@ class Server
 		void setMessage(const char* msg);
 		int serverSetup(std::string prt);
 		int acceptPendingConnections();
-		int recieve_msg(int new_fd);
+		int recieve_msg(int new_fd, int i);
 		int send_msg(int new_fd);
 		int poll_loop();
+		void shut_down_server(int i, int fd);
 };
 
 #endif
