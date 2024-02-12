@@ -18,8 +18,38 @@
  * @param new_fd socket fd
  * @param _mode mode for USER, CHANNEL
  */
+
+Client::Client(){};
+
 Client::Client(int new_fd): _client_fd(new_fd), _readbuf(NULL), _sendbuf(NULL){ 
-		_connection_password = false;
+		_password = false;
 		_registrationDone = false;
 		_welcomeSent = false;
 }
+
+Client::~Client(){
+	if(_readbuf)
+		delete(_readbuf);
+	if(_sendbuf)
+		delete(_sendbuf);
+}
+
+Client::Client(Client const &other){
+	*this = other;
+}
+
+//What do we want to copy using assignment operator?
+Client	&Client::operator=(Client const &other){
+	if (this != &other){
+		_nickname = other._nickname;
+		_username = other._username;
+		_readbuf = other._readbuf;
+		_sendbuf = other._sendbuf;
+		_mode = other._mode;
+	}
+}
+
+void	Client::setSocketFd(int new_fd){
+	_client_fd = new_fd;
+}
+
