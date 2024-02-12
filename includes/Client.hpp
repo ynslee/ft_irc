@@ -5,16 +5,7 @@
 
 class Client{
 	private:
-		int				_client_fd;
-		char*			_readbuf;
-		char*			_sendbuf;
-		std::string		_nickname;
-		std::string		_username;
-		std::string		_realname;
-		std::string		_mode;
-		bool			_password;
-		bool			_registrationDone;
-		bool			_welcomeSent;
+ 
 	
 	public:
 	Client();

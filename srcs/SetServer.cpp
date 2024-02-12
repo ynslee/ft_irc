@@ -180,7 +180,7 @@ int Server::recieve_msg(int new_fd, int i)
 	else
 	{
 		std::cout << buf << std::endl;
-		setMessage(buf);
+		parsing(buf);
 		setClientId(new_fd);
 		return (0);
 	}
@@ -259,7 +259,13 @@ void Server::setClientId(const int id)
 	this->client_id = id;
 }
 
-void Server::setMessage(const char* msg)
+void Server::parsing(const char* msg)
 {
 	this->message = msg;
+
+	// Split 
+
+	// Command Comm(string[0])
+
+	
 }

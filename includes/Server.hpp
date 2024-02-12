@@ -7,7 +7,7 @@
 
 class Server
 {
-	enum coommand {
+	enum command {
 		PASS,
 		NICK,
 		USER,
@@ -15,7 +15,12 @@ class Server
 		INVITE,
 		KICK,
 		TOPIC,
-		MODE
+		MODE,
+		MOTD,
+		PRIVMSG,
+		WHOIS,
+		KILL,
+		OPER,
 		// what else?
 	} ;
 
@@ -33,7 +38,7 @@ class Server
 		~Server();
 		int getClientId();
 		void setClientId(const int id);
-		void setMessage(const char* msg);
+		void parsing(const char* msg);
 		int serverSetup(std::string prt);
 		int acceptPendingConnections();
 		int recieve_msg(int new_fd, int i);
