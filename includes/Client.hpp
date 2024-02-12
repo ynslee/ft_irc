@@ -13,13 +13,20 @@ class Client{
 		std::string		_username;
 		std::string		_realname;
 		std::string		_mode;
-		bool			_connection_password;
-		bool			_registrationDone;
-		bool			_welcomeSent;
+		bool			_registerationDone;
+		Client();
+		Client(Client const &other);
+		Client	&Client::operator=(Client const &other);
 	
 	public:
-	Client();
+	Client(int new_fd);
 	~Client();
+
+	void	setSocketFd(int new_fd);
+	void	setNickName(std::string new_name);
+	void	setUserName(std::string new_user);
+	void	setRealName(std::string new_real);
+
 
 };
 
