@@ -6,9 +6,8 @@
 class Client{
 	private:
 		int				_client_fd;
-		std::string		_readbuf;
-		std::string		_sendbuf;
-		bool			_to_deconnect;
+		char*			_readbuf;
+		char*			_sendbuf;
 		std::string		_nickname;
 		std::string		_username;
 		std::string		_realname;
@@ -21,6 +20,19 @@ class Client{
 	public:
 	Client(int new_fd);
 	~Client();
+	Client	&operator=(Client const &other);
+
+	void	setSocketFd(int new_fd);
+	void	setNickName(std::string nickname);
+	void	setUserName(std::string _username);
+
+	//write setters getters
+
+	void	setSocketFd(int new_fd);
+	void	setNickName(std::string new_name);
+	void	setUserName(std::string new_user);
+	void	setRealName(std::string new_real);
+
 
 	void	setSocketFd(int new_fd);
 	void	setNickName(std::string new_name);
