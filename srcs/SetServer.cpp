@@ -98,11 +98,11 @@ int Server::poll_loop()
 						if(acceptPendingConnections())
 							return(-1);
 					}
-					else
-					{
-						if(recieve_msg(this->pfds[i].fd, i) == -1)
+				}
+				else
+				{
+					if(recieve_msg(this->pfds[i].fd, i) == -1)
 							return(-1);
-					}
 				}
 			}
 			else if (this->pfds[i].revents & POLLOUT){
@@ -161,7 +161,6 @@ int Server::recieve_msg(int new_fd, int i)
 {
 	char buf[80];
 	int readcount;
-	std::string msg;
 
 	memset(buf, 0, sizeof(buf));
 	this->message.clear();
@@ -184,19 +183,9 @@ int Server::recieve_msg(int new_fd, int i)
 	else
 	{
 		std::cout << buf << std::endl;
-		std::map<int, Client*>::iterator it;
-		for(it=_clients.begin(); it!=_clients.end(); it++)
-		{
-			int key = it->first;
-			if(key == new_fd)
-			{
-				std::stringstream ss;
-				ss << buf;
-				ss >> msg;
-				it->second->setReadbuf(msg);
-				msg.clear();
-			}
-		}
+		setClientId(new_fd);
+		setMessage(buf);
+		// we start parsing here
 		return (0);
 	}
 	return (-1);
@@ -272,9 +261,30 @@ int Server::getClientId()
 void Server::setClientId(const int id)
 {
 	this->client_id = id;
+	std::map<int, Client*>::iterator it;
+	for(it=_clients.begin(); it!=_clients.end(); it++)
+	{
+		int key = it->first;
+		if(key == id)
+			it->second->setSocketFd(id);
+	}
 }
 
 void Server::setMessage(const char* msg)
 {
 	this->message = msg;
+	std::map<int, Client*>::iterator it;
+	for(it=_clients.begin(); it!=_clients.end(); it++)
+	{
+		int key = it->first;
+		if(key == this->client_id)
+		{
+			std::stringstream ss;
+			std::string buf;
+			ss << msg;
+			ss >> buf;
+			it->second->setReadbuf(buf);
+			buf.clear();
+		}
+	}
 }
