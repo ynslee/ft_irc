@@ -1,5 +1,6 @@
 
 #include "../includes/Server.hpp"
+#include "../includes/Client.hpp"
 
 
 void *get_in_addr(struct sockaddr *sa)
@@ -145,6 +146,7 @@ int Server::acceptPendingConnections()
 	fcntl(new_fd, F_SETFL, O_NONBLOCK);
 	poll_fd.fd = new_fd;
 	poll_fd.events = POLLIN | POLLOUT;
+	Client new_client(new_fd);
 	this->pfds.push_back(poll_fd);
 	inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof(s));
 	std::cout << "New conection from" << s << "on socket :" << new_fd << std::endl;
