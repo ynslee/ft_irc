@@ -12,10 +12,11 @@ class Client{
 		std::string		_username;
 		std::string		_realname;
 		std::string		_mode;
+		std::string		_IPaddress;
 		bool			_registerationDone;
 		Client();
 		Client(Client const &other);
-		Client	&Client::operator=(Client const &other);
+		Client	&operator=(Client const &other);
 	
 	public:
 		Client(int new_fd);
@@ -27,10 +28,17 @@ class Client{
 		void	setUserName(std::string new_user);
 		void	setRealName(std::string new_real);
 		void	setReadbuf(std::string buf);
+		void	setSendbuf(std::string buf);
+		void	setMode(std::string mode);
+		void	setIPaddress(char *ip);
 		const std::string	&getNickName(void);
 		const std::string	&getUserName(void);
 		const std::string	&getRealName(void);
 		const int	&getSocketFd(void);
+		const std::string	&getReadbuf(void);
+		const std::string	&getSendbuf(void);
+		const std::string	&getIPaddress(void);
+		const std::string	&getMode(void);
 };
 
 #endif

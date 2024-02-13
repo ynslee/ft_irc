@@ -28,7 +28,6 @@ class Server
 		std::string password;
 		std::vector<struct pollfd> pfds;
 		int pollfd_count;
-		std::string message;
 		int client_id;
 		std::map<int, Client*>	_clients;
 
@@ -43,7 +42,7 @@ class Server
 		int recieve_msg(int new_fd, int i);
 		int send_msg(int new_fd);
 		int poll_loop();
-		void shut_down_server(int i, int fd);
+		void close_client(int i, int fd);
 };
 
 #endif

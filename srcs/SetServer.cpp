@@ -91,13 +91,10 @@ int Server::poll_loop()
 		{
 			if(this->pfds[i].revents & POLLIN)
 			{
-				if(this->pollfd_count < MAXCLIENTS + 1)
+				if(this->pfds[i].fd == this->pfds[0].fd)
 				{
-					if(this->pfds[i].fd == this->pfds[0].fd)
-					{
-						if(acceptPendingConnections())
-							return(-1);
-					}
+					if(acceptPendingConnections())
+						return(-1);
 				}
 				else
 				{
@@ -146,13 +143,21 @@ int Server::acceptPendingConnections()
 		return(-1);
 	}
 	fcntl(new_fd, F_SETFL, O_NONBLOCK);
-	poll_fd.fd = new_fd;
-	poll_fd.events = POLLIN | POLLOUT;
-	// Client new_client(new_fd);
-	this->pfds.push_back(poll_fd);
+	if(this->pollfd_count < MAXCLIENTS + 1)
+	{
+		poll_fd.fd = new_fd;
+		poll_fd.events = POLLIN | POLLOUT;
+		this->pfds.push_back(poll_fd);
+	}
+	else
+	{
+		send(new_fd, "[IRCSERV] You cannot join, the server is already full", 53, 0);
+		close(new_fd);
+	}
 	inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof(s));
 	std::cout << "New conection from" << s << "on socket :" << new_fd << std::endl;
 	_clients.insert(std::make_pair(new_fd, new Client(new_fd)));
+	_clients[new_fd]->setIPaddress(s);
 	this->pollfd_count = this->pfds.size();
 	return (0);
 }
@@ -163,21 +168,20 @@ int Server::recieve_msg(int new_fd, int i)
 	int readcount;
 
 	memset(buf, 0, sizeof(buf));
-	this->message.clear();
 	readcount = recv(new_fd, buf, sizeof(buf), 0);
 	if (readcount < 0)
 	{
 		if (errno != EWOULDBLOCK) // no data to read
 		{
 			std::cerr << "Error in recv()" << std::endl;
-			shut_down_server(i, new_fd);
+			close_client(i, new_fd);
 			return (-1);
 		}
 	}
 	else if (readcount == 0)
 	{
 		std::cerr << "Peer has closed connection" << std::endl;
-		shut_down_server(i, new_fd);
+		close_client(i, new_fd);
 		return (0);
 	}
 	else
@@ -193,11 +197,24 @@ int Server::recieve_msg(int new_fd, int i)
 
 int Server::send_msg(int new_fd)
 {
-	if (this->message.empty() == true)
-		return (0);
-	int len = this->message.length();
-	const char *msg = this->message.c_str();
-	int send_readcount = send(new_fd, msg, len, 0);
+	std::string message;
+
+	std::map<int, Client*>::iterator it;
+	for(it=_clients.begin(); it!=_clients.end(); it++)
+	{
+		int key = it->first;
+		if(key == new_fd)
+		{
+			message = it->second->getSendbuf();
+			break;
+		}
+	}
+	if (message.empty())
+	{
+		return (-1);
+	}
+	int len = message.length();
+	int send_readcount = send(new_fd, message.c_str(), len, 0);
 	if (send_readcount == -1)
 	{
 		// std::cerr << "Error in send()" << std::endl;
@@ -205,7 +222,7 @@ int Server::send_msg(int new_fd)
 	}
 	// std::cout << send_readcount << " bytes sent" << std::endl;
 	// msg = NULL;
-	this->message.clear();
+	_clients[new_fd]->setSendbuf("");
 	return (0);
 }
 
@@ -251,6 +268,11 @@ Server::Server(std::string port, std::string password): port(port), password(pas
 
 Server::~Server()
 {
+	std::map<int, Client*>::iterator it;
+	for(it=_clients.begin(); it!=_clients.end(); it++)
+	{
+		delete it->second;
+	}
 }
 
 int Server::getClientId()
@@ -261,28 +283,20 @@ int Server::getClientId()
 void Server::setClientId(const int id)
 {
 	this->client_id = id;
-	std::map<int, Client*>::iterator it;
-	for(it=_clients.begin(); it!=_clients.end(); it++)
-	{
-		int key = it->first;
-		if(key == id)
-			it->second->setSocketFd(id);
-	}
 }
 
 void Server::setMessage(const char* msg)
 {
-	this->message = msg;
+	std::string buf;
+
 	std::map<int, Client*>::iterator it;
 	for(it=_clients.begin(); it!=_clients.end(); it++)
 	{
 		int key = it->first;
 		if(key == this->client_id)
 		{
-			std::stringstream ss;
-			std::string buf;
-			ss << msg;
-			ss >> buf;
+
+			buf.assign(msg);
 			it->second->setReadbuf(buf);
 			buf.clear();
 		}
