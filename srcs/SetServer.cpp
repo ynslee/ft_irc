@@ -188,7 +188,7 @@ int Server::recieve_msg(int client_fd, int i)
 		setClientId(client_fd);
 		setMessage(buf);
 		std::cout << buf << std::endl;
-		if(parseMessage(new_fd))
+		if(parseMessage(client_fd))
 			return(-1);// we start parsing here
 		return (0);
 	}
@@ -208,6 +208,10 @@ int Server::parseMessage(int client_fd)
 			break ;
 		case command::NICK:
 			if(cmd_nick(msg,client_fd))
+				return(-1);
+			break ;
+		case command::USER:
+			if(cmd_user(msg,client_fd))
 				return(-1);
 			break ;
 	}

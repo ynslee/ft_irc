@@ -23,6 +23,7 @@ class Client;
 		WHOIS,
 		KILL,
 		OPER,
+		INVALID,
 		// what else?
 	};
 
