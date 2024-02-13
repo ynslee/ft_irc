@@ -10,7 +10,7 @@ Client::Client(){};
  */
 Client::Client(int new_fd): _client_fd(new_fd)
 { 
-	_registerationDone = false;
+	_registeration = false;
 }
 
 Client::~Client(){}
@@ -66,6 +66,11 @@ void	Client::setMode(std::string mode)
 void	Client::setIPaddress(char *ip)
 {
 	_IPaddress.assign(ip);
+}
+
+void	Client::setRegisteration(bool reg)
+{
+	_registerationDone = reg;
 }
 
 const std::string	&Client::getNickName(void){return(_nickname);}

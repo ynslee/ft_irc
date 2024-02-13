@@ -198,12 +198,20 @@ int Server::recieve_msg(int new_fd, int i)
 int Server::send_msg(int client_fd)
 {
 	std::string message;
+	static int flag = 1;
 
 	std::map<int, Client*>::iterator it;
 	for(it=_clients.begin(); it!=_clients.end(); it++)
 	{
 		int key = it->first;
-		if(key == client_fd)
+		if(key == client_fd && flag)
+		{
+			message = ":" + it->second->getIPaddress() + " CAP * LS ";
+			send(client_fd, message.c_str(), message.length(), 0);
+			flag = 0;
+			return (0);
+		}
+		else if (key == client_fd && !flag)
 		{
 			message = it->second->getSendbuf();
 			break;
