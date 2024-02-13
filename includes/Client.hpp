@@ -21,7 +21,7 @@ class Client{
 		Client();
 		Client(Client const &other);
 		Client	&operator=(Client const &other);
-	
+
 	public:
 		Client(int new_fd);
 		~Client();

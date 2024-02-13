@@ -1,7 +1,7 @@
 
 NAME = ircserv
 
-SRC = main.cpp SetServer.cpp Client.cpp SetServer_utils.cpp
+SRC = main.cpp SetServer.cpp Client.cpp SetServer_utils.cpp Message.cpp
 
 DIR_SRCS = srcs/
 DIR_OBJS = objs/
@@ -23,7 +23,7 @@ ${OBJS} : ${DIR_OBJS}%.o : ${DIR_SRCS}%.cpp
 	${CC} ${FLAGS} ${INCLUDES} $< -o $@
 
 clean:
-	rm -rf ${DIR_OBJS} 
+	rm -rf ${DIR_OBJS}
 
 fclean: clean
 	   rm -f $(NAME)

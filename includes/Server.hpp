@@ -5,11 +5,10 @@
 # define MAXCLIENTS 32
 # include "Common.hpp"
 # include "Client.hpp"
+# include "Message.hpp"
 
 class Client;
 
-class Server
-{
 	enum command {
 		PASS,
 		NICK,
@@ -27,6 +26,8 @@ class Server
 		// what else?
 	};
 
+class Server
+{
 	private:
 		Server();
 		std::string port;
@@ -41,7 +42,6 @@ class Server
 		~Server();
 		int getClientId();
 		void setClientId(const int id);
-		void parsing(const char* msg, int );
 		int serverSetup(std::string prt);
 		int acceptPendingConnections();
 		int recieve_msg(int new_fd, int i);
@@ -49,6 +49,7 @@ class Server
 		int poll_loop();
 		void close_client(int i, int fd);
 		void setMessage(const char* msg);
+		void parseMessage(int client_fd);
 };
 
 #endif
