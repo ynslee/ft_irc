@@ -197,6 +197,7 @@ void Server::parseMessage(char *messageBuffer, int client_fd)
 {
 	std::string input(messageBuffer);
 	Message msg(input);
+	
 }
 
 int Server::send_msg(int client_fd)
