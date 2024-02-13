@@ -20,5 +20,6 @@
 #include <csignal>
 #include <poll.h>
 #include <map>
+#include <vector>
 
 #endif
