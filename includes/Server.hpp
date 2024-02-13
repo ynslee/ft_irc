@@ -20,6 +20,7 @@ class Client;
 		MODE
 		// what else?
 	};
+
 class Server
 {
 
@@ -44,7 +45,7 @@ class Server
 		int send_msg(int send_fd);
 		int poll_loop();
 		void close_client(int i, int fd);
-		void parseMessage(char *messageBuffer, int client_fd);
+		void parseMessage(int client_fd);
 };
 
 #endif

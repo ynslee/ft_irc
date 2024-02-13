@@ -185,19 +185,19 @@ int Server::recieve_msg(int new_fd, int i)
 	else
 	{
 		setClientId(new_fd);
-		setMessage(buf); // here we wait for the /r/n
+		setMessage(buf);
 		std::cout << buf << std::endl;
-		parseMessage(buf, new_fd);// we start parsing here
+		parseMessage(new_fd);// we start parsing here
 		return (0);
 	}
 	return (-1);
 }
 
-void Server::parseMessage(char *messageBuffer, int client_fd)
+void Server::parseMessage(int client_fd)
 {
-	std::string input(messageBuffer);
+	std::string input(_clients[client_fd]->getReadbuf());
 	Message msg(input);
-	
+
 }
 
 int Server::send_msg(int client_fd)
