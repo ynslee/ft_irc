@@ -1,0 +1,65 @@
+<< CAP LS 302
+<< JOIN :
+>> :zirconium.libera.chat NOTICE * :*** Checking Ident
+>> :zirconium.libera.chat NOTICE * :*** Looking up your hostname...
+>> :zirconium.libera.chat NOTICE * :*** Couldn't look up your hostname
+>> :zirconium.libera.chat NOTICE * :*** No Ident response
+>> :zirconium.libera.chat CAP * LS :account-notify away-notify chghost extended-join multi-prefix sasl=PLAIN,ECDSA-NIST256P-CHALLENGE,EXTERNAL tls account-tag cap-notify echo-message server-time solanum.chat/identify-msg solanum.chat/oper solanum.chat/realhost
+<< CAP REQ :multi-prefix extended-join away-notify chghost account-notify server-time
+>> :zirconium.libera.chat 451 * :You have not registered
+>> :zirconium.libera.chat CAP * ACK :multi-prefix extended-join away-notify chghost account-notify server-time
+<< CAP END
+<< NICK jpelaez-
+<< USER jpelaez- jpelaez- irc.libera.chat :Juan Esteban Pelaez Hoyos
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 001 jpelaez- :Welcome to the Libera.Chat Internet Relay Chat Network jpelaez-
+<< MODE jpelaez- +i
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 002 jpelaez- :Your host is zirconium.libera.chat[46.16.175.175/6697], running version solanum-1.0-dev
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 003 jpelaez- :This server was created Fri Nov 17 2023 at 08:47:16 UTC
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 004 jpelaez- zirconium.libera.chat solanum-1.0-dev DGIMQRSZaghilopsuwz CFILMPQRSTbcefgijklmnopqrstuvz bkloveqjfI
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 005 jpelaez- ACCOUNTEXTBAN=a ETRACE WHOX FNC MONITOR=100 SAFELIST ELIST=CMNTU CALLERID=g KNOCK CHANTYPES=# EXCEPTS INVEX :are supported by this server
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 005 jpelaez- CHANMODES=eIbq,k,flj,CFLMPQRSTcgimnprstuz CHANLIMIT=#:250 PREFIX=(ov)@+ MAXLIST=bqeI:100 MODES=4 NETWORK=Libera.Chat STATUSMSG=@+ CASEMAPPING=rfc1459 NICKLEN=16 MAXNICKLEN=16 CHANNELLEN=50 TOPICLEN=390 :are supported by this server
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 005 jpelaez- DEAF=D TARGMAX=NAMES:1,LIST:1,KICK:1,WHOIS:1,PRIVMSG:4,NOTICE:4,ACCEPT:,MONITOR: EXTBAN=$,agjrxz :are supported by this server
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 251 jpelaez- :There are 63 users and 35257 invisible on 28 servers
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 252 jpelaez- 37 :IRC Operators online
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 253 jpelaez- 193 :unknown connection(s)
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 254 jpelaez- 22802 :channels formed
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 255 jpelaez- :I have 2316 clients and 1 servers
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 265 jpelaez- 2316 2360 :Current local users 2316, max 2360
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 266 jpelaez- 35320 35347 :Current global users 35320, max 35347
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 250 jpelaez- :Highest connection count: 2361 (2360 clients) (14024 connections received)
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 375 jpelaez- :- zirconium.libera.chat Message of the Day - 
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 372 jpelaez- :- This server provided by Seeweb <https://www.seeweb.it/>
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 372 jpelaez- :- Welcome to Libera Chat, the IRC network for
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 372 jpelaez- :- free & open-source software and peer directed projects.
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 372 jpelaez- :-  
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 372 jpelaez- :- Use of Libera Chat is governed by our network policies.
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 372 jpelaez- :-  
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 372 jpelaez- :- To reduce network abuses we perform open proxy checks
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 372 jpelaez- :- on hosts at connection time.
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 372 jpelaez- :-  
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 372 jpelaez- :- Please visit us in #libera for questions and support.
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 372 jpelaez- :-  
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 372 jpelaez- :- Website and documentation:  https://libera.chat
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 372 jpelaez- :- Webchat:                    https://web.libera.chat
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 372 jpelaez- :- Network policies:           https://libera.chat/policies
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 372 jpelaez- :- Email:                      support@libera.chat
+>> @time=2024-02-13T14:53:06.189Z :zirconium.libera.chat 376 jpelaez- :End of /MOTD command.
+>> @time=2024-02-13T14:53:06.189Z :jpelaez- MODE jpelaez- :+Ziw
+<< PING zirconium.libera.chat
+>> @time=2024-02-13T14:53:12.187Z :zirconium.libera.chat PONG zirconium.libera.chat :zirconium.libera.chat
+--> lag pong
+<< NICK juan
+>> @time=2024-02-13T14:53:28.106Z :jpelaez-!~jpelaez-@194.136.126.51 NICK :juan
+>> @time=2024-02-13T14:53:28.118Z :NickServ!NickServ@services.libera.chat NOTICE juan :This nickname is registered. Please choose a different nickname, or identify via /msg NickServ IDENTIFY Juan <password>
+>> @time=2024-02-13T14:53:28.119Z :NickServ!NickServ@services.libera.chat NOTICE juan :You have 30 seconds to identify to your nickname before it is changed.
+<< NICK juaneeeee
+>> @time=2024-02-13T14:53:40.011Z :juan!~jpelaez-@194.136.126.51 NICK :juaneeeee
+<< PING zirconium.libera.chat
+>> @time=2024-02-13T14:54:12.893Z :zirconium.libera.chat PONG zirconium.libera.chat :zirconium.libera.chat
+--> lag pong
+<< PING zirconium.libera.chat
+>> @time=2024-02-13T14:55:13.058Z :zirconium.libera.chat PONG zirconium.libera.chat :zirconium.libera.chat
+--> lag pong
+<< PING zirconium.libera.chat
+>> @time=2024-02-13T14:56:14.247Z :zirconium.libera.chat PONG zirconium.libera.chat :zirconium.libera.chat
+--> lag pong

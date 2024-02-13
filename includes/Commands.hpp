@@ -1,9 +1,13 @@
 #ifndef COMMANDS_HPP
 # define COMMANDS_HPP
 
-# include "Common.hpp"
+#include "Common.hpp"
+#include "Server.hpp"
+#include "Client.hpp"
 
 class Message; 
+class Server;
+class Client;
 
 int cmd_nick(Message &msg, int client_fd);
 int cmd_pass(Message &msg, int client_fd);

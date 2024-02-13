@@ -2,6 +2,7 @@
 # define CLIENT_HPP
 
 # include "Common.hpp"
+# include "Commands.hpp"
 
 // if _registeration == 0, then the client is not registered
 // if _registeration == 1, then the client pass is registered

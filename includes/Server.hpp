@@ -6,8 +6,10 @@
 # include "Common.hpp"
 # include "Client.hpp"
 # include "Message.hpp"
+# include "Commands.hpp"
 
 class Client;
+class Message;
 
 	enum command {
 		PASS,
@@ -45,6 +47,7 @@ class Server
 		void setClientId(const int id);
 		int serverSetup(std::string prt);
 		int acceptPendingConnections();
+		int cmd_nick(Message &msg, int client_fd);
 		int recieve_msg(int new_fd, int i);
 		int send_msg(int send_fd);
 		int poll_loop();
