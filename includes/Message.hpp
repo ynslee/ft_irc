@@ -11,9 +11,10 @@ class Message {
 
 	public:
 		Message(std::string input);
-		std::string	prefix;
+		// std::string	prefix;
 		std::string	command;
 		int command_flag;
+		std::string	trailing;
 		std::vector<std::string> params;
 		~Message();
 } ;

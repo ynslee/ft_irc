@@ -1,3 +1,14 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jhusso <jhusso@student.42.fr>              +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/02/05 16:26:39 by jpelaez-          #+#    #+#              #
+#    Updated: 2024/02/13 14:53:36 by jhusso           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
 NAME = ircserv
 
@@ -10,7 +21,7 @@ DIR_OBJS = objs/
 OBJS = $(SRC:%.cpp=${DIR_OBJS}%.o)
 HEADER = Server.hpp
 
-FLAGS = -Wall -Wextra -Werror -MMD -MP -g3 -c #-fsanitize=address
+FLAGS = -Wall -Wextra -Werror -MMD -MP -g3 -c -std=c++11 #-fsanitize=address
 CC = c++
 INCLUDES = -I includes/
 

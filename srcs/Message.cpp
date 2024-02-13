@@ -4,13 +4,27 @@ Message::Message(std::string input)
 {
 	std::string token;
 	std::stringstream iss(input);
+	int index = 0;
 
 	while (iss >> token)
 	{
-		std::cout << token << std::endl;
+		if (index == 0)
+		{
+			this->command = token;
+			// std::cout << "COMMAND: " << this->command << std::endl;
+		}
+		else if (index > 1  && token[0] != ':')
+		{
+			this->params.push_back(token);
+			// std::cout << "PARAM: " << token << std::endl;
+		}
+		else if (index > 1 && token[0] == ':')
+		{
+			std::getline(iss, trailing);
+			// std::cout << "TRAIILING: " << trailing << std::endl;
+		}
+		index ++;
 	}
-
-	// basic parsing here
 }
 
 Message::~Message()
