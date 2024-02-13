@@ -1,3 +1,4 @@
+#include "../../includes/Server.hpp"
 
 // Nick command----------------------------------------------
 //Nicknames are non-empty strings with the following restrictions:
@@ -9,3 +10,20 @@
 // They SHOULD NOT contain any dot character ('.', 0x2E).
 // Servers MAY have additional implementation-specific nickname restrictions and SHOULD avoid the use of nicknames which are ambiguous 
 // with commands or command parameters where this could lead to confusion or error.
+
+
+/**
+ * @brief Nick command for giving the client a nickname or changing the previous one
+ * Syntax: NICK <nickname>
+ * 
+ * 	ERR_NONICKNAMEGIVEN (431)
+ * 	ERR_ERRONEUSNICKNAME (432)
+ * 	ERR_NICKNAMEINUSE (433)
+ * 	ERR_NICKCOLLISION (436)
+ * 
+ * Example : /NICK nickname
+ */
+int cmd_nick(std::string message, int client_fd)
+{
+
+}

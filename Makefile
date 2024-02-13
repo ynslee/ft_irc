@@ -1,18 +1,8 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: jhusso <jhusso@student.42.fr>              +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/02/05 16:26:39 by jpelaez-          #+#    #+#              #
-#    Updated: 2024/02/13 12:05:58 by jhusso           ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
 
 NAME = ircserv
 
-SRC = main.cpp SetServer.cpp Client.cpp SetServer_utils.cpp Message.cpp
+SRC = main.cpp SetServer.cpp Client.cpp SetServer_utils.cpp Message.cpp \
+commands/Nick.cpp commands/Pass.cpp
 
 DIR_SRCS = srcs/
 DIR_OBJS = objs/
