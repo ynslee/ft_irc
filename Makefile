@@ -1,7 +1,8 @@
 
 NAME = ircserv
 
-SRC = main.cpp SetServer.cpp Client.cpp SetServer_utils.cpp Message.cpp
+SRC = main.cpp SetServer.cpp Client.cpp SetServer_utils.cpp Message.cpp \
+commands/Nick.cpp commands/Pass.cpp
 
 DIR_SRCS = srcs/
 DIR_OBJS = objs/
