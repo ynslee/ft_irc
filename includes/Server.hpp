@@ -5,11 +5,10 @@
 # define MAXCLIENTS 32
 # include "Common.hpp"
 # include "Client.hpp"
+# include "Message.hpp"
 
 class Client;
 
-class Server
-{
 	enum command {
 		PASS,
 		NICK,
@@ -21,6 +20,8 @@ class Server
 		MODE
 		// what else?
 	};
+class Server
+{
 
 	private:
 		Server();
@@ -43,6 +44,7 @@ class Server
 		int send_msg(int send_fd);
 		int poll_loop();
 		void close_client(int i, int fd);
+		void parseMessage(char *messageBuffer, int client_fd);
 };
 
 #endif

@@ -1,8 +1,6 @@
-
-
 #include "../includes/Server.hpp"
 #include "../includes/Client.hpp"
-
+#include "../includes/Message.hpp"
 
 void *get_in_addr(struct sockaddr *sa)
 {
@@ -133,7 +131,7 @@ int Server::acceptPendingConnections()
 	int new_fd;
 	char s[INET6_ADDRSTRLEN];
 	struct pollfd poll_fd;
-	// Client new_client(new_fd); 
+	// Client new_client(new_fd);
 
 	addr_len = sizeof(their_addr);
 	new_fd = accept(this->pfds[0].fd, (struct sockaddr *)&their_addr, &addr_len);
@@ -186,13 +184,19 @@ int Server::recieve_msg(int new_fd, int i)
 	}
 	else
 	{
-		std::cout << buf << std::endl;
 		setClientId(new_fd);
-		setMessage(buf);
-		// we start parsing here
+		setMessage(buf); // here we wait for the /r/n
+		std::cout << buf << std::endl;
+		parseMessage(buf, new_fd);// we start parsing here
 		return (0);
 	}
 	return (-1);
+}
+
+void Server::parseMessage(char *messageBuffer, int client_fd)
+{
+	std::string input(messageBuffer);
+	Message msg(input);
 }
 
 int Server::send_msg(int client_fd)

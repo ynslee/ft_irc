@@ -10,6 +10,7 @@ class Message {
 		Message &operator=(Message const &other);
 
 	public:
+		Message(std::string input);
 		std::string	prefix;
 		std::string	command;
 		std::vector<std::string> params;
