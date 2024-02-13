@@ -8,3 +8,14 @@ void Server::shut_down_server(int i, int fd)
     // we have to remove from the client when we have it 
     this->pollfd_count--;
 }
+
+void Server::parsing(const char* msg)
+{
+	this->message = msg;
+
+	// Split 
+
+	// Command Comm(string[0])
+
+	
+}
