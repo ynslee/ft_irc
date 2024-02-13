@@ -19,5 +19,6 @@
 #include <errno.h>
 #include <csignal>
 #include <poll.h>
+#include <map>
 
 #endif
