@@ -206,23 +206,20 @@ int Server::send_msg(int new_fd)
 		if(key == new_fd)
 		{
 			message = it->second->getSendbuf();
-			break;
+			if (message.empty())
+			{
+				return (0);
+			}
+			int len = message.length();
+			int send_readcount = send(new_fd, message.c_str(), len, 0);
+			if (send_readcount == -1)
+			{
+				// std::cerr << "Error in send()" << std::endl;
+				return (-1);
+			}
+			it->second->setSendbuf("");
 		}
 	}
-	if (message.empty())
-	{
-		return (-1);
-	}
-	int len = message.length();
-	int send_readcount = send(new_fd, message.c_str(), len, 0);
-	if (send_readcount == -1)
-	{
-		// std::cerr << "Error in send()" << std::endl;
-		return (-1);
-	}
-	// std::cout << send_readcount << " bytes sent" << std::endl;
-	// msg = NULL;
-	_clients[new_fd]->setSendbuf("");
 	return (0);
 }
 
