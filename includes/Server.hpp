@@ -42,7 +42,6 @@ class Server
 		~Server();
 		int getClientId();
 		void setClientId(const int id);
-		void parsing(const char* msg, int );
 		int serverSetup(std::string prt);
 		int acceptPendingConnections();
 		int recieve_msg(int new_fd, int i);

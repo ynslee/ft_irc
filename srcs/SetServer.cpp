@@ -197,7 +197,6 @@ void Server::parseMessage(int client_fd)
 {
 	std::string input(_clients[client_fd]->getReadbuf());
 	Message msg(input);
-
 }
 
 int Server::send_msg(int client_fd)
