@@ -40,7 +40,7 @@ class Server
 		int serverSetup(std::string prt);
 		int acceptPendingConnections();
 		int recieve_msg(int new_fd, int i);
-		int send_msg(int new_fd);
+		int send_msg(int send_fd);
 		int poll_loop();
 		void close_client(int i, int fd);
 };

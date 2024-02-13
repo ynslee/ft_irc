@@ -195,7 +195,7 @@ int Server::recieve_msg(int new_fd, int i)
 	return (-1);
 }
 
-int Server::send_msg(int new_fd)
+int Server::send_msg(int send_fd)
 {
 	std::string message;
 
@@ -203,23 +203,24 @@ int Server::send_msg(int new_fd)
 	for(it=_clients.begin(); it!=_clients.end(); it++)
 	{
 		int key = it->first;
-		if(key == new_fd)
+		if(key == send_fd)
 		{
 			message = it->second->getSendbuf();
-			if (message.empty())
-			{
-				return (0);
-			}
-			int len = message.length();
-			int send_readcount = send(new_fd, message.c_str(), len, 0);
-			if (send_readcount == -1)
-			{
-				// std::cerr << "Error in send()" << std::endl;
-				return (-1);
-			}
-			it->second->setSendbuf("");
+			break;
 		}
 	}
+	if (message.empty())
+	{
+		return (0);
+	}
+	int len = message.length();
+	int send_readcount = send(send_fd, message.c_str(), len, 0);
+	if (send_readcount == -1)
+	{
+		// std::cerr << "Error in send()" << std::endl;
+		return (-1);
+	}
+	_clients[send_fd]->setSendbuf("");
 	return (0);
 }
 
