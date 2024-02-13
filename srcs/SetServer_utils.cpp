@@ -1,6 +1,5 @@
-#include "../includes/Server.hpp"
-#include "Server.hpp"
 
+#include "../includes/Server.hpp"
 
 void Server::close_client(int i, int fd)
 {

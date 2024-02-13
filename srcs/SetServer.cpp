@@ -160,34 +160,34 @@ int Server::acceptPendingConnections()
 	return (0);
 }
 
-int Server::recieve_msg(int new_fd, int i)
+int Server::recieve_msg(int client_fd, int i)
 {
 	char buf[80];
 	int readcount;
 
 	memset(buf, 0, sizeof(buf));
-	readcount = recv(new_fd, buf, sizeof(buf), 0);
+	readcount = recv(client_fd, buf, sizeof(buf), 0);
 	if (readcount < 0)
 	{
 		if (errno != EWOULDBLOCK) // no data to read
 		{
 			std::cerr << "Error in recv()" << std::endl;
-			close_client(i, new_fd);
+			close_client(i, client_fd);
 			return (-1);
 		}
 	}
 	else if (readcount == 0)
 	{
 		std::cerr << "Peer has closed connection" << std::endl;
-		close_client(i, new_fd);
+		close_client(i, client_fd);
 		return (0);
 	}
 	else
 	{
-		setClientId(new_fd);
+		setClientId(client_fd);
 		setMessage(buf);
 		std::cout << buf << std::endl;
-		parseMessage(new_fd);// we start parsing here
+		parseMessage(client_fd);// we start parsing here
 		return (0);
 	}
 	return (-1);

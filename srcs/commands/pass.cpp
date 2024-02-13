@@ -1,5 +1,6 @@
 
 #include "../../includes/Server.hpp"
+#include "../../includes/Commands.hpp"
 
 /**
  * @brief PASS command for setting 'connection password'
@@ -11,7 +12,7 @@
  * 
  * Example : /PASS secretpassword
  */
-void pass_command(Client *client, Message *msg)
+int cmd_pass(std::string message, int client_fd);
 {
 	//if (password is empty){
 		//send ERR_NEEDMOREPARAMS
