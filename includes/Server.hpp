@@ -17,7 +17,12 @@ class Client;
 		INVITE,
 		KICK,
 		TOPIC,
-		MODE
+		MODE,
+		MOTD,
+		PRIVMSG,
+		WHOIS,
+		KILL,
+		OPER,
 		// what else?
 	};
 
@@ -37,13 +42,14 @@ class Server
 		~Server();
 		int getClientId();
 		void setClientId(const int id);
-		void setMessage(const char* msg);
+		void parsing(const char* msg, int );
 		int serverSetup(std::string prt);
 		int acceptPendingConnections();
 		int recieve_msg(int new_fd, int i);
 		int send_msg(int send_fd);
 		int poll_loop();
 		void close_client(int i, int fd);
+		void setMessage(const char* msg);
 		void parseMessage(int client_fd);
 };
 
