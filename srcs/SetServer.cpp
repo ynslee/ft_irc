@@ -1,6 +1,7 @@
 #include "../includes/Server.hpp"
 #include "../includes/Client.hpp"
 #include "../includes/Message.hpp"
+#include "../includes/Commands.hpp"
 
 void *get_in_addr(struct sockaddr *sa)
 {
@@ -187,16 +188,34 @@ int Server::recieve_msg(int client_fd, int i)
 		setClientId(client_fd);
 		setMessage(buf);
 		std::cout << buf << std::endl;
-		parseMessage(client_fd);// we start parsing here
+		if(parseMessage(client_fd))
+			return(-1);// we start parsing here
 		return (0);
 	}
 	return (-1);
 }
 
-void Server::parseMessage(int client_fd)
+int Server::parseMessage(int client_fd)
 {
 	std::string input(_clients[client_fd]->getReadbuf());
 	Message msg(input);
+
+	switch(get_command_type(msg.command))
+	{
+		case command::PASS:
+			if(cmd_pass(msg,client_fd))
+				return(-1);
+			break ;
+		case command::NICK:
+			if(cmd_nick(msg,client_fd))
+				return(-1);
+			break ;
+		case command::USER:
+			if(cmd_user(msg,client_fd))
+				return(-1);
+			break ;
+	}
+	return (0);
 }
 
 int Server::send_msg(int client_fd)

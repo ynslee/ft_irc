@@ -23,6 +23,7 @@ class Client;
 		WHOIS,
 		KILL,
 		OPER,
+		INVALID,
 		// what else?
 	};
 
@@ -49,7 +50,8 @@ class Server
 		int poll_loop();
 		void close_client(int i, int fd);
 		void setMessage(const char* msg);
-		void parseMessage(int client_fd);
+		int parseMessage(int client_fd);
+		int get_command_type(std::string command);
 };
 
 #endif
