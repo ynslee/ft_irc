@@ -17,7 +17,7 @@ class Client{
 		std::string		_realname;
 		std::string		_mode;
 		std::string		_IPaddress;
-		int				_registeration;
+		int				_isRegistered;
 		Client();
 		Client(Client const &other);
 		Client	&operator=(Client const &other);
