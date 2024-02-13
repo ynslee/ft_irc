@@ -1,4 +1,5 @@
 
+
 #include "../includes/Server.hpp"
 #include "../includes/Client.hpp"
 
@@ -90,18 +91,15 @@ int Server::poll_loop()
 		{
 			if(this->pfds[i].revents & POLLIN)
 			{
-				if(this->pollfd_count < MAXCLIENTS + 1)
+				if(this->pfds[i].fd == this->pfds[0].fd)
 				{
-					if(this->pfds[i].fd == this->pfds[0].fd)
-					{
-						if(acceptPendingConnections())
+					if(acceptPendingConnections())
+						return(-1);
+				}
+				else
+				{
+					if(recieve_msg(this->pfds[i].fd, i) == -1)
 							return(-1);
-					}
-					else
-					{
-						if(recieve_msg(this->pfds[i].fd, i) == -1)
-							return(-1);
-					}
 				}
 			}
 			else if (this->pfds[i].revents & POLLOUT){
@@ -135,6 +133,7 @@ int Server::acceptPendingConnections()
 	int new_fd;
 	char s[INET6_ADDRSTRLEN];
 	struct pollfd poll_fd;
+	// Client new_client(new_fd); 
 
 	addr_len = sizeof(their_addr);
 	new_fd = accept(this->pfds[0].fd, (struct sockaddr *)&their_addr, &addr_len);
@@ -144,12 +143,21 @@ int Server::acceptPendingConnections()
 		return(-1);
 	}
 	fcntl(new_fd, F_SETFL, O_NONBLOCK);
-	poll_fd.fd = new_fd;
-	poll_fd.events = POLLIN | POLLOUT;
-	Client new_client(new_fd);
-	this->pfds.push_back(poll_fd);
+	if(this->pollfd_count < MAXCLIENTS + 1)
+	{
+		poll_fd.fd = new_fd;
+		poll_fd.events = POLLIN | POLLOUT;
+		this->pfds.push_back(poll_fd);
+	}
+	else
+	{
+		send(new_fd, "[IRCSERV] You cannot join, the server is already full", 53, 0);
+		close(new_fd);
+	}
 	inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof(s));
 	std::cout << "New conection from" << s << "on socket :" << new_fd << std::endl;
+	_clients.insert(std::make_pair(new_fd, new Client(new_fd)));
+	_clients[new_fd]->setIPaddress(s);
 	this->pollfd_count = this->pfds.size();
 	return (0);
 }
@@ -160,48 +168,59 @@ int Server::recieve_msg(int new_fd, int i)
 	int readcount;
 
 	memset(buf, 0, sizeof(buf));
-	this->message.clear();
 	readcount = recv(new_fd, buf, sizeof(buf), 0);
 	if (readcount < 0)
 	{
 		if (errno != EWOULDBLOCK) // no data to read
 		{
 			std::cerr << "Error in recv()" << std::endl;
-			shut_down_server(i, new_fd);
+			close_client(i, new_fd);
 			return (-1);
 		}
 	}
 	else if (readcount == 0)
 	{
 		std::cerr << "Peer has closed connection" << std::endl;
-		shut_down_server(i, new_fd);
+		close_client(i, new_fd);
 		return (0);
 	}
 	else
 	{
 		std::cout << buf << std::endl;
-		parsing(buf,new_fd);
 		setClientId(new_fd);
+		setMessage(buf);
+		// we start parsing here
 		return (0);
 	}
 	return (-1);
 }
 
-int Server::send_msg(int new_fd)
+int Server::send_msg(int client_fd)
 {
-	if (this->message.empty() == true)
+	std::string message;
+
+	std::map<int, Client*>::iterator it;
+	for(it=_clients.begin(); it!=_clients.end(); it++)
+	{
+		int key = it->first;
+		if(key == client_fd)
+		{
+			message = it->second->getSendbuf();
+			break;
+		}
+	}
+	if (message.empty())
+	{
 		return (0);
-	int len = this->message.length();
-	const char *msg = this->message.c_str();
-	int send_readcount = send(new_fd, msg, len, 0);
+	}
+	int len = message.length();
+	int send_readcount = send(client_fd, message.c_str(), len, 0);
 	if (send_readcount == -1)
 	{
 		// std::cerr << "Error in send()" << std::endl;
 		return (-1);
 	}
-	// std::cout << send_readcount << " bytes sent" << std::endl;
-	// msg = NULL;
-	this->message.clear();
+	_clients[client_fd]->setSendbuf("");
 	return (0);
 }
 
@@ -247,6 +266,11 @@ Server::Server(std::string port, std::string password): port(port), password(pas
 
 Server::~Server()
 {
+	std::map<int, Client*>::iterator it;
+	for(it=_clients.begin(); it!=_clients.end(); it++)
+	{
+		delete it->second;
+	}
 }
 
 int Server::getClientId()
@@ -259,3 +283,20 @@ void Server::setClientId(const int id)
 	this->client_id = id;
 }
 
+void Server::setMessage(const char* msg)
+{
+	std::string buf;
+
+	std::map<int, Client*>::iterator it;
+	for(it=_clients.begin(); it!=_clients.end(); it++)
+	{
+		int key = it->first;
+		if(key == this->client_id)
+		{
+
+			buf.assign(msg);
+			it->second->setReadbuf(buf);
+			buf.clear();
+		}
+	}
+}

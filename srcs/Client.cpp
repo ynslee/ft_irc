@@ -1,16 +1,6 @@
+#include "../includes/Client.hpp"
 
-#include "Client.hpp"
-
-//Nicknames are non-empty strings with the following restrictions:
-
-// They MUST NOT contain any of the following characters: space (' ', 0x20), comma (',', 0x2C), asterisk ('*', 0x2A)
-// question mark ('?', 0x3F), exclamation mark ('!', 0x21), at sign ('@', 0x40).
-// They MUST NOT start with any of the following characters: dollar ('$', 0x24), colon (':', 0x3A).
-// They MUST NOT start with a character listed as a channel type, channel membership prefix, or prefix listed in the IRCv3 multi-prefix Extension.
-// They SHOULD NOT contain any dot character ('.', 0x2E).
-// Servers MAY have additional implementation-specific nickname restrictions and SHOULD avoid the use of nicknames which are ambiguous 
-// with commands or command parameters where this could lead to confusion or error.
-
+Client::Client(){};
 
 /**
  * @brief Construct a new Client:: Client object
@@ -18,38 +8,71 @@
  * @param new_fd socket fd
  * @param _mode mode for USER, CHANNEL
  */
-
-Client::Client(){};
-
-Client::Client(int new_fd): _client_fd(new_fd), _readbuf(NULL), _sendbuf(NULL){ 
-		_password = false;
-		_registrationDone = false;
-		_welcomeSent = false;
+Client::Client(int new_fd): _client_fd(new_fd)
+{ 
+	_registerationDone = false;
 }
 
-Client::~Client(){
-	if(_readbuf)
-		delete(_readbuf);
-	if(_sendbuf)
-		delete(_sendbuf);
-}
+Client::~Client(){}
 
-Client::Client(Client const &other){
+Client::Client(Client const &other)
+{
 	*this = other;
 }
 
-//What do we want to copy using assignment operator?
-Client	&Client::operator=(Client const &other){
+Client	&Client::operator=(Client const &other)
+{
 	if (this != &other){
 		_nickname = other._nickname;
 		_username = other._username;
-		_readbuf = other._readbuf;
-		_sendbuf = other._sendbuf;
 		_mode = other._mode;
 	}
+	return (*this);
 }
 
-void	Client::setSocketFd(int new_fd){
+void	Client::setSocketFd(int new_fd)
+{
 	_client_fd = new_fd;
 }
 
+void	Client::setNickName(std::string new_name)
+{
+	_nickname = new_name;
+}
+void	Client::setUserName(std::string new_user)
+{
+	_username = new_user;
+}
+void	Client::setRealName(std::string new_real)
+{
+	_realname = new_real;
+}
+
+void 	Client::setReadbuf(std::string buf)
+{
+	_readbuf = buf;
+}
+
+void	Client::setSendbuf(std::string buf)
+{
+	_sendbuf = buf;
+}
+
+void	Client::setMode(std::string mode)
+{
+	_mode = mode;
+}
+
+void	Client::setIPaddress(char *ip)
+{
+	_IPaddress.assign(ip);
+}
+
+const std::string	&Client::getNickName(void){return(_nickname);}
+const std::string	&Client::getUserName(void){return(_username);}
+const std::string	&Client::getRealName(void){return(_realname);}
+const int	&Client::getSocketFd(void){return(_client_fd);}
+const std::string	&Client::getReadbuf(void){return(_readbuf);}
+const std::string	&Client::getSendbuf(void){return(_sendbuf);}
+const std::string	&Client::getIPaddress(void){return(_IPaddress);}
+const std::string	&Client::getMode(void){return(_mode);}
