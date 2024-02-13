@@ -8,10 +8,7 @@ Client::Client(){};
  * @param new_fd socket fd
  * @param _mode mode for USER, CHANNEL
  */
-Client::Client(int new_fd): _client_fd(new_fd)
-{ 
-	_registerationDone = false;
-}
+Client::Client(int new_fd): _client_fd(new_fd), _mode("+Ziw"), _isRegistered(0) {}
 
 Client::~Client(){}
 
@@ -68,6 +65,11 @@ void	Client::setIPaddress(char *ip)
 	_IPaddress.assign(ip);
 }
 
+void	Client::setRegisteration(int reg)
+{
+	_isRegistered = reg;
+}
+
 const std::string	&Client::getNickName(void){return(_nickname);}
 const std::string	&Client::getUserName(void){return(_username);}
 const std::string	&Client::getRealName(void){return(_realname);}
@@ -76,3 +78,4 @@ const std::string	&Client::getReadbuf(void){return(_readbuf);}
 const std::string	&Client::getSendbuf(void){return(_sendbuf);}
 const std::string	&Client::getIPaddress(void){return(_IPaddress);}
 const std::string	&Client::getMode(void){return(_mode);}
+const int	&Client::getRegisteration(void){return(_isRegistered);}
