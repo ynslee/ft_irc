@@ -23,7 +23,6 @@ class Client;
 
 class Server
 {
-
 	private:
 		Server();
 		std::string port;
