@@ -13,6 +13,7 @@ class Message {
 		Message(std::string input);
 		std::string	prefix;
 		std::string	command;
+		int command_flag;
 		std::vector<std::string> params;
 		~Message();
 } ;

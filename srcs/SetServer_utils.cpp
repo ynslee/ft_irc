@@ -1,5 +1,4 @@
 #include "../includes/Server.hpp"
-#include "Server.hpp"
 
 
 void Server::close_client(int i, int fd)
@@ -9,4 +8,12 @@ void Server::close_client(int i, int fd)
 	// we have to remove from the client when we have it
 	this->pollfd_count--;
 	_clients.erase(fd);
+}
+
+
+int Server::get_command_type(std::string command)
+{
+    if(command == "PASS")
+        return(0);
+    else if(command == )
 }
