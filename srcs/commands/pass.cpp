@@ -1,6 +1,7 @@
 
 #include "../../includes/Server.hpp"
 #include "../../includes/Commands.hpp"
+#include "../../includes/Reply.hpp"
 
 /**
  * @brief PASS command for setting 'connection password'
@@ -12,20 +13,27 @@
  * 
  * Example : /PASS secretpassword
  */
-int cmd_pass(std::string message, int client_fd);
+int cmd_pass(Message &msg, Client &Client)
 {
-	//if (password is empty){
-		//send ERR_NEEDMOREPARAMS
-	//}
-	//else if(client->_isRegistered == 3)
-	//{
-		//send ERR_ALREADYREGISTERED
-	//}
-	//else if(password is incorrect){
-		//send ERR_PASSWDMISMATCH
-	//}
-	//else{
-		//client->_isRegistered = 1;
-	//}
+	std::string servername = Client.getServerName();
+
+	if (msg.params.size() == 0)
+	{
+		send(Client.getClientFd(), ERR_NEEDMOREPARAMS(servername).c_str(), ERR_NEEDMOREPARAMS(servername).length(), 0);
+		return (-1);
+	}
+	else if(Client.getRegisteration() == 3)
+	{
+		send(Client.getClientFd(), ERR_ALREADYREGISTRED(servername).c_str(), ERR_ALREADYREGISTRED(servername).length(), 0);
+		return (-1);
+	}
+	// else if(password is incorrect){
+	// 	send ERR_PASSWDMISMATCH
+	// }
+	else
+	{
+		Client.setRegisteration(1);
+		return (0);
+	}
 
 }

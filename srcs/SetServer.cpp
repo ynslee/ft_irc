@@ -17,6 +17,7 @@ int Server::serverSetup(std::string prt)
 	struct addrinfo *serverinfo;
 	int yes = 1;
 
+	serverName = "IRCserv";
 	const char *port = prt.c_str();
 	std::cout << "port " << port << std::endl;
 
@@ -92,13 +93,13 @@ int Server::poll_loop()
 			{
 				if(this->pfds[i].fd == this->pfds[0].fd)
 				{
-					if(acceptPendingConnections())
+					if(acceptPendingConnections() == -1)
 						return(-1);
 				}
 				else
 				{
 					if(recieve_msg(this->pfds[i].fd, i) == -1)
-							return(-1);
+						continue;
 				}
 			}
 			else if (this->pfds[i].revents & POLLOUT){
@@ -188,7 +189,7 @@ int Server::recieve_msg(int client_fd, int i)
 		setClientId(client_fd);
 		setMessage(buf);
 		std::cout << buf << std::endl;
-		if(parseMessage(client_fd))
+		if(parseMessage(client_fd) == -1)
 			return(-1);// we start parsing here
 		return (0);
 	}
@@ -203,16 +204,16 @@ int Server::parseMessage(int client_fd)
 	switch(get_command_type(msg.command))
 	{
 		case command::PASS:
-			if(cmd_pass(msg,client_fd))
+			if(cmd_pass(msg, *(_clients[client_fd])) == -1)
 				return(-1);
 			break ;
-		case command::NICK:
-			if(cmd_nick(msg,client_fd))
-				return(-1);
-			break ;
-		case command::USER:
-			if(cmd_user(msg,client_fd))
-				return(-1);
+		// case command::NICK:
+		// 	if(cmd_nick(msg,client_fd))
+		// 		return(-1);
+		// 	break ;
+		// case command::USER:
+		// 	if(cmd_user(msg,client_fd))
+		// 		return(-1);
 			break ;
 	}
 	return (0);
@@ -330,4 +331,9 @@ void Server::setMessage(const char* msg)
 			buf.clear();
 		}
 	}
+}
+
+const std::string &Server::getServerName() const
+{
+	return (this->serverName);
 }
