@@ -166,7 +166,7 @@ int Server::acceptPendingConnections()
 	}
 	_clients[new_fd]->setHostName(hostname);
 	std::cout << "host name is" << hostname << std::endl;
-	this->pollfd_count = this->pfds.size();
+	this->_pollfdCount = this->_pfds.size();
 	return (0);
 }
 
