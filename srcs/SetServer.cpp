@@ -224,18 +224,23 @@ int Server::send_msg(int client_fd)
 	std::string message;
 
 	message.clear();
+	message.clear();
 	std::map<int, Client*>::iterator it;
 	for(it=_clients.begin(); it!=_clients.end(); it++)
 	{
 		int key = it->first;
+		if(key == client_fd && _clients[client_fd]->getCAPsent() == 0)
 		if(key == client_fd && _clients[client_fd]->getCAPsent() == 0)
 		{
 			message = ":" + serverName + " CAP * LS :";
 			send(client_fd, message.c_str(), message.length(), 0);
 			std::cout<< "sending>>> " << message << std::endl;
 			_clients[client_fd]->setCAPsent(1);
+			std::cout<< "sending>>> " << message << std::endl;
+			_clients[client_fd]->setCAPsent(1);
 			return (0);
 		}
+		else if (key == client_fd && _clients[client_fd]->getCAPsent())
 		else if (key == client_fd && _clients[client_fd]->getCAPsent())
 		{
 			message = it->second->getSendbuf();
