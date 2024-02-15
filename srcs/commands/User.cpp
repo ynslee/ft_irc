@@ -16,7 +16,12 @@ int cmd_user(Message &msg, Client *Client)
 {
 	std::string servername = Client->getServerName();
 
-	if (Client->getRegisteration() == 3)
+	if (Client->getRegisteration() == 0)
+	{
+		send(Client->getClientFd(), ERR_NOTREGISTERED(servername).c_str(), ERR_NOTREGISTERED(servername).length(), 0);
+		return (-1);
+	}
+	else if (Client->getRegisteration() == 3)
 	{
 		send(Client->getClientFd(), ERR_ALREADYREGISTRED(servername).c_str(), ERR_ALREADYREGISTRED(servername).length(), 0);
 		return (-1);
