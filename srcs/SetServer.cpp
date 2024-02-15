@@ -218,7 +218,7 @@ int Server::findCommand(int client_fd)
 		// 		return(-1);
 		// 	break ;
 		case command::USER:
-			if(cmd_user(msg, _clients[client_fd]) == -1)
+			if(cmdUser(msg, _clients[client_fd]) == -1)
 				return(-1);
 			break ;
 		case command::INVALID:
