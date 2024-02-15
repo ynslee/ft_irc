@@ -10,6 +10,8 @@
 class Client{
 	private:
 		int				_client_fd;
+		int				_CAPsent;
+		std::string		_serverName;
 		std::string		_readbuf;
 		std::string		_sendbuf;
 		std::string		_nickname;
@@ -28,6 +30,7 @@ class Client{
 		//write setters getters
 
 		void	setSocketFd(int new_fd);
+		void	setCAPsent(int sent);
 		void	setNickName(std::string new_name);
 		void	setUserName(std::string new_user);
 		void	setRealName(std::string new_real);
@@ -36,6 +39,9 @@ class Client{
 		void	setMode(std::string mode);
 		void	setIPaddress(char *ip);
 		void	setRegisteration(int reg);
+		const int	&getClientFd(void);
+		const int	&getCAPsent(void);
+		const std::string	&getServerName(void);
 		const std::string	&getNickName(void);
 		const std::string	&getUserName(void);
 		const std::string	&getRealName(void);
