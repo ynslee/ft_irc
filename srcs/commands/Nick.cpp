@@ -26,18 +26,16 @@
  * Example : /NICK nickname
  */
 
-int is_valid_nick(std::string new_nick)
+int isValidnick(std::string new_nick)
 {
-    if(!isdigit(new_nick[0]) || !isalpha(new_nick[0]))
+    if(!std::isalnum(new_nick[0]))
         return (-1);
     
     std::string::iterator it;
-
     for(it = new_nick.begin(); it != new_nick.end(); it++)
     {
+
         if(!std::isalnum(*it) && *it != '[' && *it != ']' && *it != '{' && *it != '}' && *it != '\\' && *it != '|')
-            return(-1);
-        else if(!std::isspace(*it))
             return(-1);
     }
     return(0);
@@ -57,13 +55,14 @@ int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names)
         return(-1);
     }
     std::string new_nick = msg.params.front();
-    if(is_valid_nick(new_nick))
+    if(isValidnick(new_nick))
     {
         send(Client->getClientFd(), ERR_ERRONEUSNICKNAME(servername, new_nick).c_str(), ERR_ERRONEUSNICKNAME(servername, new_nick).length(), 0);
         return(-1);
     }
-    if(std::find(nick_names.begin(), nick_names.end(), new_nick) == nick_names.end())
+    if(std::find(nick_names.begin(), nick_names.end(), new_nick) != nick_names.end())
     {
+
         send(Client->getClientFd(), ERR_NICKNAMEINUSE(servername, new_nick).c_str(), ERR_NICKNAMEINUSE(servername, new_nick).length(), 0);
         return(-1);
     }
