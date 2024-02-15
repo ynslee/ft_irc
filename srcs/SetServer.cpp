@@ -188,7 +188,7 @@ int Server::recieve_msg(int client_fd, int i)
 	{
 		setClientId(client_fd);
 		setMessage(buf);
-		std::cout << buf << std::endl;
+		std::cout << "received<< " << buf << std::endl;
 		if(parseMessage(client_fd) == -1)
 			return(-1);// we start parsing here
 		return (0);
@@ -214,7 +214,7 @@ int Server::parseMessage(int client_fd)
 		// case command::USER:
 		// 	if(cmd_user(msg,client_fd))
 		// 		return(-1);
-			break ;
+			// break ;
 	}
 	return (0);
 }
@@ -224,18 +224,23 @@ int Server::send_msg(int client_fd)
 	std::string message;
 
 	message.clear();
+	message.clear();
 	std::map<int, Client*>::iterator it;
 	for(it=_clients.begin(); it!=_clients.end(); it++)
 	{
 		int key = it->first;
 		if(key == client_fd && _clients[client_fd]->getCAPsent() == 0)
+		if(key == client_fd && _clients[client_fd]->getCAPsent() == 0)
 		{
-			message = ":" + serverName + " CAP * LS :" + "\r\n";
+			message = ":" + serverName + " CAP * LS :";
 			send(client_fd, message.c_str(), message.length(), 0);
+			std::cout<< "sending>>> " << message << std::endl;
+			_clients[client_fd]->setCAPsent(1);
 			std::cout<< "sending>>> " << message << std::endl;
 			_clients[client_fd]->setCAPsent(1);
 			return (0);
 		}
+		else if (key == client_fd && _clients[client_fd]->getCAPsent())
 		else if (key == client_fd && _clients[client_fd]->getCAPsent())
 		{
 			message = it->second->getSendbuf();
