@@ -8,25 +8,25 @@
 class Client;
 class Message;
 
-void cmd_cap(Message &msg, Client *Client);
-int cmd_nick(Message &msg, int client_fd);
-int cmd_pass(Message &msg, Client *Client, std::string password);
-int cmd_quit(Message &msg, int client_fd);
-int cmd_user(Message &msg, int client_fd);
-int cmd_whois(Message &msg, int client_fd);
-int cmd_kill(Message &msg, int client_fd);
-int cmd_privmsg(Message &msg, int client_fd);
+void cmdCap(Message &msg, Client *Client);
+int cmdNick(Message &msg, int client_fd);
+int cmdPass(Message &msg, Client *Client, std::string password);
+int cmdQuit(Message &msg, int client_fd);
+int cmdUser(Message &msg, int client_fd);
+int cmdWhois(Message &msg, int client_fd);
+int cmdKill(Message &msg, int client_fd);
+int cmdPrivmsg(Message &msg, int client_fd);
 
 
 /*channel commands*/
 
-int cmd_join(Message &msg, int client_fd);
-int cmd_kick(Message &msg, int client_fd);
-int cmd_invite(Message &msg, int client_fd);
-int cmd_topic(Message &msg, int client_fd);
-int cmd_mode(Message &msg, int client_fd);
-int cmd_motd(Message &msg, int client_fd);
-int cmd_oper(Message &msg, int client_fd);
+int cmdJoin(Message &msg, int client_fd);
+int cmdKick(Message &msg, int client_fd);
+int cmdInvite(Message &msg, int client_fd);
+int cmdTopic(Message &msg, int client_fd);
+int cmdMode(Message &msg, int client_fd);
+int cmdMotd(Message &msg, int client_fd);
+int cmdOper(Message &msg, int client_fd);
 
 
 

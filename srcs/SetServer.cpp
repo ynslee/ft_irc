@@ -206,15 +206,15 @@ int Server::findCommand(int client_fd)
 	{
 		case command::CAP:
 		{
-			cmd_cap(msg, _clients[client_fd]);
+			cmdCap(msg, _clients[client_fd]);
 			break ;
 		}
 		case command::PASS:
-			if(cmd_pass(msg, _clients[client_fd], this->password) == -1)
+			if(cmdPass(msg, _clients[client_fd], this->password) == -1)
 				return(-1);
 			break ;
 		// case command::NICK:
-		// 	if(cmd_nick(msg,client_fd))
+		// 	if(cmdNick(msg,client_fd))
 		// 		return(-1);
 		// 	break ;
 		// case command::USER:

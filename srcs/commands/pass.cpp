@@ -13,7 +13,7 @@
  *
  * Example : /PASS secretpassword
  */
-int cmd_pass(Message &msg, Client *Client, std::string password)
+int cmdPass(Message &msg, Client *Client, std::string password)
 {
 	std::string servername = Client->getServerName();
 
