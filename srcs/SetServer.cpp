@@ -200,7 +200,7 @@ int Server::findCommand(int client_fd)
 {
 	std::string input(_clients[client_fd]->getReadbuf());
 	Message msg(input);
-	
+
 	int i = get_command_type(msg.command);
 	switch(i)
 	{
@@ -210,7 +210,7 @@ int Server::findCommand(int client_fd)
 			break ;
 		}
 		case command::PASS:
-			if(cmd_pass(msg, _clients[client_fd]) == -1)
+			if(cmd_pass(msg, _clients[client_fd], this->password) == -1)
 				return(-1);
 			break ;
 		// case command::NICK:
