@@ -20,7 +20,10 @@ Message::Message(std::string input)
 		}
 		else if (index >= 1 && token[0] == ':')
 		{
-			std::getline(iss, trailing);
+			std::string trailing  = token.substr(1);
+			std::string temp;
+			getline(iss, temp, '\n');
+			trailing += temp;
 			std::cout << "TRAIILING: " << trailing << std::endl;
 		}
 		index ++;
