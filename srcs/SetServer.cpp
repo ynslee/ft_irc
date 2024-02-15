@@ -10,16 +10,16 @@ void *get_in_addr(struct sockaddr *sa)
 	return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
-int Server::serverSetup(std::string prt)
+int Server::serverSetup()
 {
 	int status, socketfd;
 	struct addrinfo hints, *p;
 	struct addrinfo *serverinfo;
 	int yes = 1;
 
-	serverName = "IRCserv";
-	const char *port = prt.c_str();
-	std::cout << "port " << port << std::endl;
+	this->_serverName = "IRCserv";
+	const char *port = _port.c_str();
+	std::cout << "port " << this->_port << std::endl;
 
 // SETTING UP getaddrinfo()
 	std::memset(&hints, 0, sizeof(hints));	// to empty the struct
@@ -68,46 +68,46 @@ int Server::serverSetup(std::string prt)
 	struct pollfd poll_fd;
 	poll_fd.fd = socketfd;
 	poll_fd.events = POLLIN;
-	this->pfds.push_back(poll_fd);
-	std::cout << "listner socket is :" <<this->pfds[0].fd << std::endl;
+	this->_pfds.push_back(poll_fd);
+	std::cout << "listener socket is :" <<this->_pfds[0].fd << std::endl;
 	return (0);
 }
 
-int Server::poll_loop()
+int Server::pollLoop()
 {
 	int poll_count;
-	this->pollfd_count = this->pfds.size();
-	// std::cout << this->pollfd_count << std::endl;
+	this->_pollfdCount = this->_pfds.size();
+	// std::cout << this->_pollfdCount << std::endl;
 
 	while(42)
 	{
-		poll_count = poll(&this->pfds[0], this->pollfd_count, 0);
+		poll_count = poll(&this->_pfds[0], this->_pollfdCount, 0);
 		if (poll_count == -1)
 		{
 			std::cerr << "Poll Error" << std::endl;
 			return (-1);
 		}
-		for(int i = 0; i < this->pollfd_count; i++)
+		for(int i = 0; i < this->_pollfdCount; i++)
 		{
-			if(this->pfds[i].revents & POLLIN)
+			if(this->_pfds[i].revents & POLLIN)
 			{
-				if(this->pfds[i].fd == this->pfds[0].fd)
+				if(this->_pfds[i].fd == this->_pfds[0].fd)
 				{
 					if(acceptPendingConnections() == -1)
 						return(-1);
 				}
 				else
 				{
-					if(recieve_msg(this->pfds[i].fd, i) == -1)
+					if(recieveMsg(this->_pfds[i].fd, i) == -1)
 						continue;
 				}
 			}
-			else if (this->pfds[i].revents & POLLOUT){
-				for (int i = 0; i < this->pollfd_count; i++)
+			else if (this->_pfds[i].revents & POLLOUT){
+				for (int i = 0; i < this->_pollfdCount; i++)
 				{
-					if (this->pfds[i].fd == getClientId())
+					if (this->_pfds[i].fd == getClientId())
 					{
-						if (send_msg(this->pfds[i].fd) == -1)
+						if (sendMsg(this->_pfds[i].fd) == -1)
 						{
 							// std::perror("Error in send()");
 							break;
@@ -115,14 +115,14 @@ int Server::poll_loop()
 					}
 				}
 			}
-			else if (this->pfds[i].revents & POLLERR)
+			else if (this->_pfds[i].revents & POLLERR)
 			{
 				return (-1);
 			}
 		}
 	}
-	for(int i = 0; i < this->pollfd_count; i++)
-		close(this->pfds[i].fd);
+	for(int i = 0; i < this->_pollfdCount; i++)
+		close(this->_pfds[i].fd);
 	return(0);
 }
 
@@ -136,18 +136,18 @@ int Server::acceptPendingConnections()
 	// Client new_client(new_fd);
 
 	addr_len = sizeof(their_addr);
-	new_fd = accept(this->pfds[0].fd, (struct sockaddr *)&their_addr, &addr_len);
+	new_fd = accept(this->_pfds[0].fd, (struct sockaddr *)&their_addr, &addr_len);
 	if (new_fd == -1)
 	{
 		std::perror("Could not create a newfd in accept()");
 		return(-1);
 	}
 	fcntl(new_fd, F_SETFL, O_NONBLOCK);
-	if(this->pollfd_count < MAXCLIENTS + 1)
+	if(this->_pollfdCount < MAXCLIENTS + 1)
 	{
 		poll_fd.fd = new_fd;
 		poll_fd.events = POLLIN | POLLOUT;
-		this->pfds.push_back(poll_fd);
+		this->_pfds.push_back(poll_fd);
 	}
 	else
 	{
@@ -158,11 +158,11 @@ int Server::acceptPendingConnections()
 	std::cout << "New conection from" << s << "on socket :" << new_fd << std::endl;
 	_clients.insert(std::make_pair(new_fd, new Client(new_fd)));
 	_clients[new_fd]->setIPaddress(s);
-	this->pollfd_count = this->pfds.size();
+	this->_pollfdCount = this->_pfds.size();
 	return (0);
 }
 
-int Server::recieve_msg(int client_fd, int i)
+int Server::recieveMsg(int client_fd, int i)
 {
 	char buf[80];
 	int readcount;
@@ -174,14 +174,14 @@ int Server::recieve_msg(int client_fd, int i)
 		if (errno != EWOULDBLOCK) // no data to read
 		{
 			std::cerr << "Error in recv()" << std::endl;
-			close_client(i, client_fd);
+			closeClient(i, client_fd);
 			return (-1);
 		}
 	}
 	else if (readcount == 0)
 	{
 		std::cerr << "Peer has closed connection" << std::endl;
-		close_client(i, client_fd);
+		closeClient(i, client_fd);
 		return (0);
 	}
 	else
@@ -201,24 +201,24 @@ int Server::findCommand(int client_fd)
 	std::string input(_clients[client_fd]->getReadbuf());
 	Message msg(input);
 
-	int i = get_command_type(msg.command);
+	int i = getCommandType(msg.command);
 	switch(i)
 	{
 		case command::CAP:
 		{
-			cmd_cap(msg, _clients[client_fd]);
+			cmdCap(msg, _clients[client_fd]);
 			break ;
 		}
 		case command::PASS:
-			if(cmd_pass(msg, _clients[client_fd], this->password) == -1)
+			if(cmdPass(msg, _clients[client_fd], this->_password) == -1)
 				return(-1);
 			break ;
 		// case command::NICK:
-		// 	if(cmd_nick(msg,client_fd))
+		// 	if(cmdNick(msg,client_fd))
 		// 		return(-1);
 		// 	break ;
 		case command::USER:
-			if(cmd_user(msg, _clients[client_fd]) == -1)
+			if(cmdUser(msg, _clients[client_fd]) == -1)
 				return(-1);
 			break ;
 		case command::INVALID:
@@ -228,7 +228,7 @@ int Server::findCommand(int client_fd)
 	return (0);
 }
 
-int Server::send_msg(int client_fd)
+int Server::sendMsg(int client_fd)
 {
 	std::string message;
 
@@ -260,12 +260,12 @@ int Server::send_msg(int client_fd)
 }
 
 
-Server::Server(std::string port, std::string password): port(port), password(password)
+Server::Server(std::string port, std::string password): _port(port), _password(password)
 {
 	/// check some error stuff;
 	int port_number;
 
-	port_number = std::stoi(port);
+	port_number = std::stoi(_port);
 	try
 	{
 		if(port_number < 1024 || port_number > 65535)
@@ -278,7 +278,7 @@ Server::Server(std::string port, std::string password): port(port), password(pas
 	}
 	try
 	{
-		if(password.empty() == true)
+		if(_password.empty() == true)
 			throw std::exception();
 	}
 	catch(const std::exception& e)
@@ -288,7 +288,7 @@ Server::Server(std::string port, std::string password): port(port), password(pas
 	}
 	try
 	{
-		if (serverSetup(port) < 0)
+		if (serverSetup() < 0)
 			throw std::runtime_error("Could not set server up");
 	}
 	catch(const std::exception& e)
@@ -310,12 +310,12 @@ Server::~Server()
 
 int Server::getClientId()
 {
-	return(this->client_id);
+	return(this->_clientId);
 }
 
 void Server::setClientId(const int id)
 {
-	this->client_id = id;
+	this->_clientId = id;
 }
 
 void Server::setMessage(const char* msg)
@@ -326,7 +326,7 @@ void Server::setMessage(const char* msg)
 	for(it=_clients.begin(); it!=_clients.end(); it++)
 	{
 		int key = it->first;
-		if(key == this->client_id)
+		if(key == this->_clientId)
 		{
 
 			buf.assign(msg);
@@ -338,5 +338,5 @@ void Server::setMessage(const char* msg)
 
 const std::string &Server::getServerName() const
 {
-	return (this->serverName);
+	return (this->_serverName);
 }

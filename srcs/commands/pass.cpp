@@ -13,7 +13,7 @@
  *
  * Example : /PASS secretpassword
  */
-int cmd_pass(Message &msg, Client *Client, std::string password)
+int cmdPass(Message &msg, Client *Client, std::string password)
 {
 	std::string servername = Client->getServerName();
 
@@ -29,7 +29,7 @@ int cmd_pass(Message &msg, Client *Client, std::string password)
 	}
 	else if (msg.params[0] == password)
 	{
-		Client->setSendbuf("Password correct!");
+		Client->setSendbuf("Password correct!\r\n");
 		Client->setRegisteration(1);
 		return (0);
 	}

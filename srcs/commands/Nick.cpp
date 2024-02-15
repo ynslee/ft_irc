@@ -8,22 +8,22 @@
 // They MUST NOT start with any of the following characters: dollar ('$', 0x24), colon (':', 0x3A).
 // They MUST NOT start with a character listed as a channel type, channel membership prefix, or prefix listed in the IRCv3 multi-prefix Extension.
 // They SHOULD NOT contain any dot character ('.', 0x2E).
-// Servers MAY have additional implementation-specific nickname restrictions and SHOULD avoid the use of nicknames which are ambiguous 
+// Servers MAY have additional implementation-specific nickname restrictions and SHOULD avoid the use of nicknames which are ambiguous
 // with commands or command parameters where this could lead to confusion or error.
 
 
 /**
  * @brief Nick command for giving the client a nickname or changing the previous one
  * Syntax: NICK <nickname>
- * 
+ *
  * 	ERR_NONICKNAMEGIVEN (431)
  * 	ERR_ERRONEUSNICKNAME (432)
  * 	ERR_NICKNAMEINUSE (433)
  * 	ERR_NICKCOLLISION (436)
- * 
+ *
  * Example : /NICK nickname
  */
-int cmd_nick(std::string message, int client_fd)
+int cmdNick(std::string message, int client_fd)
 {
-	
+
 }

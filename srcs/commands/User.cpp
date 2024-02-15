@@ -4,15 +4,15 @@
 #include "../../includes/Reply.hpp"
 
 /**
- * @brief used at the beginning of a connection to specify the username and realname of a new user 
+ * @brief used at the beginning of a connection to specify the username and realname of a new user
  * SYNTAX : USER <username> 0 * <realname>
- * 
+ *
  * ERR_NEEDMOREPARAMS (461)
  * ERR_ALREADYREGISTERED (462)
- * 
+ *
  * <username> needs to be at least 1 character long.
  */
-int cmd_user(Message &msg, Client *Client)
+int cmdUser(Message &msg, Client *Client)
 {
 	std::string servername = Client->getServerName();
 
