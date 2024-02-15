@@ -65,6 +65,11 @@ void	Client::setIPaddress(char *ip)
 	_IPaddress.assign(ip);
 }
 
+void	Client::setHostName(char *host)
+{
+	_hostname.assign(host);
+}
+
 void	Client::setRegisteration(int reg)
 {
 	_isRegistered = reg;
