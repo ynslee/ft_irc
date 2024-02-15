@@ -43,7 +43,7 @@ int is_valid_nick(std::string new_nick)
     return(0);
 }
 
-int cmd_nick(Message &msg, Client *Client, std::vector<std::string> &nick_names)
+int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names)
 {
     std::string servername = Client->getServerName();
     if(Client->getRegisteration() == 0)
