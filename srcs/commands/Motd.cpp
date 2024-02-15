@@ -4,5 +4,8 @@
 
 void cmd_motd(Message &msg, Client *Client)
 {
-	
+	if (Client->getRegisteration() == 3)
+	{
+		
+	}
 }
