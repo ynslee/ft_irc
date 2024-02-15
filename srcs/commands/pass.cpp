@@ -30,7 +30,6 @@ int cmd_pass(Message &msg, Client *Client, std::string password)
 	else if (msg.params[0] == password)
 	{
 		Client->setSendbuf("Password correct!");
-		// std::cout << "***** correct password *****" << std::endl;
 		Client->setRegisteration(1);
 		return (0);
 	}
