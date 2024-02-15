@@ -6,7 +6,7 @@
 # include "Client.hpp"
 
 class Client;
-class Message; 
+class Message;
 
 void cmd_cap(Message &msg, Client *Client);
 int cmd_nick(Message &msg, int client_fd);
