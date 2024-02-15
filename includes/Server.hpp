@@ -10,6 +10,7 @@
 class Client;
 
 	enum command {
+		CAP,
 		PASS,
 		NICK,
 		USER,
