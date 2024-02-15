@@ -229,6 +229,9 @@ int Server::findCommand(int client_fd)
 			if(cmdUser(msg, _clients[client_fd]) == -1)
 				return(-1);
 			break ;
+		case command::MOTD:
+			cmdMotd(msg, _clients[client_fd]);
+			break ;
 		case command::INVALID:
 			std::cerr << "Invalid command" << std::endl;
 			break ;
