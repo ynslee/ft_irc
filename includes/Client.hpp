@@ -10,7 +10,7 @@
 // if _registeration == 3, then the client pass, nick and user are registered
 class Client{
 	private:
-		int				_client_fd;
+		int				_clientFd;
 		std::string		_serverName;
 		std::string		_readbuf;
 		std::string		_sendbuf;
