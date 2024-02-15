@@ -203,8 +203,11 @@ int Server::parseMessage(int client_fd)
 
 	switch(get_command_type(msg.command))
 	{
+		case command::CAP:
+			cmd_cap(msg, _clients[client_fd]);
+			break ;
 		case command::PASS:
-			if(cmd_pass(msg, *(_clients[client_fd])) == -1)
+			if(cmd_pass(msg, _clients[client_fd]) == -1)
 				return(-1);
 			break ;
 		// case command::NICK:
@@ -214,50 +217,44 @@ int Server::parseMessage(int client_fd)
 		// case command::USER:
 		// 	if(cmd_user(msg,client_fd))
 		// 		return(-1);
-			// break ;
+		// 	break ;
 	}
 	return (0);
 }
 
 int Server::send_msg(int client_fd)
 {
-	std::string message;
-
-	message.clear();
-	message.clear();
 	std::map<int, Client*>::iterator it;
 	for(it=_clients.begin(); it!=_clients.end(); it++)
 	{
 		int key = it->first;
-		if(key == client_fd && _clients[client_fd]->getCAPsent() == 0)
-		if(key == client_fd && _clients[client_fd]->getCAPsent() == 0)
+		if(key == client_fd)
 		{
-			message = ":" + serverName + " CAP * LS :";
-			send(client_fd, message.c_str(), message.length(), 0);
-			std::cout<< "sending>>> " << message << std::endl;
-			_clients[client_fd]->setCAPsent(1);
-			std::cout<< "sending>>> " << message << std::endl;
-			_clients[client_fd]->setCAPsent(1);
-			return (0);
-		}
-		else if (key == client_fd && _clients[client_fd]->getCAPsent())
-		else if (key == client_fd && _clients[client_fd]->getCAPsent())
-		{
-			message = it->second->getSendbuf();
+			if (it->second->getSendbuf().empty())
+				break;
+			int len = it->second->getSendbuf().length();
+			int send_readcount = send(client_fd, it->second->getSendbuf().c_str(), len, 0);
+			if (send_readcount == -1)
+			{
+				// std::cerr << "Error in send()" << std::endl;
+				return (-1);
+			}
+			std::cout<< "sending>>> " << it->second->getSendbuf() << std::endl;
 			break;
 		}
 	}
-	if (message.empty())
-	{
-		return (0);
-	}
-	int len = message.length();
-	int send_readcount = send(client_fd, message.c_str(), len, 0);
-	if (send_readcount == -1)
-	{
-		// std::cerr << "Error in send()" << std::endl;
-		return (-1);
-	}
+	// if (message.empty())
+	// {
+	// 	return (0);
+	// }
+	// int len = message.length();
+	// int send_readcount = send(client_fd, message.c_str(), len, 0);
+	// if (send_readcount == -1)
+	// {
+	// 	// std::cerr << "Error in send()" << std::endl;
+	// 	return (-1);
+	// }
+	// std::cout<< "sending>>> " << message << std::endl;
 	_clients[client_fd]->setSendbuf("");
 	return (0);
 }

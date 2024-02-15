@@ -8,9 +8,9 @@
 class Client;
 class Message; 
 
-int cmd_cap(Message &msg, Client &Client);
+void cmd_cap(Message &msg, Client *Client);
 int cmd_nick(Message &msg, int client_fd);
-int cmd_pass(Message &msg, Client &Client);
+int cmd_pass(Message &msg, Client *Client);
 int cmd_quit(Message &msg, int client_fd);
 int cmd_user(Message &msg, int client_fd);
 int cmd_whois(Message &msg, int client_fd);

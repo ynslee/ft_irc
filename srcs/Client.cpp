@@ -8,7 +8,7 @@ Client::Client(){};
  * @param new_fd socket fd
  * @param _mode mode for USER, CHANNEL
  */
-Client::Client(int new_fd): _client_fd(new_fd), _CAPsent(0), _serverName("IRCserv"), _mode("+Ziw"), _isRegistered(0) {}
+Client::Client(int new_fd): _client_fd(new_fd), _serverName("IRCserv"), _mode("+Ziw"), _isRegistered(0) {}
 
 Client::~Client(){}
 
@@ -30,11 +30,6 @@ Client	&Client::operator=(Client const &other)
 void	Client::setSocketFd(int new_fd)
 {
 	_client_fd = new_fd;
-}
-
-void	Client::setCAPsent(int sent)
-{
-	_CAPsent = sent;
 }
 
 void	Client::setNickName(std::string new_name)
@@ -76,14 +71,13 @@ void	Client::setRegisteration(int reg)
 }
 
 const int	&Client::getClientFd(void){return(_client_fd);}
-const int	&Client::getCAPsent(void){return(_CAPsent);}
 const std::string	&Client::getServerName(void){return(_serverName);}
 const std::string	&Client::getNickName(void){return(_nickname);}
 const std::string	&Client::getUserName(void){return(_username);}
 const std::string	&Client::getRealName(void){return(_realname);}
 const int	&Client::getSocketFd(void){return(_client_fd);}
 const std::string	&Client::getReadbuf(void){return(_readbuf);}
-const std::string	&Client::getSendbuf(void){return(_sendbuf);}
+const std::string	Client::getSendbuf(void){return(_sendbuf);}
 const std::string	&Client::getIPaddress(void){return(_IPaddress);}
 const std::string	&Client::getMode(void){return(_mode);}
 const int	&Client::getRegisteration(void){return(_isRegistered);}
