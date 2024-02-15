@@ -200,11 +200,17 @@ int Server::findCommand(int client_fd)
 {
 	std::string input(_clients[client_fd]->getReadbuf());
 	Message msg(input);
-
-	switch(get_command_type(msg.command))
+	
+	int i = get_command_type(msg.command);
+	switch(i)
 	{
+		case command::CAP:
+		{
+			cmd_cap(msg, _clients[client_fd]);
+			break ;
+		}
 		case command::PASS:
-			if(cmd_pass(msg, *(_clients[client_fd])) == -1)
+			if(cmd_pass(msg, _clients[client_fd]) == -1)
 				return(-1);
 			break ;
 		// case command::NICK:
@@ -215,6 +221,9 @@ int Server::findCommand(int client_fd)
 		// 	if(cmd_user(msg,client_fd))
 		// 		return(-1);
 			// break ;
+		case command::INVALID:
+			std::cerr << "Invalid command" << std::endl;
+			break ;
 	}
 	return (0);
 }
@@ -224,20 +233,11 @@ int Server::send_msg(int client_fd)
 	std::string message;
 
 	message.clear();
-	message.clear();
 	std::map<int, Client*>::iterator it;
 	for(it=_clients.begin(); it!=_clients.end(); it++)
 	{
 		int key = it->first;
-		if(key == client_fd && _clients[client_fd]->getCAPsent() == 0)
-		{
-			message = ":" + serverName + " CAP * LS :" + "\r\n";
-			send(client_fd, message.c_str(), message.length(), 0);
-			std::cout<< "sending>>> " << message << std::endl;
-			_clients[client_fd]->setCAPsent(1);
-			return (0);
-		}
-		else if (key == client_fd && _clients[client_fd]->getCAPsent())
+		if(key == client_fd)
 		{
 			message = it->second->getSendbuf();
 			break;
@@ -255,6 +255,7 @@ int Server::send_msg(int client_fd)
 		return (-1);
 	}
 	_clients[client_fd]->setSendbuf("");
+	std::cout<< "sending>>> " << message << std::endl;
 	return (0);
 }
 
