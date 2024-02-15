@@ -11,22 +11,22 @@ class Message;
 void cmd_cap(Message &msg, Client *Client);
 int cmd_nick(Message &msg, int client_fd);
 int cmd_pass(Message &msg, Client *Client);
-int cmd_quit(Message &msg, int client_fd);
-int cmd_user(Message &msg, int client_fd);
-int cmd_whois(Message &msg, int client_fd);
-int cmd_kill(Message &msg, int client_fd);
-int cmd_privmsg(Message &msg, int client_fd);
+int cmd_quit(Message &msg, Client *Client);
+int cmd_user(Message &msg, Client *Client);
+int cmd_whois(Message &msg, Client *Client);
+int cmd_kill(Message &msg, Client *Client);
+int cmd_privmsg(Message &msg, Client *Client);
 
 
 /*channel commands*/
 
-int cmd_join(Message &msg, int client_fd);
-int cmd_kick(Message &msg, int client_fd);
-int cmd_invite(Message &msg, int client_fd);
-int cmd_topic(Message &msg, int client_fd);
-int cmd_mode(Message &msg, int client_fd);
-int cmd_motd(Message &msg, int client_fd);
-int cmd_oper(Message &msg, int client_fd);
+int cmd_join(Message &msg, Client *Client);
+int cmd_kick(Message &msg, Client *Client);
+int cmd_invite(Message &msg, Client *Client);
+int cmd_topic(Message &msg, Client *Client);
+int cmd_mode(Message &msg, Client *Client);
+int cmd_motd(Message &msg, Client *Client);
+int cmd_oper(Message &msg, Client *Client);
 
 
 

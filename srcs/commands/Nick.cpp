@@ -25,5 +25,5 @@
  */
 int cmd_nick(std::string message, int client_fd)
 {
-
+	
 }
