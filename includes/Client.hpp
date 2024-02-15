@@ -10,6 +10,7 @@
 class Client{
 	private:
 		int				_client_fd;
+		std::string		_serverName;
 		std::string		_readbuf;
 		std::string		_sendbuf;
 		std::string		_nickname;
@@ -36,6 +37,8 @@ class Client{
 		void	setMode(std::string mode);
 		void	setIPaddress(char *ip);
 		void	setRegisteration(int reg);
+		const int	&getClientFd(void);
+		const std::string	&getServerName(void);
 		const std::string	&getNickName(void);
 		const std::string	&getUserName(void);
 		const std::string	&getRealName(void);

@@ -8,7 +8,7 @@ Client::Client(){};
  * @param new_fd socket fd
  * @param _mode mode for USER, CHANNEL
  */
-Client::Client(int new_fd): _client_fd(new_fd), _mode("+Ziw"), _isRegistered(0) {}
+Client::Client(int new_fd): _client_fd(new_fd), _serverName("IRCserv"), _mode("+Ziw"), _isRegistered(0) {}
 
 Client::~Client(){}
 
@@ -70,6 +70,8 @@ void	Client::setRegisteration(int reg)
 	_isRegistered = reg;
 }
 
+const int	&Client::getClientFd(void){return(_client_fd);}
+const std::string	&Client::getServerName(void){return(_serverName);}
 const std::string	&Client::getNickName(void){return(_nickname);}
 const std::string	&Client::getUserName(void){return(_username);}
 const std::string	&Client::getRealName(void){return(_realname);}
