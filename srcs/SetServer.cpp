@@ -76,18 +76,18 @@ int Server::serverSetup()
 int Server::pollLoop()
 {
 	int poll_count;
-	this->_pollfd_count = this->_pfds.size();
-	// std::cout << this->_pollfd_count << std::endl;
+	this->_pollfdCount = this->_pfds.size();
+	// std::cout << this->_pollfdCount << std::endl;
 
 	while(42)
 	{
-		poll_count = poll(&this->_pfds[0], this->_pollfd_count, 0);
+		poll_count = poll(&this->_pfds[0], this->_pollfdCount, 0);
 		if (poll_count == -1)
 		{
 			std::cerr << "Poll Error" << std::endl;
 			return (-1);
 		}
-		for(int i = 0; i < this->_pollfd_count; i++)
+		for(int i = 0; i < this->_pollfdCount; i++)
 		{
 			if(this->_pfds[i].revents & POLLIN)
 			{
@@ -103,7 +103,7 @@ int Server::pollLoop()
 				}
 			}
 			else if (this->_pfds[i].revents & POLLOUT){
-				for (int i = 0; i < this->_pollfd_count; i++)
+				for (int i = 0; i < this->_pollfdCount; i++)
 				{
 					if (this->_pfds[i].fd == getClientId())
 					{
@@ -121,7 +121,7 @@ int Server::pollLoop()
 			}
 		}
 	}
-	for(int i = 0; i < this->_pollfd_count; i++)
+	for(int i = 0; i < this->_pollfdCount; i++)
 		close(this->_pfds[i].fd);
 	return(0);
 }
@@ -143,7 +143,7 @@ int Server::acceptPendingConnections()
 		return(-1);
 	}
 	fcntl(new_fd, F_SETFL, O_NONBLOCK);
-	if(this->_pollfd_count < MAXCLIENTS + 1)
+	if(this->_pollfdCount < MAXCLIENTS + 1)
 	{
 		poll_fd.fd = new_fd;
 		poll_fd.events = POLLIN | POLLOUT;
@@ -158,7 +158,7 @@ int Server::acceptPendingConnections()
 	std::cout << "New conection from" << s << "on socket :" << new_fd << std::endl;
 	_clients.insert(std::make_pair(new_fd, new Client(new_fd)));
 	_clients[new_fd]->setIPaddress(s);
-	this->_pollfd_count = this->_pfds.size();
+	this->_pollfdCount = this->_pfds.size();
 	return (0);
 }
 
@@ -310,12 +310,12 @@ Server::~Server()
 
 int Server::getClientId()
 {
-	return(this->_client_id);
+	return(this->_clientId);
 }
 
 void Server::setClientId(const int id)
 {
-	this->_client_id = id;
+	this->_clientId = id;
 }
 
 void Server::setMessage(const char* msg)
@@ -326,7 +326,7 @@ void Server::setMessage(const char* msg)
 	for(it=_clients.begin(); it!=_clients.end(); it++)
 	{
 		int key = it->first;
-		if(key == this->_client_id)
+		if(key == this->_clientId)
 		{
 
 			buf.assign(msg);

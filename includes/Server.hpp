@@ -36,8 +36,8 @@ class Server
 		std::string _serverName;
 		std::string _password;
 		std::vector<struct pollfd> _pfds;
-		int _pollfd_count;
-		int _client_id;
+		int _pollfdCount;
+		int _clientId;
 		std::map<int, Client*>	_clients;
 
 	public:

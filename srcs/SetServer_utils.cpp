@@ -4,9 +4,9 @@
 void Server::closeClient(int i, int fd)
 {
 	close(fd);
-	this->_pfds[i] = this->_pfds[this->_pollfd_count - 1];
+	this->_pfds[i] = this->_pfds[this->_pollfdCount - 1];
 	// we have to remove from the client when we have it
-	this->_pollfd_count--;
+	this->_pollfdCount--;
 	_clients.erase(fd);
 }
 
