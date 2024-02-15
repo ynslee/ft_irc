@@ -11,17 +11,20 @@ Message::Message(std::string input)
 		if (index == 0)
 		{
 			this->command = token;
-			// std::cout << "COMMAND: " << this->command << std::endl;
+			std::cout << "COMMAND: " << this->command << std::endl;
 		}
-		else if (index > 1  && token[0] != ':')
+		else if (index >= 1  && token[0] != ':')
 		{
 			this->params.push_back(token);
-			// std::cout << "PARAM: " << token << std::endl;
+			std::cout << "PARAM: " << token << std::endl;
 		}
-		else if (index > 1 && token[0] == ':')
+		else if (index >= 1 && token[0] == ':')
 		{
-			std::getline(iss, trailing);
-			// std::cout << "TRAIILING: " << trailing << std::endl;
+			std::string trailing  = token.substr(1);
+			std::string temp;
+			getline(iss, temp, '\n');
+			trailing += temp;
+			std::cout << "TRAIILING: " << trailing << std::endl;
 		}
 		index ++;
 	}

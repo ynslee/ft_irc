@@ -17,6 +17,7 @@ int Server::serverSetup(std::string prt)
 	struct addrinfo *serverinfo;
 	int yes = 1;
 
+	serverName = "IRCserv";
 	const char *port = prt.c_str();
 	std::cout << "port " << port << std::endl;
 
@@ -92,13 +93,13 @@ int Server::poll_loop()
 			{
 				if(this->pfds[i].fd == this->pfds[0].fd)
 				{
-					if(acceptPendingConnections())
+					if(acceptPendingConnections() == -1)
 						return(-1);
 				}
 				else
 				{
 					if(recieve_msg(this->pfds[i].fd, i) == -1)
-							return(-1);
+						continue;
 				}
 			}
 			else if (this->pfds[i].revents & POLLOUT){
@@ -187,32 +188,41 @@ int Server::recieve_msg(int client_fd, int i)
 	{
 		setClientId(client_fd);
 		setMessage(buf);
-		std::cout << buf << std::endl;
-		if(parseMessage(client_fd))
+		std::cout << "received<< " << buf << std::endl;
+		if(findCommand(client_fd) == -1)
 			return(-1);// we start parsing here
 		return (0);
 	}
 	return (-1);
 }
 
-int Server::parseMessage(int client_fd)
+int Server::findCommand(int client_fd)
 {
 	std::string input(_clients[client_fd]->getReadbuf());
 	Message msg(input);
-
-	switch(get_command_type(msg.command))
+	
+	int i = get_command_type(msg.command);
+	switch(i)
 	{
+		case command::CAP:
+		{
+			cmd_cap(msg, _clients[client_fd]);
+			break ;
+		}
 		case command::PASS:
-			if(cmd_pass(msg,client_fd))
+			if(cmd_pass(msg, _clients[client_fd]) == -1)
 				return(-1);
 			break ;
-		case command::NICK:
-			if(cmd_nick(msg,client_fd))
-				return(-1);
-			break ;
-		case command::USER:
-			if(cmd_user(msg,client_fd))
-				return(-1);
+		// case command::NICK:
+		// 	if(cmd_nick(msg,client_fd))
+		// 		return(-1);
+		// 	break ;
+		// case command::USER:
+		// 	if(cmd_user(msg,client_fd))
+		// 		return(-1);
+			// break ;
+		case command::INVALID:
+			std::cerr << "Invalid command" << std::endl;
 			break ;
 	}
 	return (0);
@@ -221,20 +231,13 @@ int Server::parseMessage(int client_fd)
 int Server::send_msg(int client_fd)
 {
 	std::string message;
-	static int flag = 1;
 
+	message.clear();
 	std::map<int, Client*>::iterator it;
 	for(it=_clients.begin(); it!=_clients.end(); it++)
 	{
 		int key = it->first;
-		if(key == client_fd && flag)
-		{
-			message = ":" + it->second->getIPaddress() + " CAP * LS ";
-			send(client_fd, message.c_str(), message.length(), 0);
-			flag = 0;
-			return (0);
-		}
-		else if (key == client_fd && !flag)
+		if(key == client_fd)
 		{
 			message = it->second->getSendbuf();
 			break;
@@ -252,6 +255,7 @@ int Server::send_msg(int client_fd)
 		return (-1);
 	}
 	_clients[client_fd]->setSendbuf("");
+	std::cout<< "sending>>> " << message << std::endl;
 	return (0);
 }
 
@@ -330,4 +334,9 @@ void Server::setMessage(const char* msg)
 			buf.clear();
 		}
 	}
+}
+
+const std::string &Server::getServerName() const
+{
+	return (this->serverName);
 }
