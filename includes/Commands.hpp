@@ -11,7 +11,7 @@ class Server;
 class Client;
 
 void cmd_cap(Message &msg, Client *Client);
-int cmd_nick(Message &msg, int client_fd);
+int cmd_nick(Message &msg, Client *Client, std::vector<std::string> nick_names);
 int cmd_pass(Message &msg, Client *Client);
 int cmd_quit(Message &msg, int client_fd);
 int cmd_user(Message &msg, int client_fd);

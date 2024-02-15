@@ -38,9 +38,10 @@ class Server
 		std::string serverName;
 		std::string password;
 		std::vector<struct pollfd> pfds;
-		int pollfd_count;
+		int pollfd_count;	
 		int client_id;
 		std::map<int, Client*>	_clients;
+		std::vector<std::string> _nicknames;
 
 	public:
 		Server(std::string port, std::string password);
@@ -49,7 +50,6 @@ class Server
 		void setClientId(const int id);
 		int serverSetup(std::string prt);
 		int acceptPendingConnections();
-		int cmd_nick(Message &msg, int client_fd);
 		int recieve_msg(int new_fd, int i);
 		int send_msg(int send_fd);
 		int poll_loop();
@@ -58,6 +58,8 @@ class Server
 		int findCommand(int client_fd);
 		int get_command_type(std::string command);
 		const std::string &getServerName() const;
+		static bool findNick(std::string nick);
+		std::vector<std::string> &getNicknames();
 };
 
 #endif

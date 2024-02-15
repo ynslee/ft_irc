@@ -1,5 +1,6 @@
 #include "../../includes/Server.hpp"
-#include "../../includes/Client.hpp"
+#include "../../includes/Commands.hpp"
+#include "../../includes/Reply.hpp"
 
 // Nick command----------------------------------------------
 //Nicknames are non-empty strings with the following restrictions:
@@ -42,24 +43,39 @@ int is_valid_nick(std::string new_nick)
     return(0);
 }
 
-int Server::cmd_nick(Message &msg, int client_fd)
+int cmd_nick(Message &msg, Client *Client, std::vector<std::string> &nick_names)
 {
-    std::string message;
-    std::string servername("hola");
-
-    Server server;
+    std::string servername = Client->getServerName();
+    if(Client->getRegisteration() == 0)
+    {
+        send(Client->getClientFd(), ERR_NOTREGISTERED(servername).c_str(), ERR_NOTREGISTERED(servername).length(), 0);
+        return(-1);
+    }
     if(msg.params.size() < 1)
     {
-        message = ERR_NONICKNAMEGIVEN(servername);
-        send(client_fd, message.c_str(), message.length(), 0);
+        send(Client->getClientFd(), ERR_NONICKNAMEGIVEN(servername).c_str(), ERR_NONICKNAMEGIVEN(servername).length(), 0);
         return(-1);
     }
     std::string new_nick = msg.params.front();
     if(is_valid_nick(new_nick))
     {
-        message = ERR_ERRONEUSNICKNAME(servername, new_nick);
-        send(client_fd, message.c_str(), message.length(), 0);
+        send(Client->getClientFd(), ERR_ERRONEUSNICKNAME(servername, new_nick).c_str(), ERR_ERRONEUSNICKNAME(servername, new_nick).length(), 0);
         return(-1);
     }
+    if(std::find(nick_names.begin(), nick_names.end(), new_nick) == nick_names.end())
+    {
+        send(Client->getClientFd(), ERR_NICKNAMEINUSE(servername, new_nick).c_str(), ERR_NICKNAMEINUSE(servername, new_nick).length(), 0);
+        return(-1);
+    }
+    if(Client->getRegisteration() == 3)
+    {
+        std::string old_nick = Client->getNickName();
+        Client->setNickName(new_nick);
+        nick_names.push_back(new_nick);
+        send(Client->getClientFd(), NICK_REPLY(old_nick,Client->getUserName(),Client->getIPaddress(), new_nick).c_str(), NICK_REPLY(old_nick,Client->getUserName(),Client->getIPaddress(), new_nick).length(),0);
+        return(0);
+    }
+    Client->setNickName(new_nick);
+    nick_names.push_back(new_nick);
     return(0);
 }
