@@ -37,7 +37,7 @@ void cmdMotd(Message &msg, Client *Client)
 {
 	std::string hostname = Client->getHostName();
 	std::string username = Client->getUserName();
-	std::string motd_line = readFile("motd.txt");
+	std::string motd_line = readFile("./motd.txt");
 	std::istringstream iss(motd_line);
 	std::string motd;
 
@@ -45,22 +45,20 @@ void cmdMotd(Message &msg, Client *Client)
 	// {
 	// 	send(Client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);
 	// }
-	if (msg.params[0].compare("localhost") != 0 || msg.params[0].compare("127.0.0.1") != 0)
+
+	if (msg.params.empty() == true)
+	{
+		Client->setSendbuf(RPL_MOTDSTART(hostname, username));
+		while(std::getline(iss, motd))
+		{
+			if (motd.empty() == false && motd.length() < 80)
+				Client->setSendbuf(RPL_MOTD(hostname, username, motd));
+		}
+		if (motd_line.empty() == true)
+			Client->setSendbuf(RPL_ENDOFMOTD(hostname, username));
+	}
+	else if (msg.params[0].compare("localhost") != 0 || msg.params[0].compare("127.0.0.1") != 0)
 	{
 		send(Client->getClientFd(), ERR_NOSUCHSERVER(hostname, msg.params[0]).c_str(), ERR_NOSUCHSERVER(hostname, msg.params[0]).length(), 0);
-	}
-	else
-	{
-		if (msg.params.size() == 0)
-		{
-			Client->setSendbuf(RPL_MOTDSTART(hostname, username));
-			while(std::getline(iss, motd))
-			{
-				if (motd.empty() == false && motd.length() < 80)
-					Client->setSendbuf(RPL_MOTD(hostname, username, motd));
-			}
-			if (motd_line.empty() == true)
-				Client->setSendbuf(RPL_ENDOFMOTD(hostname, username));
-		}
 	}
 }
