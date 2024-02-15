@@ -15,27 +15,27 @@
  */
 int cmd_pass(Message &msg, Client *Client, std::string password)
 {
-	std::string servername = Client->getServerName();
+	std::string hostname = Client->getHostName();
 
 	if (msg.params.size() == 0)
 	{
-		send(Client->getClientFd(), ERR_NEEDMOREPARAMS(servername).c_str(), ERR_NEEDMOREPARAMS(servername).length(), 0);
+		send(Client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);
 		return (-1);
 	}
 	else if(Client->getRegisteration() == 3)
 	{
-		send(Client->getClientFd(), ERR_ALREADYREGISTRED(servername).c_str(), ERR_ALREADYREGISTRED(servername).length(), 0);
+		send(Client->getClientFd(), ERR_ALREADYREGISTRED(hostname).c_str(), ERR_ALREADYREGISTRED(hostname).length(), 0);
 		return (-1);
 	}
 	else if (msg.params[0] == password)
 	{
-		Client->setSendbuf("Password correct!");
+		Client->setSendbuf("Password correct!\n");
 		Client->setRegisteration(1);
 		return (0);
 	}
 	else
 	{
-		send(Client->getClientFd(), ERR_PASSWDMISMATCH(servername).c_str(), ERR_PASSWDMISMATCH(servername).length(), 0);
+		send(Client->getClientFd(), ERR_PASSWDMISMATCH(hostname).c_str(), ERR_PASSWDMISMATCH(hostname).length(), 0);
 		return (-1);
 	}
 

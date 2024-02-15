@@ -133,6 +133,7 @@ int Server::acceptPendingConnections()
 	int new_fd;
 	char s[INET6_ADDRSTRLEN];
 	struct pollfd poll_fd;
+	char hostname[258];
 	// Client new_client(new_fd);
 
 	addr_len = sizeof(their_addr);
@@ -158,6 +159,13 @@ int Server::acceptPendingConnections()
 	std::cout << "New conection from" << s << "on socket :" << new_fd << std::endl;
 	_clients.insert(std::make_pair(new_fd, new Client(new_fd)));
 	_clients[new_fd]->setIPaddress(s);
+	if (gethostname(hostname, sizeof(hostname)) == -1)
+	{
+		std::cerr << "Error in gethostname()" << std::endl;
+		return (-1);
+	}
+	_clients[new_fd]->setHostName(hostname);
+	std::cout << "host name is" << hostname << std::endl;
 	this->pollfd_count = this->pfds.size();
 	return (0);
 }
