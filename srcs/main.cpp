@@ -22,7 +22,7 @@ int main(int argc, char **argv)
 	Server New_server(argv[1], argv[2]);
 	try
 	{
-		if (New_server.poll_loop() < 0)
+		if (New_server.pollLoop() < 0)
 			throw std::runtime_error("Poll");
 	}
 	catch(const std::exception& e)

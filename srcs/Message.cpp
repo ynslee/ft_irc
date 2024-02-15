@@ -24,7 +24,7 @@ Message::Message(std::string input)
 			std::string temp;
 			getline(iss, temp, '\n');
 			trailing += temp;
-			std::cout << "TRAIILING: " << trailing << std::endl;
+			std::cout << "TRAILING: " << trailing << std::endl;
 		}
 		index ++;
 	}

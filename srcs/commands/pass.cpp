@@ -29,7 +29,7 @@ int cmdPass(Message &msg, Client *Client, std::string password)
 	}
 	else if (msg.params[0] == password)
 	{
-		Client->setSendbuf("Password correct!");
+		Client->setSendbuf("Password correct!\r\n");
 		Client->setRegisteration(1);
 		return (0);
 	}
