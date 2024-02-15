@@ -44,7 +44,7 @@ class Client{
 		const std::string	&getRealName(void);
 		const int	&getSocketFd(void);
 		const std::string	&getReadbuf(void);
-		const std::string	getSendbuf(void);
+		const std::string	&getSendbuf(void);
 		const std::string	&getIPaddress(void);
 		const std::string	&getMode(void);
 		const int	&getRegisteration(void);

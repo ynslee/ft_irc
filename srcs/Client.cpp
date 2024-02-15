@@ -77,7 +77,7 @@ const std::string	&Client::getUserName(void){return(_username);}
 const std::string	&Client::getRealName(void){return(_realname);}
 const int	&Client::getSocketFd(void){return(_client_fd);}
 const std::string	&Client::getReadbuf(void){return(_readbuf);}
-const std::string	Client::getSendbuf(void){return(_sendbuf);}
+const std::string	&Client::getSendbuf(void){return(_sendbuf);}
 const std::string	&Client::getIPaddress(void){return(_IPaddress);}
 const std::string	&Client::getMode(void){return(_mode);}
 const int	&Client::getRegisteration(void){return(_isRegistered);}
