@@ -189,14 +189,14 @@ int Server::recieve_msg(int client_fd, int i)
 		setClientId(client_fd);
 		setMessage(buf);
 		std::cout << "received<< " << buf << std::endl;
-		if(parseMessage(client_fd) == -1)
+		if(findCommand(client_fd) == -1)
 			return(-1);// we start parsing here
 		return (0);
 	}
 	return (-1);
 }
 
-int Server::parseMessage(int client_fd)
+int Server::findCommand(int client_fd)
 {
 	std::string input(_clients[client_fd]->getReadbuf());
 	Message msg(input);
