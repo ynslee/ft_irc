@@ -66,10 +66,12 @@ int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names)
         send(Client->getClientFd(), ERR_NICKNAMEINUSE(servername, new_nick).c_str(), ERR_NICKNAMEINUSE(servername, new_nick).length(), 0);
         return(-1);
     }
-    if(Client->getRegisteration() == 3)
+    if((Client->getRegisteration() == 3 || Client->getRegisteration() == 2 || Client->getRegisteration() == 1) && Client->getNickName() != "")
     {
         std::string old_nick = Client->getNickName();
         Client->setNickName(new_nick);
+        std::vector<std::string>::iterator it = std::find(nick_names.begin(),nick_names.end(), old_nick);
+        nick_names.erase(it);
         nick_names.push_back(new_nick);
         send(Client->getClientFd(), NICK_REPLY(old_nick,Client->getUserName(),Client->getIPaddress(), new_nick).c_str(), NICK_REPLY(old_nick,Client->getUserName(),Client->getIPaddress(), new_nick).length(),0);
         return(0);
