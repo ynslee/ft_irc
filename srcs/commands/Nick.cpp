@@ -67,7 +67,7 @@ int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names)
         send(Client->getClientFd(), ERR_NICKNAMEINUSE(hostname, new_nick).c_str(), ERR_NICKNAMEINUSE(hostname, new_nick).length(), 0);
         return(-1);
     }
-    if((Client->getRegisteration() == 3 || Client->getRegisteration() == 2 || Client->getRegisteration() == 1) && Client->getNickName() != "")
+    if((Client->getRegisteration() == 3 || Client->getRegisteration() == 2 || Client->getRegisteration() == 1) && Client->getNickName().empty() == false)
     {
         std::string old_nick = Client->getNickName();
         Client->setNickName(new_nick);
@@ -79,5 +79,7 @@ int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names)
     }
     Client->setNickName(new_nick);
     nick_names.push_back(new_nick);
+    int registered = Client->getRegisteration();
+    Client->setRegisteration(registered + 1);
     return(0);
 }

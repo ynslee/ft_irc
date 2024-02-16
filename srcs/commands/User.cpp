@@ -33,6 +33,11 @@ int cmdUser(Message &msg, Client *Client)
 	}
 	else
 	{
+		if (Client->getUserName().empty() == true)
+		{
+			int registeration = Client->getRegisteration();
+			Client->setRegisteration(registeration + 1);
+		}
 		Client->setUserName(msg.params[0]);
 		if (msg.trailing.empty() == true)
 		{
@@ -40,8 +45,6 @@ int cmdUser(Message &msg, Client *Client)
 		}
 		else
 			Client->setRealName('~' + msg.trailing);
-		int registeration = Client->getRegisteration();
-		Client->setRegisteration(registeration + 1);
 		return (0);
 	}
 }
