@@ -43,5 +43,6 @@ void welcomeUser(Client *Client)
 			Client->addSendbuf(RPL_MOTD(hostname, username, motd_line));
 	}
 	if (readline.empty() == false)
-		Client->addSendbuf(RPL_ENDOFMOTD(hostname, username));	
+		Client->addSendbuf(RPL_ENDOFMOTD(hostname, username));
+	Client->setWelcomeSent(1);
 }
