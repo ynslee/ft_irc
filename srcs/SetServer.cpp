@@ -221,10 +221,12 @@ int Server::findCommand(int client_fd)
 			if(cmdPass(msg, _clients[client_fd], this->_password) == -1)
 				return(-1);
 			break ;
-		// case command::NICK:
-		// 	if(cmdNick(msg,client_fd))
-		// 		return(-1);
-		// 	break ;
+		case command::NICK:
+		{
+			if(cmdNick(msg,_clients[client_fd],getNicknames()))
+				return(-1);
+			break ;
+		}
 		case command::USER:
 			if(cmdUser(msg, _clients[client_fd]) == -1)
 				return(-1);
@@ -327,6 +329,11 @@ int Server::getClientId()
 void Server::setClientId(const int id)
 {
 	this->_clientId = id;
+}
+
+std::vector<std::string> &Server::getNicknames()
+{
+	return(this->_nicknames);
 }
 
 void Server::setMessage(const char* msg)

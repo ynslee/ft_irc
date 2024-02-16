@@ -9,7 +9,7 @@ class Client;
 class Message;
 
 void cmdCap(Message &msg, Client *Client);
-int cmdNick(Message &msg, Client *Client);
+int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names);
 int cmdPass(Message &msg, Client *Client, std::string password);
 int cmdQuit(Message &msg, Client *Client);
 int cmdUser(Message &msg, Client *Client);
