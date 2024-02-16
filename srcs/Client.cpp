@@ -8,7 +8,7 @@ Client::Client(){};
  * @param new_fd socket fd
  * @param _mode mode for USER, CHANNEL
  */
-Client::Client(int new_fd): _clientFd(new_fd), _serverName("IRCserv"), _nickname(""), _mode("+Ziw"), _isRegistered(0), _welcomeSent(0){}
+Client::Client(int new_fd): _clientFd(new_fd), _serverName("🐾TYCHUNEN SERVER🐾"), _nickname(""), _mode("+Ziw"), _isRegistered(0), _welcomeSent(0){}
 
 Client::~Client(){}
 

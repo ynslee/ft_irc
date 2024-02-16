@@ -21,6 +21,7 @@ class Client{
 		std::string		_IPaddress;
 		std::string 	_hostname;
 		int				_isRegistered;
+		int				_welcomeSent;
 		Client();
 		Client(Client const &other);
 		Client	&operator=(Client const &other);
@@ -40,6 +41,7 @@ class Client{
 		void	setIPaddress(char *ip);
 		void	setHostName(char *host);
 		void	setRegisteration(int reg);
+		void	setWelcomeSent(int sent);
 		const int	&getClientFd(void);
 		const std::string	&getServerName(void);
 		const std::string	&getNickName(void);
@@ -52,6 +54,7 @@ class Client{
 		const std::string	&getMode(void);
 		const std::string	&getHostName(void);
 		const int	&getRegisteration(void);
+		const int	&getWelcomeSent(void);
 
 		void addSendbuf(std::string buf);
 };

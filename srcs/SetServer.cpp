@@ -17,7 +17,7 @@ int Server::serverSetup()
 	struct addrinfo *serverinfo;
 	int yes = 1;
 
-	this->_serverName = "IRCserv";
+	this->_serverName = "🐾TYCHUNEN SERVER🐾";
 	const char *port = _port.c_str();
 	std::cout << "port " << this->_port << std::endl;
 
