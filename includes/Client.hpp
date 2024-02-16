@@ -19,7 +19,9 @@ class Client{
 		std::string		_realname;
 		std::string		_mode;
 		std::string		_IPaddress;
+		std::string 	_hostname;
 		int				_isRegistered;
+		int				_welcomeSent;
 		Client();
 		Client(Client const &other);
 		Client	&operator=(Client const &other);
@@ -27,8 +29,8 @@ class Client{
 	public:
 		Client(int new_fd);
 		~Client();
+		
 		//write setters getters
-
 		void	setSocketFd(int new_fd);
 		void	setNickName(std::string new_name);
 		void	setUserName(std::string new_user);
@@ -37,7 +39,9 @@ class Client{
 		void	setSendbuf(std::string buf);
 		void	setMode(std::string mode);
 		void	setIPaddress(char *ip);
+		void	setHostName(char *host);
 		void	setRegisteration(int reg);
+		void	setWelcomeSent(int sent);
 		const int	&getClientFd(void);
 		const std::string	&getServerName(void);
 		const std::string	&getNickName(void);
@@ -48,7 +52,11 @@ class Client{
 		const std::string	&getSendbuf(void);
 		const std::string	&getIPaddress(void);
 		const std::string	&getMode(void);
+		const std::string	&getHostName(void);
 		const int	&getRegisteration(void);
+		const int	&getWelcomeSent(void);
+
+		void addSendbuf(std::string buf);
 };
 
 #endif

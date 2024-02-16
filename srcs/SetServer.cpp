@@ -17,7 +17,7 @@ int Server::serverSetup()
 	struct addrinfo *serverinfo;
 	int yes = 1;
 
-	this->_serverName = "IRCserv";
+	this->_serverName = "🐾TYCHUNEN SERVER🐾";
 	const char *port = _port.c_str();
 	std::cout << "port " << this->_port << std::endl;
 
@@ -133,6 +133,7 @@ int Server::acceptPendingConnections()
 	int new_fd;
 	char s[INET6_ADDRSTRLEN];
 	struct pollfd poll_fd;
+	char hostname[258];
 	// Client new_client(new_fd);
 
 	addr_len = sizeof(their_addr);
@@ -158,6 +159,13 @@ int Server::acceptPendingConnections()
 	std::cout << "New conection from" << s << "on socket :" << new_fd << std::endl;
 	_clients.insert(std::make_pair(new_fd, new Client(new_fd)));
 	_clients[new_fd]->setIPaddress(s);
+	if (gethostname(hostname, sizeof(hostname)) == -1)
+	{
+		std::cerr << "Error in gethostname()" << std::endl;
+		return (-1);
+	}
+	_clients[new_fd]->setHostName(hostname);
+	std::cout << "host name is" << hostname << std::endl;
 	this->_pollfdCount = this->_pfds.size();
 	return (0);
 }
@@ -225,6 +233,10 @@ int Server::findCommand(int client_fd)
 			}
 			case command::USER:
 				if(cmdUser(msg, _clients[client_fd]) == -1)
+					return(-1);
+				break ;
+			case command::MOTD:
+				if (cmdMotd(msg, _clients[client_fd]) == -1)
 					return(-1);
 				break ;
 			case command::INVALID:

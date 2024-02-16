@@ -24,7 +24,7 @@ int Server::getCommandType(std::string command)
         "KICK",
         "TOPIC",
         "MODE",
-        "MODT",
+        "MOTD",
         "PRIVMSG",
         "WHOIS",
         "KILL",
