@@ -54,7 +54,7 @@ class Server
 		int sendMsg(int send_fd);
 		int pollLoop();
 		void closeClient(int i, int fd);
-		void setMessage(const char* msg);
+		void setMessage(std::string msg);
 		int findCommand(int client_fd);
 		int getCommandType(std::string command);
 		const std::string &getServerName() const;

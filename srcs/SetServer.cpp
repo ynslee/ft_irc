@@ -3,6 +3,8 @@
 #include "../includes/Message.hpp"
 #include "../includes/Commands.hpp"
 
+static std::string msg;
+
 void *get_in_addr(struct sockaddr *sa)
 {
 	if (sa->sa_family == AF_INET)
@@ -186,12 +188,17 @@ int Server::recieveMsg(int client_fd, int i)
 	}
 	else
 	{
-		setClientId(client_fd); // setting clientId for the server
-		setMessage(buf);
-		std::cout << "received<< " << buf << std::endl;
-		if(findCommand(client_fd) == -1)
-			return(-1);// we start parsing here
-		return (0);
+		msg = buf;
+		while (!msg.empty())
+		{
+			setClientId(client_fd); // setting clientId for the server
+			setMessage(msg);
+			std::cout << "message in receive message after set message: " << msg <<std::endl;
+			if(findCommand(client_fd) == -1)
+				return(-1);// we start parsing here
+			// std::cout << "received<< " << buf << std::endl;
+		}
+		// return (0);
 	}
 	return (-1);
 }
@@ -325,7 +332,7 @@ std::vector<std::string> &Server::getNicknames()
 	return(this->_nicknames);
 }
 
-void Server::setMessage(const char* msg) // message coming from client to server
+void Server::setMessage(std::string msg) // message coming from client to server
 {
 	std::string buf; // if something left here?
 
@@ -335,11 +342,13 @@ void Server::setMessage(const char* msg) // message coming from client to server
 		int key = it->first;
 		if(key == this->_clientId)
 		{
-			size_t pos = std::string(msg).find('\n');
+			size_t pos = msg.find('\n');
 			if (pos != std::string::npos)
 			{
-				buf = std::string(msg, 0, pos);
-				std::string(msg).erase(0, pos +1 );
+				buf = msg.substr(0, pos + 1);
+				msg.erase(0, pos + 1);
+				std::cout << "msg after erasing << " << msg << std::endl;
+				std::cout << "received<< " << buf << std::endl;
 			}
 			else
 			{
