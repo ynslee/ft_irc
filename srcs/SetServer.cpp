@@ -164,7 +164,7 @@ int Server::acceptPendingConnections()
 
 int Server::recieveMsg(int client_fd, int i)
 {
-	char buf[80];
+	char buf[512];
 	int readcount;
 
 	memset(buf, 0, sizeof(buf));
@@ -186,7 +186,7 @@ int Server::recieveMsg(int client_fd, int i)
 	}
 	else
 	{
-		setClientId(client_fd);
+		setClientId(client_fd); // setting clientId for the server
 		setMessage(buf);
 		std::cout << "received<< " << buf << std::endl;
 		if(findCommand(client_fd) == -1)
@@ -318,9 +318,9 @@ void Server::setClientId(const int id)
 	this->_clientId = id;
 }
 
-void Server::setMessage(const char* msg)
+void Server::setMessage(const char* msg) // message coming from client to server
 {
-	std::string buf;
+	std::string buf; // if something left here?
 
 	std::map<int, Client*>::iterator it;
 	for(it=_clients.begin(); it!=_clients.end(); it++)
@@ -328,8 +328,17 @@ void Server::setMessage(const char* msg)
 		int key = it->first;
 		if(key == this->_clientId)
 		{
-
-			buf.assign(msg);
+			size_t pos = std::string(msg).find('\n');
+			if (pos != std::string::npos)
+			{
+				buf = std::string(msg, 0, pos);
+				std::string(msg).erase(0, pos +1 );
+			}
+			else
+			{
+				buf = std::string(msg);
+				buf += '\n';
+			}
 			it->second->setReadbuf(buf);
 			buf.clear();
 		}
