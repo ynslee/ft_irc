@@ -3,8 +3,6 @@
 #include "../includes/Message.hpp"
 #include "../includes/Commands.hpp"
 
-static std::string msg;
-
 void *get_in_addr(struct sockaddr *sa)
 {
 	if (sa->sa_family == AF_INET)
@@ -188,53 +186,63 @@ int Server::recieveMsg(int client_fd, int i)
 	}
 	else
 	{
-		msg = buf;
-		while (!msg.empty())
-		{
-			setClientId(client_fd); // setting clientId for the server
-			setMessage(msg);
-			std::cout << "message in receive message after set message: " << msg <<std::endl;
-			if(findCommand(client_fd) == -1)
-				return(-1);// we start parsing here
-			// std::cout << "received<< " << buf << std::endl;
-		}
-		// return (0);
+		setClientId(client_fd);
+		setMessage(std::string(buf));
+		if(findCommand(client_fd) == -1)
+			return(-1);
+		// std::cout << "received<< " << buf << std::endl;
+		return (0);
 	}
 	return (-1);
 }
 
 int Server::findCommand(int client_fd)
 {
-	std::string input(_clients[client_fd]->getReadbuf());
-	Message msg(input);
-
-	int i = getCommandType(msg.command);
-	switch(i)
+	while (1)
 	{
-		case command::CAP:
+		if (_clients[client_fd]->getReadbuf().empty())
+			break ;
+		std::string input = extractInput(_clients, client_fd);
+		Message msg(input);
+
+		int i = getCommandType(msg.command);
+		switch(i)
 		{
-			cmdCap(msg, _clients[client_fd]);
-			break ;
+			case command::CAP:
+			{
+				cmdCap(msg, _clients[client_fd]);
+				break ;
+			}
+			case command::PASS:
+				if(cmdPass(msg, _clients[client_fd], this->_password) == -1)
+					return(-1);
+				break ;
+			case command::NICK:
+			{
+				if(cmdNick(msg,_clients[client_fd],getNicknames()))
+					return(-1);
+				break ;
+			}
+			case command::USER:
+				if(cmdUser(msg, _clients[client_fd]) == -1)
+					return(-1);
+				break ;
+			case command::INVALID:
+				std::cerr << "Invalid command" << std::endl;
+				break ;
 		}
-		case command::PASS:
-			if(cmdPass(msg, _clients[client_fd], this->_password) == -1)
-				return(-1);
-			break ;
-		case command::NICK:
-		{
-			if(cmdNick(msg,_clients[client_fd],getNicknames()))
-				return(-1);
-			break ;
-		}
-		case command::USER:
-			if(cmdUser(msg, _clients[client_fd]) == -1)
-				return(-1);
-			break ;
-		case command::INVALID:
-			std::cerr << "Invalid command" << std::endl;
-			break ;
 	}
 	return (0);
+}
+
+std::string extractInput(std::map<int, Client *> _clients, int client_fd)
+{
+	size_t pos =  _clients[client_fd]->getReadbuf().find("\n");
+	std::string input =  _clients[client_fd]->getReadbuf().substr(0, pos);
+	std::string temp = _clients[client_fd]->getReadbuf();
+	temp.erase(0, pos + 1);
+	_clients[client_fd]->setReadbuf(temp);
+	return (input);
 }
 
 int Server::sendMsg(int client_fd)
@@ -332,31 +340,16 @@ std::vector<std::string> &Server::getNicknames()
 	return(this->_nicknames);
 }
 
-void Server::setMessage(std::string msg) // message coming from client to server
+void Server::setMessage(std::string msg)
 {
-	std::string buf; // if something left here?
-
 	std::map<int, Client*>::iterator it;
 	for(it=_clients.begin(); it!=_clients.end(); it++)
 	{
 		int key = it->first;
 		if(key == this->_clientId)
 		{
-			size_t pos = msg.find('\n');
-			if (pos != std::string::npos)
-			{
-				buf = msg.substr(0, pos + 1);
-				msg.erase(0, pos + 1);
-				std::cout << "msg after erasing << " << msg << std::endl;
-				std::cout << "received<< " << buf << std::endl;
-			}
-			else
-			{
-				buf = std::string(msg);
-				buf += '\n';
-			}
-			it->second->setReadbuf(buf);
-			buf.clear();
+			it->second->setReadbuf(msg);
+			msg.clear();
 		}
 	}
 }

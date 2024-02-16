@@ -62,4 +62,6 @@ class Server
 		std::vector<std::string> &getNicknames();
 };
 
+std::string extractInput(std::map<int, Client *> _clients, int client_fd);
+
 #endif
