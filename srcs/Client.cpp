@@ -65,6 +65,11 @@ void	Client::setIPaddress(char *ip)
 	_IPaddress.assign(ip);
 }
 
+void	Client::setHostName(char *host)
+{
+	_hostname.assign(host);
+}
+
 void	Client::setRegisteration(int reg)
 {
 	_isRegistered = reg;
@@ -79,5 +84,11 @@ const int	&Client::getSocketFd(void){return(_clientFd);}
 const std::string	&Client::getReadbuf(void){return(_readbuf);}
 const std::string	&Client::getSendbuf(void){return(_sendbuf);}
 const std::string	&Client::getIPaddress(void){return(_IPaddress);}
+const std::string	&Client::getHostName(void){return(_hostname);}
 const std::string	&Client::getMode(void){return(_mode);}
 const int	&Client::getRegisteration(void){return(_isRegistered);}
+
+void	Client::addSendbuf(std::string buf)
+{
+	_sendbuf += buf;
+}
