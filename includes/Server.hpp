@@ -6,8 +6,10 @@
 # include "Common.hpp"
 # include "Client.hpp"
 # include "Message.hpp"
+# include "Commands.hpp"
 
 class Client;
+class Message;
 
 	enum command {
 		CAP,
@@ -39,6 +41,7 @@ class Server
 		int _pollfdCount;
 		int _clientId;
 		std::map<int, Client*>	_clients;
+		std::vector<std::string> _nicknames;
 
 	public:
 		Server(std::string port, std::string password);
@@ -55,6 +58,8 @@ class Server
 		int findCommand(int client_fd);
 		int getCommandType(std::string command);
 		const std::string &getServerName() const;
+		static bool findNick(std::string nick);
+		std::vector<std::string> &getNicknames();
 };
 
 #endif
