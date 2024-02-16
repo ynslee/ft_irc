@@ -81,5 +81,7 @@ int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names)
     nick_names.push_back(new_nick);
     int registered = Client->getRegisteration();
     Client->setRegisteration(registered + 1);
+    if (Client->getRegisteration() == 3 && Client->getWelcomeSent() == 0)
+        welcomeUser(Client);
     return(0);
 }

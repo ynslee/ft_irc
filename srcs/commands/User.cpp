@@ -45,6 +45,8 @@ int cmdUser(Message &msg, Client *Client)
 		}
 		else
 			Client->setRealName('~' + msg.trailing);
+		if (Client->getRegisteration() == 3 && Client->getWelcomeSent() == 0)
+        	welcomeUser(Client);
 		return (0);
 	}
 }

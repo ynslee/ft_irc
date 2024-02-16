@@ -8,7 +8,7 @@ Client::Client(){};
  * @param new_fd socket fd
  * @param _mode mode for USER, CHANNEL
  */
-Client::Client(int new_fd): _clientFd(new_fd), _serverName("IRCserv"), _nickname(""), _mode("+Ziw"), _isRegistered(0){}
+Client::Client(int new_fd): _clientFd(new_fd), _serverName("🐾TYCHUNEN SERVER🐾"), _nickname(""), _mode("+Ziw"), _isRegistered(0), _welcomeSent(0){}
 
 Client::~Client(){}
 
@@ -75,6 +75,11 @@ void	Client::setRegisteration(int reg)
 	_isRegistered = reg;
 }
 
+void	Client::setWelcomeSent(int sent)
+{
+	_welcomeSent = sent;
+}
+
 const int	&Client::getClientFd(void){return(_clientFd);}
 const std::string	&Client::getServerName(void){return(_serverName);}
 const std::string	&Client::getNickName(void){return(_nickname);}
@@ -87,6 +92,7 @@ const std::string	&Client::getIPaddress(void){return(_IPaddress);}
 const std::string	&Client::getHostName(void){return(_hostname);}
 const std::string	&Client::getMode(void){return(_mode);}
 const int	&Client::getRegisteration(void){return(_isRegistered);}
+const int &Client::getWelcomeSent(void){return(_welcomeSent);}
 
 void	Client::addSendbuf(std::string buf)
 {
