@@ -87,3 +87,8 @@ const std::string	&Client::getIPaddress(void){return(_IPaddress);}
 const std::string	&Client::getHostName(void){return(_hostname);}
 const std::string	&Client::getMode(void){return(_mode);}
 const int	&Client::getRegisteration(void){return(_isRegistered);}
+
+void	Client::addSendbuf(std::string buf)
+{
+	_sendbuf += buf;
+}

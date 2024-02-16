@@ -36,9 +36,9 @@ void cmdMotd(Message &msg, Client *Client)
 {
 	std::string hostname = Client->getHostName();
 	std::string username = Client->getUserName();
-	std::string motd_line = readFile("./motd.txt");
-	std::istringstream iss(motd_line);
-	std::string motd;
+	std::string readline = readFile("./motd.txt");
+	std::istringstream iss(readline);
+	std::string motd_line;
 
 	// if (Client->getRegisteration() != 3)
 	// {
@@ -48,13 +48,14 @@ void cmdMotd(Message &msg, Client *Client)
 	if (msg.params.empty() == true)
 	{
 		Client->setSendbuf(RPL_MOTDSTART(hostname, username));
-		while(std::getline(iss, motd))
+		while(std::getline(iss, motd_line))
 		{
-			if (motd.empty() == false)
-				Client->setSendbuf(RPL_MOTD(hostname, username, motd));
+			if (motd_line.empty() == false)
+				Client->addSendbuf(RPL_MOTD(hostname, username, motd_line));
+				// send(Client->getClientFd(), RPL_MOTD(hostname, username, motd).c_str(), RPL_MOTD(hostname, username, motd).length(), 0);
 		}
-		if (motd_line.empty() == true)
-			Client->setSendbuf(RPL_ENDOFMOTD(hostname, username));
+		if (readline.empty() == false)
+			Client->addSendbuf(RPL_ENDOFMOTD(hostname, username));
 	}
 	else if (msg.params[0].compare("localhost") != 0 || msg.params[0].compare("127.0.0.1") != 0)
 	{

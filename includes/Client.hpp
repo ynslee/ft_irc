@@ -28,8 +28,8 @@ class Client{
 	public:
 		Client(int new_fd);
 		~Client();
+		
 		//write setters getters
-
 		void	setSocketFd(int new_fd);
 		void	setNickName(std::string new_name);
 		void	setUserName(std::string new_user);
@@ -52,6 +52,8 @@ class Client{
 		const std::string	&getMode(void);
 		const std::string	&getHostName(void);
 		const int	&getRegisteration(void);
+
+		void addSendbuf(std::string buf);
 };
 
 #endif

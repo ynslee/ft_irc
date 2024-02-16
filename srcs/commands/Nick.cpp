@@ -43,27 +43,28 @@ int isValidnick(std::string new_nick)
 
 int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names)
 {
-    std::string servername = Client->getServerName();
+    std::string hostname = Client->getHostName();
+    
     if(Client->getRegisteration() == 0)
     {
-        send(Client->getClientFd(), ERR_NOTREGISTERED(servername).c_str(), ERR_NOTREGISTERED(servername).length(), 0);
+        send(Client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);
         return(-1);
     }
     if(msg.params.size() < 1)
     {
-        send(Client->getClientFd(), ERR_NONICKNAMEGIVEN(servername).c_str(), ERR_NONICKNAMEGIVEN(servername).length(), 0);
+        send(Client->getClientFd(), ERR_NONICKNAMEGIVEN(hostname).c_str(), ERR_NONICKNAMEGIVEN(hostname).length(), 0);
         return(-1);
     }
     std::string new_nick = msg.params.front();
     if(isValidnick(new_nick))
     {
-        send(Client->getClientFd(), ERR_ERRONEUSNICKNAME(servername, new_nick).c_str(), ERR_ERRONEUSNICKNAME(servername, new_nick).length(), 0);
+        send(Client->getClientFd(), ERR_ERRONEUSNICKNAME(hostname, new_nick).c_str(), ERR_ERRONEUSNICKNAME(hostname, new_nick).length(), 0);
         return(-1);
     }
     if(std::find(nick_names.begin(), nick_names.end(), new_nick) != nick_names.end())
     {
 
-        send(Client->getClientFd(), ERR_NICKNAMEINUSE(servername, new_nick).c_str(), ERR_NICKNAMEINUSE(servername, new_nick).length(), 0);
+        send(Client->getClientFd(), ERR_NICKNAMEINUSE(hostname, new_nick).c_str(), ERR_NICKNAMEINUSE(hostname, new_nick).length(), 0);
         return(-1);
     }
     if((Client->getRegisteration() == 3 || Client->getRegisteration() == 2 || Client->getRegisteration() == 1) && Client->getNickName() != "")
