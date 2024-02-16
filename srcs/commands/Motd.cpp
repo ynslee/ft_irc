@@ -20,7 +20,6 @@
  *   RPL_MOTD (372)
  *   RPL_ENDOFMOTD (376)
  * 
- * 
  */
 
 static std::string readFile(const std::string &filename)
@@ -51,7 +50,7 @@ void cmdMotd(Message &msg, Client *Client)
 		Client->setSendbuf(RPL_MOTDSTART(hostname, username));
 		while(std::getline(iss, motd))
 		{
-			if (motd.empty() == false && motd.length() < 80)
+			if (motd.empty() == false)
 				Client->setSendbuf(RPL_MOTD(hostname, username, motd));
 		}
 		if (motd_line.empty() == true)
