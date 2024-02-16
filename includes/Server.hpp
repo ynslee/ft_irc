@@ -26,6 +26,7 @@ class Message;
 		WHOIS,
 		KILL,
 		OPER,
+		QUIT,
 		INVALID,
 		// what else?
 	};
@@ -58,8 +59,8 @@ class Server
 		int findCommand(int client_fd);
 		int getCommandType(std::string command);
 		const std::string &getServerName() const;
-		static bool findNick(std::string nick);
 		std::vector<std::string> &getNicknames();
+		void removeClientfromPoll(int fd);
 };
 
 #endif

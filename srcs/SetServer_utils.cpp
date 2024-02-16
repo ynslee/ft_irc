@@ -28,14 +28,32 @@ int Server::getCommandType(std::string command)
         "PRIVMSG",
         "WHOIS",
         "KILL",
-        "OPER"
+        "OPER",
+        "QUIT",
     };
 
-    for (int i = 0; i < 14; i++)
-    {
+    for (int i = 0; i < 15; i++)
+    { 
         if (command == commands[i])
+        {
             return (i);
+        }
     }
     return (INVALID);
 
+}
+
+void Server::removeClientfromPoll(int fd)
+{
+    for(int i = 0; i < this->_pollfdCount; i++)
+	{				
+        if(this->_pfds[i].fd == fd)
+        {
+            this->_pfds[i] = this->_pfds[this->_pollfdCount - 1];
+            _pollfdCount--;
+            _clients.erase(fd);
+            break ;
+        }
+    }
+    return ;
 }
