@@ -12,7 +12,7 @@
 # define ERR_NICKCOLLISION(hostname, nick, user, host)(":" + hostname + " 436 * " + nick + " Nickname collision KILL from " + user + "@" + host + + "\r\n")
 # define ERR_NOTREGISTERED(hostname)(":" + hostname + " 451 * :You have not registered" + "\r\n")
 # define ERR_NOSUCHSERVER(hostname, servername)(":" + hostname + " 402 " + servername + " :No such server" + "\r\n")
-
+# define ERR_NOOPERHOST(hostname)(":" + hostname + " 491 * :You have not registered" + "\r\n")
 //NORMAL REPLIES
 # define NICK_REPLY(old_nick, usesrname, userIP, new_nick)(":" + old_nick + "!~" + usesrname + "@" + userIP + " Nick :" + new_nick+ "\r\n")
 # define RPL_MOTDSTART(hostname, usersname)(":" + hostname+ " 375 * :- " + username + " Message of the day - " + "\r\n")
@@ -21,5 +21,6 @@
 # define RPL_WELCOME(hostname, username, servername, nick, userIP)(":" + hostname + " 001 " + username + " :Welcome to the Internet Relay Network " + servername + "!" + nick + "@" + userIP + "\r\n")
 # define RPL_YOURHOST(hostname, username, servername)(":" + hostname + " 002 " + username + " :Your host is " + servername + ", running version 1.0\r\n")
 # define RPL_CREATED(hostname, username, date)(":" + hostname + " 003 " + username + " :This server was created " + date + "\r\n")
+# define RPL_YOUREOPER(hostname, username)(":" + hostname + " 381 " + username + " :You are now an IRC operator " + "\r\n")
 
 #endif

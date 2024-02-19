@@ -8,7 +8,7 @@ Client::Client(){};
  * @param new_fd socket fd
  * @param _mode mode for USER, CHANNEL
  */
-Client::Client(int new_fd): _clientFd(new_fd), _serverName("🐾TYCHUNEN SERVER🐾"), _nickname(""), _mode("+Ziw"), _isRegistered(0), _welcomeSent(0){}
+Client::Client(int new_fd): _clientFd(new_fd), _serverName("🐾TYCHUNEN SERVER🐾"), _nickname(""), _mode("+Ziw"), _isRegistered(0), _welcomeSent(0), _isOperator(false) {}
 
 Client::~Client(){}
 
@@ -79,7 +79,10 @@ void	Client::setWelcomeSent(int sent)
 {
 	_welcomeSent = sent;
 }
-
+void	Client::setIsOperator(bool status)
+{
+	_isOperator = status;
+}
 const int	&Client::getClientFd(void){return(_clientFd);}
 const std::string	&Client::getServerName(void){return(_serverName);}
 const std::string	&Client::getNickName(void){return(_nickname);}

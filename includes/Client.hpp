@@ -22,6 +22,7 @@ class Client{
 		std::string 	_hostname;
 		int				_isRegistered;
 		int				_welcomeSent;
+		bool			_isOperator;
 		Client();
 		Client(Client const &other);
 		Client	&operator=(Client const &other);
@@ -42,6 +43,7 @@ class Client{
 		void	setHostName(char *host);
 		void	setRegisteration(int reg);
 		void	setWelcomeSent(int sent);
+		void	setIsOperator(bool status);
 		const int	&getClientFd(void);
 		const std::string	&getServerName(void);
 		const std::string	&getNickName(void);
