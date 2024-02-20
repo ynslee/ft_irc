@@ -12,7 +12,7 @@
 # define ERR_NICKCOLLISION(hostname, nick, user, host)(":" + hostname + " 436 * " + nick + " Nickname collision KILL from " + user + "@" + host + + "\r\n")
 # define ERR_NOTREGISTERED(hostname)(":" + hostname + " 451 * :You have not registered" + "\r\n")
 # define ERR_NOSUCHSERVER(hostname, servername)(":" + hostname + " 402 " + servername + " :No such server" + "\r\n")
-
+# define ERR_NOOPERHOST(hostname)(":" + hostname + " 491 * :You have not registered" + "\r\n")
 //NORMAL REPLIES
 # define QUIT_MESSAGE(nick, username, userIP)(":" + nick + "!" + username + "@" + userIP + " QUIT :Quit: ")
 # define NICK_REPLY(old_nick, usesrname, userIP, new_nick)(":" + old_nick + "!~" + usesrname + "@" + userIP + " Nick :" + new_nick+ "\r\n")
@@ -23,5 +23,6 @@
 # define RPL_YOURHOST(hostname, username, servername)(":" + hostname + " 002 " + username + " :Your host is " + servername + ", running version 1.0\r\n")
 # define RPL_CREATED(hostname, username, date)(":" + hostname + " 003 " + username + " :This server was created " + date + "\r\n")
 # define RPL_MODE(username, mode)(":" + username + " MODE " + username + " :" + mode + "\r\n")
+# define RPL_YOUREOPER(hostname, username)(":" + hostname + " 381 " + username + " :You are now an IRC operator " + "\r\n")
 
 #endif

@@ -235,6 +235,10 @@ int Server::findCommand(int client_fd)
 			if (cmdMotd(msg, _clients[client_fd]) == -1)
 				return(-1);
 			break ;
+		case command::OPER:
+			if (cmdOper(msg, _clients[client_fd]) == -1)
+				return(-1);
+			break ;
 		case command::QUIT:
 		{
 			cmdQuit(msg, _clients[client_fd]);
