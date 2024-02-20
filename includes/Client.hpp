@@ -20,6 +20,7 @@ class Client{
 		std::string		_mode;
 		std::string		_IPaddress;
 		std::string 	_hostname;
+		std::string		_operatorPassword;
 		int				_isRegistered;
 		int				_welcomeSent;
 		bool			_isOperator;
@@ -55,8 +56,10 @@ class Client{
 		const std::string	&getIPaddress(void);
 		const std::string	&getMode(void);
 		const std::string	&getHostName(void);
+		const std::string	&getOperatorPassword(void);
 		const int	&getRegisteration(void);
 		const int	&getWelcomeSent(void);
+		const bool 	&getOperatorStatus(void);
 
 		void addSendbuf(std::string buf);
 };

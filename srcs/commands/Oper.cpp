@@ -14,11 +14,12 @@
  * <username> needs to be at least 1 character long.
  */
 
-int cmdOper(Message &msg, Client *Client, std::string password)
+int cmdOper(Message &msg, Client *Client)
 {
     std::string hostname = Client->getHostName();
+    std::string password = Client->getOperatorPassword();
 
-    if(Client->getRegisteration() == 0)
+    if(Client->getRegisteration() == 0 || Client->getRegisteration() == 1 || Client->getRegisteration() == 2)
     {
         send(Client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);
         return(-1);
@@ -42,6 +43,6 @@ int cmdOper(Message &msg, Client *Client, std::string password)
     {
         Client->setIsOperator(true);
         send(Client->getClientFd(), RPL_YOUREOPER(hostname,Client->getUserName()).c_str(), RPL_YOUREOPER(hostname,Client->getUserName()).length(), 0);
-    }
+    }   
     return(0);
 }
