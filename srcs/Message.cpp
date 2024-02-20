@@ -1,4 +1,6 @@
 #include "../includes/Message.hpp"
+#include <cctype>
+#include <cstring>
 
 Message::Message(std::string input)
 {
@@ -10,6 +12,8 @@ Message::Message(std::string input)
 	{
 		if (index == 0)
 		{
+			for (int i = 0; i < static_cast<int>(token.length()); i++)
+				token[i] = std::toupper(token[i]);
 			this->command = token;
 			std::cout << "COMMAND: " << this->command << std::endl;
 		}

@@ -17,10 +17,11 @@
 # define QUIT_MESSAGE(nick, username, userIP)(":" + nick + "!" + username + "@" + userIP + " QUIT :Quit: ")
 # define NICK_REPLY(old_nick, usesrname, userIP, new_nick)(":" + old_nick + "!~" + usesrname + "@" + userIP + " Nick :" + new_nick+ "\r\n")
 # define RPL_MOTDSTART(hostname, usersname)(":" + hostname+ " 375 * :- " + username + " Message of the day - " + "\r\n")
-# define RPL_MOTD(hostname, client, motd_line) (":" + hostname + " 372 " + client + " :" + motd_line + "\r\n")
-# define RPL_ENDOFMOTD(hostname, client) (":" + hostname + " 376 " + client + " :End of /MOTD command.\r\n")
+# define RPL_MOTD(hostname, username, motd_line) (":" + hostname + " 372 " + username + " :" + motd_line + "\r\n")
+# define RPL_ENDOFMOTD(hostname, username) (":" + hostname + " 376 " + username + " :End of /MOTD command.\r\n")
 # define RPL_WELCOME(hostname, username, servername, nick, userIP)(":" + hostname + " 001 " + username + " :Welcome to the Internet Relay Network " + servername + "!" + nick + "@" + userIP + "\r\n")
 # define RPL_YOURHOST(hostname, username, servername)(":" + hostname + " 002 " + username + " :Your host is " + servername + ", running version 1.0\r\n")
 # define RPL_CREATED(hostname, username, date)(":" + hostname + " 003 " + username + " :This server was created " + date + "\r\n")
+# define RPL_MODE(username, mode)(":" + username + " MODE " + username + " :" + mode + "\r\n")
 
 #endif
