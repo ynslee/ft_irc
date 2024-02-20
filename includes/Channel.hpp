@@ -5,6 +5,8 @@
 
 class Client;
 
+
+//userlimit = user capacity limits in channel
 class Channel
 {
 	private:
@@ -12,50 +14,36 @@ class Channel
 		std::vector<std::string>		_kickedUsers;
 		std::vector<std::string>		_operators;
 		std::string						_operatorPassword;
-		std::string 					_chanel;
-		std::string						_channelPassword;
+		std::string 					_channel;
+		std::string						_channelKey;
 		std::string						_topic;
 		std::string						_mode;
-		int								_capacity_limit;
+		int								_userLimit;
 		 
 	public:
 		Channel(std::string const &name);
 		~Channel();
 
-		/* Accessors */
-		std::string&					getName();
-		std::string&					getTopic() ;
-		std::string&					getMode() ;
-		std::string&					getChannelPassword() ;
-		int&							getCapacityLimit() ;
+
+		const std::string&				getChannelName();
+		const std::string&				getTopic() ;
+		const std::string&				getMode() ;
+		const std::string&				getChannelKey() ;
+		const int&						getUserLimit() ;
 		std::vector<std::string>&		getOperators() ;
 		std::vector<std::string>&		getKickedUsers() ;
-		std::vector<std::string>&		getBannedUsers() ;
-		std::vector<std::string>&		getVoicedUsers() ;
 		std::map <std::string, Client>&	getClientList();
 		void							setTopic(std::string& newTopic);
-		void							setChannelPassword(std::string password);
-		void							setCapacityLimit(int limit);
-		bool							doesClientExist(std::string &clientName);
-		/* Manage client in Channel */
-		void							addClientToChannel(Client &client);
-		void							removeClientFromChannel(std::string &clientName);
-		/* Operators */
-		void							addFirstOperator(std::string operatorName);
+		void							setChannelKey(std::string password);
+		void							setUserLimit(int limit);
+		void							addToChannel(Client &client);
+		void							removeFromChannel(std::string &nick);
+		void							addOperator(std::string operatorName);
 		void							removeOperator(std::string operatoName);
-		// void							addOperator(std::string operatorName);
 		bool							isOperator(std::string &operatorName);
-		/* Modes */
 		void							addMode(std::string const mode);
 		void							removeMode(std::string const mode);
 		void							removeChannelPassword();
-		/* Client status */
 		void							addToKicked(std::string &banned_name);
-		void							addToBanned(std::string &banned_name);
-		void							removeFromBanned(std::string &banned_name);
-		bool							isBanned(std::string &banned_name);
-		void							addToVoiced(std::string &voiced_name);
-		void							removeFromVoiced(std::string &voiced_name);
-		bool							isVoiced(std::string &voiced_name);
 
 };
