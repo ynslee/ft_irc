@@ -42,7 +42,7 @@ int cmdOper(Message &msg, Client *Client)
     else
     {
         Client->setIsOperator(true);
-        send(Client->getClientFd(), RPL_YOUREOPER(hostname,Client->getUserName()).c_str(), RPL_YOUREOPER(hostname,Client->getUserName()).length(), 0);
+        Client->setReadbuf(RPL_YOUREOPER(hostname,Client->getUserName()));
     }   
     return(0);
 }
