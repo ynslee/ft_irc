@@ -245,6 +245,12 @@ int Server::findCommand(int client_fd)
 			removeClientfromPoll(client_fd);
 			break ;
 		}
+		case command::JOIN:
+		{
+			if(cmdJoin(msg, _clients[client_fd], _channels) == -1)
+				return(-1);
+			break;
+		}
 		case command::INVALID:
 			std::cerr << "Invalid command" << std::endl;
 			break ;
@@ -283,6 +289,11 @@ int Server::sendMsg(int client_fd)
 	return (0);
 }
 
+std::map<std::string, Channel*> &Server::getChannels()
+{
+	return(this->_channels);
+}
+
 
 Server::Server(std::string port, std::string password): _port(port), _password(password)
 {
@@ -312,6 +323,7 @@ Server::Server(std::string port, std::string password): _port(port), _password(p
 	}
 	try
 	{
+		_channels.clear();
 		if (serverSetup() < 0)
 			throw std::runtime_error("Could not set server up");
 	}
@@ -327,6 +339,11 @@ Server::~Server()
 {
 	std::map<int, Client*>::iterator it;
 	for(it=_clients.begin(); it!=_clients.end(); it++)
+	{
+		delete it->second;
+	}
+	std::map<std::string, Channel*>::iterator it2;
+	for(it2=_channels.begin(); it2!=_channels.end(); it++)
 	{
 		delete it->second;
 	}

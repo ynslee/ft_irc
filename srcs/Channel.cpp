@@ -22,7 +22,7 @@ void	Channel::addToChannel(Client &client)
 {
 	std::string nick = client.getNickName();
 
-	_clientList.emplace(nick, client);
+	_clientList.insert(std::make_pair(static_cast<std::string>(nick), client));
 }
 
 void	Channel::removeFromChannel(std::string &nick)
