@@ -7,9 +7,11 @@
 # include "Client.hpp"
 # include "Message.hpp"
 # include "Commands.hpp"
+# include "Channel.hpp"
 
 class Client;
 class Message;
+class Channel;
 
 	enum command {
 		CAP,
@@ -43,6 +45,7 @@ class Server
 		int _clientId;
 		std::map<int, Client*>	_clients;
 		std::vector<std::string> _nicknames;
+		std::map<std::string, Channel*> _channels;
 
 	public:
 		Server(std::string port, std::string password);
