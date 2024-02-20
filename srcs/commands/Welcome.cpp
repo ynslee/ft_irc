@@ -29,6 +29,7 @@ void welcomeUser(Client *Client)
 	std::string username = Client->getUserName();
 	std::string userIP = Client->getIPaddress();
 	std::string nick = Client->getNickName();
+	std::string mode = Client->getMode();
 	std::string readline = readFile("./motd.txt");
 	std::istringstream iss(readline);
 	std::string motd_line;
@@ -44,5 +45,6 @@ void welcomeUser(Client *Client)
 	}
 	if (readline.empty() == false)
 		Client->addSendbuf(RPL_ENDOFMOTD(hostname, username));
+	Client->addSendbuf(RPL_MODE(username, mode));
 	Client->setWelcomeSent(1);
 }
