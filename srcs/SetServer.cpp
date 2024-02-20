@@ -239,7 +239,6 @@ int Server::findCommand(int client_fd)
 		{
 			cmdQuit(msg, _clients[client_fd]);
 			removeClientfromPoll(client_fd);
-			removeClientfromPoll(client_fd);
 			break ;
 		}
 		case command::INVALID:
