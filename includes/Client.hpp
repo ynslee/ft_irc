@@ -21,6 +21,7 @@ class Client{
 		std::string		_IPaddress;
 		std::string 	_hostname;
 		std::string		_operatorPassword;
+		std::vector<std::string>	_channelsJoined;
 		int				_isRegistered;
 		int				_welcomeSent;
 		bool			_isOperator;

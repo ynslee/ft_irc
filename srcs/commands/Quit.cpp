@@ -30,15 +30,17 @@ part will be done after we set the channel*/
 // }
 
 
-void cmdQuit(Message &msg, Client *Client)
+void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &channels)
 {   
     
     std::string quit_message;
     quit_message = QUIT_MESSAGE(Client->getNickName(), Client->getUserName(), Client->getIPaddress());
     if(msg.params.size())
-        quit_message.append(msg.params.front() + "\n");
+        quit_message.append(msg.params.front() + "\r\n");
     else
         quit_message.append("\n");
+    std::vector<std::string>::iterator it = Client->;
+
     // sendMsgtoClients(quit_message,Client, nick_names);
     close(Client->getClientFd());
     return ;

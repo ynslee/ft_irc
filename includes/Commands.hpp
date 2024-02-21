@@ -11,7 +11,7 @@ class Message;
 void cmdCap(Message &msg, Client *Client);
 int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names);
 int cmdPass(Message &msg, Client *Client, std::string password);
-void cmdQuit(Message &msg, Client *Client);
+void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &channels);
 int cmdUser(Message &msg, Client *Client);
 int cmdWhois(Message &msg, Client *Client);
 int cmdKill(Message &msg, Client *Client);
