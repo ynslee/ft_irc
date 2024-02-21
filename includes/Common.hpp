@@ -1,27 +1,27 @@
 #ifndef COMMON_HPP
 # define COMMON_HPP
 
-#include <iostream>
-#include <exception>
-#include <fstream>
-#include <sstream>
-#include <vector>
 #include <algorithm>
-#include <iterator>
-#include <unistd.h>
-#include <sys/types.h>
-#include <netdb.h>
-#include <sys/socket.h>
-#include <sys/wait.h>
-#include <fcntl.h>
 #include <arpa/inet.h>
-#include <signal.h>
-#include <errno.h>
 #include <csignal>
-#include <poll.h>
+#include <errno.h>
+#include <exception>
+#include <fcntl.h>
+#include <fstream>
+#include <iostream>
+#include <iterator>
 #include <map>
+#include <netdb.h>
+#include <poll.h>
+#include <signal.h>
+#include <sstream>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
 #include <utility>
-#include "../includes/Reply.hpp"
+#include <vector>
+#include "Reply.hpp"
 
 // should we put all the header includes here too?
 
