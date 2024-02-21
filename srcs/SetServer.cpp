@@ -172,7 +172,7 @@ int Server::acceptPendingConnections()
 
 int Server::recieveMsg(int client_fd, int i)
 {
-	char buf[80];
+	char buf[512];
 	int readcount;
 
 	memset(buf, 0, sizeof(buf));
@@ -195,10 +195,10 @@ int Server::recieveMsg(int client_fd, int i)
 	else
 	{
 		setClientId(client_fd);
-		setMessage(buf);
-		std::cout << "received<< " << buf << std::endl;
+		setMessage(std::string(buf));
 		if(findCommand(client_fd) == -1)
-			return(-1);// we start parsing here
+			return(-1);
+		// std::cout << "received<< " << buf << std::endl;
 		return (0);
 	}
 	return (-1);
@@ -206,56 +206,71 @@ int Server::recieveMsg(int client_fd, int i)
 
 int Server::findCommand(int client_fd)
 {
-	std::string input(_clients[client_fd]->getReadbuf());
-	Message msg(input);
-
-	int i = getCommandType(msg.command);
-	switch(i)
+	while (1)
 	{
-		case command::CAP:
+		if (_clients[client_fd]->getReadbuf().empty())
+			break ;
+		std::string input = extractInput(_clients, client_fd);
+		Message msg(input);
+
+		int i = getCommandType(msg.command);
+		switch(i)
 		{
-			cmdCap(msg, _clients[client_fd]);
-			break ;
+			case command::CAP:
+			{
+				cmdCap(msg, _clients[client_fd]);
+				break ;
+			}
+			case command::PASS:
+				if(cmdPass(msg, _clients[client_fd], this->_password) == -1)
+					return(-1);
+				break ;
+			case command::NICK:
+			{
+				if(cmdNick(msg,_clients[client_fd],getNicknames()))
+					return(-1);
+				break ;
+			}
+			case command::USER:
+				if(cmdUser(msg, _clients[client_fd]) == -1)
+					return(-1);
+				break ;
+			case command::JOIN:
+			{
+				if(cmdJoin(msg, _clients[client_fd], _channels) == -1)
+					return(-1);
+				break;
+			}
+			case command::MOTD:
+				if (cmdMotd(msg, _clients[client_fd]) == -1)
+					return(-1);
+				break ;
+			case command::OPER:
+				if (cmdOper(msg, _clients[client_fd]) == -1)
+					return(-1);
+				break ;
+			case command::QUIT:
+			{
+				cmdQuit(msg, _clients[client_fd],_channels);
+				removeClientfromPoll(client_fd);
+				break ;
+			}
+			case command::INVALID:
+				std::cerr << "Invalid command" << std::endl;
+				break ;
 		}
-		case command::PASS:
-			if(cmdPass(msg, _clients[client_fd], this->_password) == -1)
-				return(-1);
-			break ;
-		case command::NICK:
-		{
-			if(cmdNick(msg,_clients[client_fd],getNicknames()))
-				return(-1);
-			break ;
-		}
-		case command::USER:
-			if(cmdUser(msg, _clients[client_fd]) == -1)
-				return(-1);
-			break ;
-		case command::JOIN:
-		{
-			if(cmdJoin(msg, _clients[client_fd], _channels) == -1)
-				return(-1);
-			break;
-		}
-		case command::MOTD:
-			if (cmdMotd(msg, _clients[client_fd]) == -1)
-				return(-1);
-			break ;
-		case command::OPER:
-			if (cmdOper(msg, _clients[client_fd]) == -1)
-				return(-1);
-			break ;
-		case command::QUIT:
-		{
-			cmdQuit(msg, _clients[client_fd],_channels);
-			removeClientfromPoll(client_fd);
-			break ;
-		}
-		case command::INVALID:
-			std::cerr << "Invalid command" << std::endl;
-			break ;
 	}
 	return (0);
+}
+
+std::string extractInput(std::map<int, Client *> _clients, int client_fd)
+{
+	size_t pos =  _clients[client_fd]->getReadbuf().find("\n");
+	std::string input =  _clients[client_fd]->getReadbuf().substr(0, pos);
+	std::string temp = _clients[client_fd]->getReadbuf();
+	temp.erase(0, pos + 1);
+	_clients[client_fd]->setReadbuf(temp);
+	return (input);
 }
 
 int Server::sendMsg(int client_fd)
@@ -364,20 +379,16 @@ std::vector<std::string> &Server::getNicknames()
 	return(this->_nicknames);
 }
 
-void Server::setMessage(const char* msg)
+void Server::setMessage(std::string msg)
 {
-	std::string buf;
-
 	std::map<int, Client*>::iterator it;
 	for(it=_clients.begin(); it!=_clients.end(); it++)
 	{
 		int key = it->first;
 		if(key == this->_clientId)
 		{
-
-			buf.assign(msg);
-			it->second->setReadbuf(buf);
-			buf.clear();
+			it->second->setReadbuf(msg);
+			msg.clear();
 		}
 	}
 }
