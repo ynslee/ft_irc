@@ -2,7 +2,7 @@
 #ifndef REPLY_HPP
 # define REPLY_HPP
 
-# define user(nick, username, userIP)(":" + nick + "!" + username + "@" + userIP)
+# define USER(nick, username, userIP)(":" + nick + "!" + username + "@" + userIP)
 
 //ERROR REPLIES
 # define ERR_NEEDMOREPARAMS(hostname)(":" + hostname + " 461 * :Not enough parameters" + "\r\n")	
@@ -28,7 +28,7 @@
 # define RPL_CREATED(hostname, username, date)(":" + hostname + " 003 " + username + " :This server was created " + date + "\r\n")
 # define RPL_MODE(username, mode)(":" + username + " MODE " + username + " :" + mode + "\r\n")
 # define RPL_YOUREOPER(hostname, username)(":" + hostname + " 381 " + username + " :You are now an IRC operator " + "\r\n")
-# define RPL_JOIN(user, channel)(user + " JOIN " + channel + "\r\n")
+# define RPL_JOIN(USER, channel)(USER + " JOIN " + channel + "\r\n")
 
 
 #endif
