@@ -231,6 +231,12 @@ int Server::findCommand(int client_fd)
 			if(cmdUser(msg, _clients[client_fd]) == -1)
 				return(-1);
 			break ;
+		case command::JOIN:
+		{
+			if(cmdJoin(msg, _clients[client_fd], _channels) == -1)
+				return(-1);
+			break;
+		}
 		case command::MOTD:
 			if (cmdMotd(msg, _clients[client_fd]) == -1)
 				return(-1);
@@ -244,12 +250,6 @@ int Server::findCommand(int client_fd)
 			cmdQuit(msg, _clients[client_fd]);
 			removeClientfromPoll(client_fd);
 			break ;
-		}
-		case command::JOIN:
-		{
-			if(cmdJoin(msg, _clients[client_fd], _channels) == -1)
-				return(-1);
-			break;
 		}
 		case command::INVALID:
 			std::cerr << "Invalid command" << std::endl;

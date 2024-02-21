@@ -1,5 +1,5 @@
-#include "Commands.hpp"
-#include "Server.hpp"
+#include "../../includes/Commands.hpp"
+#include "../../includes/Server.hpp"
 
 static std::string getChannelName(std::string channel)
 {
@@ -19,7 +19,7 @@ static int joinExistingServerWithoutKey(std::map<std::string, Channel*> &channel
 		{
 			if (it->second->getChannelKey().empty() == false)
 			{
-				ERR_BADCHANNELKEY(Client->getHostName(), channelName);
+				send(Client->getClientFd(), ERR_BADCHANNELKEY(Client->getHostName(), channelName).c_str(), ERR_BADCHANNELKEY(Client->getHostName(), channelName).length(), 0);
 				return (-1);
 			}
 			it->second->addToChannel(*Client);
@@ -45,7 +45,7 @@ static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels,
 			}
 			else
 			{
-				ERR_BADCHANNELKEY(Client->getHostName(), channelName);
+				send(Client->getClientFd(), ERR_BADCHANNELKEY(Client->getHostName(), channelName).c_str(), ERR_BADCHANNELKEY(Client->getHostName(), channelName).length(), 0);
 				return (-1);
 			}
 		}
@@ -59,11 +59,16 @@ static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels,
 int cmdJoin(Message &msg, Client *Client, std::map<std::string, Channel*> &channels)
 {
 	std::string channelName;
-	std::string hostName = Client->getHostName();
+	std::string hostname = Client->getHostName();
 
+	if(Client->getRegisteration() <= 2)
+    {
+        send(Client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);
+        return(-1);
+    }
 	if (msg.params.size() == 0)
 	{
-		ERR_NEEDMOREPARAMS(hostName); 
+		send(Client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);
 		return (-1);
 	}
 	if (channels.size() == 0)
@@ -75,6 +80,7 @@ int cmdJoin(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 			channels[channelName]->addToChannel(*Client);
 			if (msg.params.size() == 2)
 				channels[channelName]->setChannelKey(msg.params[1]);
+			Client->setSendbuf(RPL_JOIN(user(Client->getNickName(), Client->getUserName(), Client->getIPaddress()), channelName));
 			return (0);
 		}
 		else
