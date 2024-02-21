@@ -21,6 +21,7 @@
 #include <unistd.h>
 #include <utility>
 #include <vector>
+#include <cstring>
 #include "Reply.hpp"
 
 // should we put all the header includes here too?

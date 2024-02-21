@@ -12,8 +12,8 @@ class Client{
 	private:
 		int				_clientFd;
 		std::string		_serverName;
-		std::string		_readbuf;
-		std::string		_sendbuf;
+		std::string		_readbuf; // buffer reading from client
+		std::string		_sendbuf; // buffer sending to client
 		std::string		_nickname;
 		std::string		_username;
 		std::string		_realname;
