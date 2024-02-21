@@ -10,7 +10,7 @@ class Client;
 class Channel
 {
 	private:
-		std::map<std::string, Client>	_clientList;
+		std::map<const std::string, Client *>	_clientList;
 		std::vector<std::string>		_kickedUsers;
 		std::vector<std::string>		_operators;
 		std::string 					_channel;
@@ -24,7 +24,7 @@ class Channel
 		~Channel();
 
 		/*getters and setters*/
-		std::map <std::string, Client>&	getClientList();
+		std::map <const std::string, Client *>	&getClientList();
 		// std::vector<std::string>&		getKickedUsers();
 		std::vector<std::string>&		getChannelOperators();
 		const std::string&				getChannelName();
