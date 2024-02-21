@@ -20,6 +20,8 @@
 #include <csignal>
 #include <poll.h>
 #include <map>
+#include <cstring>
+
 #include "../includes/Reply.hpp"
 
 // should we put all the header includes here too?
