@@ -20,8 +20,11 @@ class Client{
 		std::string		_mode;
 		std::string		_IPaddress;
 		std::string 	_hostname;
+		std::string		_operatorPassword;
+		std::vector<std::string>	_channelsJoined;
 		int				_isRegistered;
 		int				_welcomeSent;
+		bool			_isOperator;
 		Client();
 		Client(Client const &other);
 		Client	&operator=(Client const &other);
@@ -42,6 +45,8 @@ class Client{
 		void	setHostName(char *host);
 		void	setRegisteration(int reg);
 		void	setWelcomeSent(int sent);
+		void	setIsOperator(bool status);
+		void	setNewChannel(std::string channel_name);
 		const int	&getClientFd(void);
 		const std::string	&getServerName(void);
 		const std::string	&getNickName(void);
@@ -53,8 +58,11 @@ class Client{
 		const std::string	&getIPaddress(void);
 		const std::string	&getMode(void);
 		const std::string	&getHostName(void);
+		const std::string	&getOperatorPassword(void);
 		const int	&getRegisteration(void);
 		const int	&getWelcomeSent(void);
+		const bool 	&getOperatorStatus(void);
+		std::vector<std::string> &getChannelsJoined();
 
 		void addSendbuf(std::string buf);
 };

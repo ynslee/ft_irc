@@ -7,9 +7,11 @@
 # include "Client.hpp"
 # include "Message.hpp"
 # include "Commands.hpp"
+# include "Channel.hpp"
 
 class Client;
 class Message;
+class Channel;
 
 	enum command {
 		CAP,
@@ -26,6 +28,7 @@ class Message;
 		WHOIS,
 		KILL,
 		OPER,
+		QUIT,
 		INVALID,
 		// what else?
 	};
@@ -42,6 +45,7 @@ class Server
 		int _clientId;
 		std::map<int, Client*>	_clients;
 		std::vector<std::string> _nicknames;
+		std::map<std::string, Channel*> _channels;
 
 	public:
 		Server(std::string port, std::string password);
@@ -58,8 +62,10 @@ class Server
 		int findCommand(int client_fd);
 		int getCommandType(std::string command);
 		const std::string &getServerName() const;
-		static bool findNick(std::string nick);
 		std::vector<std::string> &getNicknames();
+		void removeClientfromPoll(int fd);
+		std::map<std::string, Channel*> &getChannels();
+		bool ChannelExists(std::map<std::string, Channel*> &channels, std::string &channelName);
 };
 
 std::string extractInput(std::map<int, Client *> _clients, int client_fd);

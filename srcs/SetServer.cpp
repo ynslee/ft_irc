@@ -213,36 +213,51 @@ int Server::findCommand(int client_fd)
 		std::string input = extractInput(_clients, client_fd);
 		Message msg(input);
 
-		int i = getCommandType(msg.command);
-		switch(i)
+	int i = getCommandType(msg.command);
+	switch(i)
+	{
+		case command::CAP:
 		{
-			case command::CAP:
-			{
-				cmdCap(msg, _clients[client_fd]);
-				break ;
-			}
-			case command::PASS:
-				if(cmdPass(msg, _clients[client_fd], this->_password) == -1)
-					return(-1);
-				break ;
-			case command::NICK:
-			{
-				if(cmdNick(msg,_clients[client_fd],getNicknames()))
-					return(-1);
-				break ;
-			}
-			case command::USER:
-				if(cmdUser(msg, _clients[client_fd]) == -1)
-					return(-1);
-				break ;
-			case command::MOTD:
-				if (cmdMotd(msg, _clients[client_fd]) == -1)
-					return(-1);
-				break ;
-			case command::INVALID:
-				std::cerr << "Invalid command" << std::endl;
-				break ;
+			cmdCap(msg, _clients[client_fd]);
+			break ;
 		}
+		case command::PASS:
+			if(cmdPass(msg, _clients[client_fd], this->_password) == -1)
+				return(-1);
+			break ;
+		case command::NICK:
+		{
+			if(cmdNick(msg,_clients[client_fd],getNicknames()))
+				return(-1);
+			break ;
+		}
+		case command::USER:
+			if(cmdUser(msg, _clients[client_fd]) == -1)
+				return(-1);
+			break ;
+		case command::JOIN:
+		{
+			if(cmdJoin(msg, _clients[client_fd], _channels) == -1)
+				return(-1);
+			break;
+		}
+		case command::MOTD:
+			if (cmdMotd(msg, _clients[client_fd]) == -1)
+				return(-1);
+			break ;
+		case command::OPER:
+			if (cmdOper(msg, _clients[client_fd]) == -1)
+				return(-1);
+			break ;
+		case command::QUIT:
+		{
+			cmdQuit(msg, _clients[client_fd],_channels);
+			removeClientfromPoll(client_fd);
+			break ;
+		}
+		case command::INVALID:
+			std::cerr << "Invalid command" << std::endl;
+			break ;
 	}
 	return (0);
 }
@@ -288,6 +303,11 @@ int Server::sendMsg(int client_fd)
 	return (0);
 }
 
+std::map<std::string, Channel*> &Server::getChannels()
+{
+	return(this->_channels);
+}
+
 
 Server::Server(std::string port, std::string password): _port(port), _password(password)
 {
@@ -317,6 +337,7 @@ Server::Server(std::string port, std::string password): _port(port), _password(p
 	}
 	try
 	{
+		_channels.clear();
 		if (serverSetup() < 0)
 			throw std::runtime_error("Could not set server up");
 	}
@@ -332,6 +353,11 @@ Server::~Server()
 {
 	std::map<int, Client*>::iterator it;
 	for(it=_clients.begin(); it!=_clients.end(); it++)
+	{
+		delete it->second;
+	}
+	std::map<std::string, Channel*>::iterator it2;
+	for(it2=_channels.begin(); it2!=_channels.end(); it++)
 	{
 		delete it->second;
 	}
