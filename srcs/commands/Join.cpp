@@ -50,6 +50,7 @@ static int joinExistingServerWithoutKey(std::map<std::string, Channel*> &channel
 	}
 	channels[channelName] = new Channel(channelName);
 	channels[channelName]->addToChannel(*Client);
+	Client->setNewChannel(channelName);
 	return (0);
 }
 
@@ -75,6 +76,7 @@ static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels,
 	channels[channelName] = new Channel(channelName);
 	channels[channelName]->addToChannel(*Client);
 	channels[channelName]->setChannelKey(key);
+	Client->setNewChannel(channelName);
 	return (0);
 }
 
@@ -103,6 +105,7 @@ int cmdJoin(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 			if (msg.params.size() == 2)
 				channels[channelName]->setChannelKey(msg.params[1]);
 			Client->setSendbuf(RPL_JOIN(USER(Client->getNickName(), Client->getUserName(), Client->getIPaddress()), channelName));
+			Client->setNewChannel(channelName);
 			return (0);
 		}
 		else

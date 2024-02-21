@@ -247,7 +247,7 @@ int Server::findCommand(int client_fd)
 			break ;
 		case command::QUIT:
 		{
-			cmdQuit(msg, _clients[client_fd]);
+			cmdQuit(msg, _clients[client_fd],_channels);
 			removeClientfromPoll(client_fd);
 			break ;
 		}
