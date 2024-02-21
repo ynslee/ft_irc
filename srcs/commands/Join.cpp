@@ -28,6 +28,7 @@ static int joinExistingServerWithoutKey(std::map<std::string, Channel*> &channel
 	}
 	channels[channelName] = new Channel(channelName);
 	channels[channelName]->addToChannel(*Client);
+	Client->setNewChannel(channelName);
 	return (0);
 }
 
@@ -53,6 +54,7 @@ static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels,
 	channels[channelName] = new Channel(channelName);
 	channels[channelName]->addToChannel(*Client);
 	channels[channelName]->setChannelKey(key);
+	Client->setNewChannel(channelName);
 	return (0);
 }
 
@@ -91,6 +93,5 @@ int cmdJoin(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 		return (joinExistingServerWithoutKey(channels, msg.params[0], Client));
 	if (channels.size() > 0 && msg.params.size() == 2)
 		return (joinExistingServerWithKey(channels, msg.params[0], msg.params[1], Client));
-	Client->setNewChannel(getChannelName(msg.params[0]));
 	return (0);
 }
