@@ -20,14 +20,17 @@
 the clients in the channel, if one of the users quit. But if you are not in a channel just quit the server. That
 part will be done after we set the channel*/
 
-void sendMsgtoClients(std::string message, Client *Client, Channel *Channel)
+void sendMsgtoClients(std::string message, Client *client, Channel *channel)
 {
-    for(size_t i = 0; i < nick_names.size(); i++)
+    std::map<const std::string, Client *> clients_list = channel->getClientList();
+    std::map<const std::string, Client *>::const_iterator it;
+    for(it = clients_list.begin(); it != clients_list.end() ; it++)
     {
-        if(Client != NULL && nick_names[i] == Client->getNickName())
-            continue;        
+        if(client != NULL && it->first == client->getNickName())
+            continue;
+        client->setSendbuf(message);       
     }
-    Channel->removeFromChannel(Client->getNickName());
+    channel->removeFromChannel(client->getNickName());
 }
 
 
@@ -46,13 +49,8 @@ void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &chan
         std::string channel_name = *it;
         std::map<std::string, Channel*>::iterator channelIt = channels.find(channel_name);  
         if(channelIt != channels.end())
-        {
             sendMsgtoClients(quit_message,Client,channelIt->second);
-        }    
     }
-
-
-    // sendMsgtoClients(quit_message,Client, nick_names);
     close(Client->getClientFd());
     return ;
 }
