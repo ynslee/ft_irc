@@ -33,7 +33,7 @@ class Channel
 		const std::string&				getMode();
 		const int&						getUserLimit();
 		void							addToChannel(Client &client);
-		void							removeFromChannel(std::string &nick);
+		void							removeFromChannel(const std::string &nick);
 		// void							addToKicked(std::string &nick);
 		// void							removeFromKicked(std::string &nick);
 		void							addOperator(std::string operatorName);

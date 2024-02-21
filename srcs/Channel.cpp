@@ -25,7 +25,7 @@ void	Channel::addToChannel(Client &client)
 	_clientList.insert(std::make_pair(nick, (&client)));
 }
 
-void	Channel::removeFromChannel(std::string &nick)
+void	Channel::removeFromChannel(const std::string &nick)
 {
 	_clientList.erase(nick);
 	removeOperator(nick);
