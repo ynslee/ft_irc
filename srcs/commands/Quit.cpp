@@ -39,7 +39,7 @@ void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &chan
         quit_message.append(msg.params.front() + "\r\n");
     else
         quit_message.append("\n");
-    std::vector<std::string>::iterator it = Client->;
+    // std::vector<std::string>::iterator it = Client->;
 
     // sendMsgtoClients(quit_message,Client, nick_names);
     close(Client->getClientFd());

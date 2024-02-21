@@ -46,6 +46,7 @@ class Client{
 		void	setRegisteration(int reg);
 		void	setWelcomeSent(int sent);
 		void	setIsOperator(bool status);
+		void	setNewChannel(std::string channel_name);
 		const int	&getClientFd(void);
 		const std::string	&getServerName(void);
 		const std::string	&getNickName(void);
@@ -61,6 +62,7 @@ class Client{
 		const int	&getRegisteration(void);
 		const int	&getWelcomeSent(void);
 		const bool 	&getOperatorStatus(void);
+		std::vector<std::string> &getChannelsJoined();
 
 		void addSendbuf(std::string buf);
 };

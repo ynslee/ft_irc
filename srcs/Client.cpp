@@ -83,6 +83,12 @@ void	Client::setIsOperator(bool status)
 {
 	_isOperator = status;
 }
+
+void	Client::setNewChannel(std::string channel_name)
+{
+		_channelsJoined.push_back(channel_name);
+}
+
 const int	&Client::getClientFd(void){return(_clientFd);}
 const std::string	&Client::getServerName(void){return(_serverName);}
 const std::string	&Client::getNickName(void){return(_nickname);}
@@ -98,6 +104,7 @@ const std::string	&Client::getOperatorPassword(void){return(_operatorPassword);}
 const int	&Client::getRegisteration(void){return(_isRegistered);}
 const int &Client::getWelcomeSent(void){return(_welcomeSent);}
 const bool &Client::getOperatorStatus(void){return(_isOperator);}
+std::vector<std::string> &Client::getChannelsJoined(void){return(this->_channelsJoined);}
 
 void	Client::addSendbuf(std::string buf)
 {
