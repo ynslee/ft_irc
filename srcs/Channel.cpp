@@ -39,7 +39,8 @@ void	Channel::addOperator(std::string operatorName)
 void	Channel::removeOperator(std::string operatorName)
 {
 	std::vector<std::string>::iterator it = std::find(_operators.begin(), _operators.end(), operatorName);
-	_operators.erase(it);
+	if(it != _operators.end())
+		_operators.erase(it);
 }
 
 void	Channel::setChannelKey(std::string password)

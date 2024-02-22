@@ -22,13 +22,15 @@ part will be done after we set the channel*/
 
 void sendMsgtoClients(std::string message, Client *client, Channel *channel)
 {
+    if(client == nullptr)
+        return ;
     std::map<const std::string, Client *> clients_list = channel->getClientList();
     std::map<const std::string, Client *>::const_iterator it;
-    for(it = clients_list.begin(); it != clients_list.end() ; it++)
+    for(it = clients_list.begin(); it != clients_list.end() ; ++it)
     {
         if(client != NULL && it->first == client->getNickName())
             continue;
-        client->setSendbuf(message);       
+        it->second->setSendbuf(message);       
     }
     channel->removeFromChannel(client->getNickName());
 }
@@ -42,14 +44,23 @@ void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &chan
     if(msg.params.size())
         quit_message.append(msg.params.front() + "\r\n");
     else
-        quit_message.append("\n");
+        quit_message.append("\r\n");
     std::vector<std::string>::iterator it;
     for(it = Client->getChannelsJoined().begin(); it < Client->getChannelsJoined().end(); it++)
     {
         std::string channel_name = *it;
         std::map<std::string, Channel*>::iterator channelIt = channels.find(channel_name);  
         if(channelIt != channels.end())
+        {
             sendMsgtoClients(quit_message,Client,channelIt->second);
+            if(channelIt->second->getClientList().size() == 0)
+            {
+                std::cout << "Channel " << channelIt->second->getChannelName() << " deleted ";
+                // delete (channelIt->second);
+                channels.erase(channelIt);
+                continue ;                
+            }
+        }
     }
     close(Client->getClientFd());
     return ;

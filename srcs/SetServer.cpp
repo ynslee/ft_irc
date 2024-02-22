@@ -208,6 +208,7 @@ int Server::findCommand(int client_fd)
 {
 	while (1)
 	{
+
 		if (_clients[client_fd]->getReadbuf().empty())
 			break ;
 		std::string input = extractInput(_clients, client_fd);
@@ -253,7 +254,7 @@ int Server::findCommand(int client_fd)
 			{
 				cmdQuit(msg, _clients[client_fd],_channels);
 				removeClientfromPoll(client_fd);
-				break ;
+				return(0);
 			}
 			case command::INVALID:
 				std::cerr << "Invalid command" << std::endl;
