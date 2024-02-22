@@ -195,7 +195,7 @@ int Server::recieveMsg(int client_fd, int i)
 	else
 	{
 		setClientId(client_fd);
-		setMessage(std::string(buf));
+		setMessage(static_cast<std::string>(buf));
 		if(findCommand(client_fd) == -1)
 			return(-1);
 		// std::cout << "received<< " << buf << std::endl;
