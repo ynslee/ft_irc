@@ -15,7 +15,10 @@
 # define ERR_NOTREGISTERED(hostname)(":" + hostname + " 451 * :You have not registered" + "\r\n")
 # define ERR_NOSUCHSERVER(hostname, servername)(":" + hostname + " 402 " + servername + " :No such server" + "\r\n")
 # define ERR_NOOPERHOST(hostname)(":" + hostname + " 491 * :You have not registered" + "\r\n")
+# define ERR_TOOMANYCHANNELS(username, channel) ("405 " + username + " " + channel + " :You have joined too many channels\r\n")
 # define ERR_BADCHANNELKEY(username, channel) ("475 " + username + " " + channel + " :Cannot join channel (+k)\r\n")
+# define ERR_CHANNELISFULL(username, channel) ("471 " + username + " " + channel + " :Cannot join channel (+l)\r\n")
+# define ERR_INVITEONLYCHAN(username, channel) ("473 " + username + " " + channel + " :Cannot join channel (+i)\r\n")
 
 //NORMAL REPLIES
 # define QUIT_MESSAGE(nick, username, userIP)(":" + nick + "!" + username + "@" + userIP + " QUIT :Quit: ")

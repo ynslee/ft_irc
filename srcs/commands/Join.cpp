@@ -30,7 +30,7 @@ static bool checkIfClientExists(std::map<const std::string, Client*> &clientList
 	return (false);
 }
 
-static int joinExistingServerWithoutKey(std::map<std::string, Channel*> &channels, std::string channelName, Client *Client)
+static int joinExistingServerWithoutKey(std::map<std::string, Channel*> &channels, std::string channelName, Client *client)
 {
 	std::map<std::string, Channel*>::iterator it;
 	for (it=channels.begin(); it!=channels.end(); it++)
@@ -39,22 +39,22 @@ static int joinExistingServerWithoutKey(std::map<std::string, Channel*> &channel
 		{
 			if (it->second->getChannelKey().empty() == false)
 			{
-				send(Client->getClientFd(), ERR_BADCHANNELKEY(Client->getHostName(), channelName).c_str(), ERR_BADCHANNELKEY(Client->getHostName(), channelName).length(), 0);
+				send(client->getClientFd(), ERR_BADCHANNELKEY(client->getHostName(), channelName).c_str(), ERR_BADCHANNELKEY(client->getHostName(), channelName).length(), 0);
 				return (-1);
 			}
-			if (checkIfClientExists(it->second->getClientList(), Client->getNickName()) == true)
+			if (checkIfClientExists(it->second->getClientList(), client->getNickName()) == true)
 				return (0);
-			it->second->addToChannel(*Client);
+			it->second->addToChannel(*client);
 			return (0);
 		}
 	}
-	channels[channelName] = new Channel(channelName);
-	channels[channelName]->addToChannel(*Client);
-	Client->setNewChannel(channelName);
+	channels.insert(std::make_pair(channelName, &Channel(channelName)));
+	channels[channelName]->addToChannel(*client);
+	client->setNewChannel(channelName);
 	return (0);
 }
 
-static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels, std::string channelName, std::string key, Client *Client)
+static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels, std::string channelName, std::string key, Client *client)
 {
 	std::map<std::string, Channel*>::iterator it;
 	for (it=channels.begin(); it!=channels.end(); it++)
@@ -63,20 +63,55 @@ static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels,
 		{
 			if (it->second->getChannelKey() == key)
 			{
-				it->second->addToChannel(*Client);
+				if (checkIfClientExists(it->second->getClientList(), client->getNickName()) == true)
+					return (0);
+				it->second->addToChannel(*client);
 				return (0);
 			}
 			else
 			{
-				send(Client->getClientFd(), ERR_BADCHANNELKEY(Client->getHostName(), channelName).c_str(), ERR_BADCHANNELKEY(Client->getHostName(), channelName).length(), 0);
+				send(client->getClientFd(), ERR_BADCHANNELKEY(client->getHostName(), channelName).c_str(), ERR_BADCHANNELKEY(client->getHostName(), channelName).length(), 0);
 				return (-1);
 			}
 		}
 	}
-	channels[channelName] = new Channel(channelName);
-	channels[channelName]->addToChannel(*Client);
+	channels[channelName]->addToChannel(*client);
 	channels[channelName]->setChannelKey(key);
-	Client->setNewChannel(channelName);
+	client->setNewChannel(channelName);
+	return (0);
+}
+
+static int clientErrorChecks(Client *client, std::map<std::string, Channel*> &channels, std::string channelName)
+{
+	std::string hostname = client->getHostName();
+
+	if(client->getRegisteration() <= 2)
+	{
+		send(client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);
+		return(-1);
+	}
+	if (client->getMaxChannels() == 3)
+	{
+		send(client->getClientFd(), ERR_TOOMANYCHANNELS(client->getUserName(), channelName).c_str(), ERR_TOOMANYCHANNELS(client->getUserName(), channelName).length(), 0);
+		return (-1);
+	}
+	std::map<std::string, Channel*>::iterator it;
+	for (it=channels.begin(); it!=channels.end(); it++)
+	{
+		if (it->first == channelName)
+		{
+			if (it->second->getMode().find('i') != std::string::npos)
+			{
+				send(client->getClientFd(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).c_str(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).length(), 0);
+				return (-1);
+			}
+			else if (it->second->getUserLimit() == 10)
+			{
+				send(client->getClientFd(), ERR_CHANNELISFULL(client->getUserName(), channelName).c_str(), ERR_CHANNELISFULL(client->getUserName(), channelName).length(), 0);
+				return (-1);
+			}
+		}
+	}
 	return (0);
 }
 
@@ -85,22 +120,27 @@ int cmdJoin(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 	std::string channelName;
 	std::string hostname = Client->getHostName();
 
+	if (msg.params.size() == 0)
+	{
+		send(Client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);
+		return (-1);
+	}
+	channelName = getChannelName(msg.params[0], channels);
 	if(Client->getRegisteration() <= 2)
     {
         send(Client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);
         return(-1);
     }
-	if (msg.params.size() == 0)
+	if (Client->getMaxChannels() == 3)
 	{
-		send(Client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);
+		send(Client->getClientFd(), ERR_TOOMANYCHANNELS(Client->getUserName(), channelName).c_str(), ERR_TOOMANYCHANNELS(Client->getUserName(), channelName).length(), 0);
 		return (-1);
 	}
 	if (channels.size() == 0)
 	{
 		if(msg.params.size() <= 2)
 		{
-			channelName = getChannelName(msg.params[0], channels);
-			channels[channelName] = new Channel(channelName);
+			channels.insert(std::make_pair(channelName, &Channel(channelName)));
 			channels[channelName]->addToChannel(*Client);
 			if (msg.params.size() == 2)
 				channels[channelName]->setChannelKey(msg.params[1]);
