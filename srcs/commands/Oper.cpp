@@ -3,7 +3,7 @@
 #include "../../includes/Reply.hpp"
 
 /**
- * @brief 
+ * @brief
  * The OPER command is used by a normal user to obtain IRC operator privileges.
  * SYNTAX : OPER <name> <password>
  *
@@ -43,6 +43,6 @@ int cmdOper(Message &msg, Client *Client)
     {
         Client->setIsOperator(true);
         Client->setReadbuf(RPL_YOUREOPER(hostname,Client->getUserName()));
-    }   
+    }
     return(0);
 }

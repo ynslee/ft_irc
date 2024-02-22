@@ -1,4 +1,5 @@
 #include "../includes/Client.hpp"
+#include "Client.hpp"
 
 Client::Client(){};
 
@@ -57,7 +58,15 @@ void	Client::setSendbuf(std::string buf)
 
 void	Client::setMode(std::string mode)
 {
-	_mode = mode;
+	// if (check that flag is correct)
+	//	send error: Unknown MODE flag
+	std::cout << "**** OLD MODE: " << _mode << std::endl;
+	char modeFlag = mode[1];
+	if (mode[0] == '+')
+		_mode += modeFlag;
+	if (mode[0] == '-')
+		_mode.erase(std::remove(_mode.begin(), _mode.end(), modeFlag), _mode.end());
+	std::cout << "**** NEW MODE: " << _mode << std::endl;
 }
 
 void	Client::setIPaddress(char *ip)

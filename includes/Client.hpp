@@ -32,7 +32,7 @@ class Client{
 	public:
 		Client(int new_fd);
 		~Client();
-		
+
 		//write setters getters
 		void	setSocketFd(int new_fd);
 		void	setNickName(std::string new_name);
