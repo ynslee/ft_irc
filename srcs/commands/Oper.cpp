@@ -19,7 +19,7 @@ int cmdOper(Message &msg, Client *Client)
     std::string hostname = Client->getHostName();
     std::string password = Client->getOperatorPassword();
 
-    if(Client->getRegisteration() == 0 || Client->getRegisteration() == 1 || Client->getRegisteration() == 2)
+    if(Client->getRegisteration() <= 2)
     {
         send(Client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);
         return(-1);
@@ -42,7 +42,8 @@ int cmdOper(Message &msg, Client *Client)
     else
     {
         Client->setIsOperator(true);
-        Client->setReadbuf(RPL_YOUREOPER(hostname,Client->getUserName()));
+		Client->setMode("+o");
+        Client->setSendbuf(RPL_YOUREOPER(hostname,Client->getUserName()));
     }
     return(0);
 }

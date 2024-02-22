@@ -63,7 +63,7 @@ class Client{
 		const int	&getWelcomeSent(void);
 		const bool 	&getOperatorStatus(void);
 		std::vector<std::string> &getChannelsJoined();
-
+		int checkModeFLag(std::string modeFlag);
 		void addSendbuf(std::string buf);
 };
 
