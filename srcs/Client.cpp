@@ -69,9 +69,9 @@ void	Client::setMode(std::string mode)
 	std::cout << "**** NEW MODE: " << _mode << std::endl;
 }
 
-void	Client::setIPaddress(char *ip)
+void	Client::setIPaddress(std::string IP)
 {
-	_IPaddress.assign(ip);
+	_IPaddress = IP;
 }
 
 void	Client::setHostName(char *host)

@@ -30,20 +30,20 @@ part will be done after we set the channel*/
 // }
 
 
-// void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &channels)
-// {
+void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &channels)
+{
 
-//     std::string quit_message;
-//     quit_message = QUIT_MESSAGE(Client->getNickName(), Client->getUserName(), Client->getIPaddress());
-//     if(msg.params.size())
-//         quit_message.append(msg.params.front() + "\r\n");
-//     else
-//         quit_message.append("\n");
-//     std::vector<std::string>::iterator it;
-//     for(it = Client->getChannelsJoined().begin(); it < Client->getChannelsJoined().end(); it++)
-//     {
+    std::string quit_message;
+    quit_message = QUIT_MESSAGE(Client->getNickName(), Client->getUserName(), Client->getIPaddress());
+    if(msg.params.size())
+        quit_message.append(msg.params.front() + "\r\n");
+    else
+        quit_message.append("\n");
+    std::vector<std::string>::iterator it;
+    for(it = Client->getChannelsJoined().begin(); it < Client->getChannelsJoined().end(); it++)
+    {
 
-//     }
+    }
 
 
 //     // sendMsgtoClients(quit_message,Client, nick_names);
