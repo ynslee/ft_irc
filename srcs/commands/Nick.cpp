@@ -35,7 +35,7 @@ int isValidnick(std::string new_nick)
     for(it = new_nick.begin(); it != new_nick.end(); it++)
     {
 
-        if(!std::isalnum(*it) && *it != '[' && *it != ']' && *it != '{' && *it != '}' && *it != '\\' && *it != '|')
+        if(!std::isalnum(*it) && *it != '[' && *it != ']' && *it != '{' && *it != '}' && *it != '\\' && *it != '|' && *it != '_' && *it != '-')
             return(-1);
     }
     return(0);
@@ -65,7 +65,7 @@ int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names)
     {
 
         send(Client->getClientFd(), ERR_NICKNAMEINUSE(hostname, new_nick).c_str(), ERR_NICKNAMEINUSE(hostname, new_nick).length(), 0);
-        return(-1);
+        return(0);
     }
     if((Client->getRegisteration() == 3 || Client->getRegisteration() == 2 || Client->getRegisteration() == 1) && Client->getNickName().empty() == false)
     {

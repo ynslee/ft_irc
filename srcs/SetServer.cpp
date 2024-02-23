@@ -102,16 +102,14 @@ int Server::pollLoop()
 						continue;
 				}
 			}
-			else if (this->_pfds[i].revents & POLLOUT){
+			else if (this->_pfds[i].revents & POLLOUT)
+			{
 				for (int i = 0; i < this->_pollfdCount; i++)
 				{
 					if (this->_pfds[i].fd == getClientId())
 					{
 						if (sendMsg(this->_pfds[i].fd) == -1)
-						{
-							// std::perror("Error in send()");
-							break;
-						}
+							continue;
 					}
 				}
 			}
@@ -195,7 +193,7 @@ int Server::recieveMsg(int client_fd, int i)
 	else
 	{
 		setClientId(client_fd);
-		setMessage(std::string(buf));
+		setMessage(static_cast<std::string>(buf));
 		if(findCommand(client_fd) == -1)
 			return(-1);
 		// std::cout << "received<< " << buf << std::endl;
@@ -210,7 +208,7 @@ int Server::findCommand(int client_fd)
 	{
 
 		if (_clients[client_fd]->getReadbuf().empty())
-			break ;
+			return (0);
 		std::string input = extractInput(_clients, client_fd);
 		Message msg(input);
 
