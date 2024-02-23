@@ -31,7 +31,7 @@
 # define RPL_CREATED(hostname, username, date)(":" + hostname + " 003 " + username + " :This server was created " + date + "\r\n")
 # define RPL_MODE(username, mode)(":" + username + " MODE " + username + " :" + mode + "\r\n")
 # define RPL_YOUREOPER(hostname, username)(":" + hostname + " 381 " + username + " :You are now an IRC operator " + "\r\n")
-# define RPL_JOIN(USER, channel)(USER + " JOIN " + channel + "\r\n")
+# define RPL_JOIN(USER, channel, realname)(USER + " JOIN " + channel + " * :" + realname + "\r\n")
 
 
 #endif

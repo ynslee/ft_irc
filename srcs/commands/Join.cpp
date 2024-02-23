@@ -151,7 +151,7 @@ int cmdJoin(Message &msg, Client *client, std::map<std::string, Channel*> &chann
 			channels[channelName]->addToChannel(*client);
 			if (msg.params.size() == 2)
 				channels[channelName]->setChannelKey(msg.params[1]);
-			client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName));
+			client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, Client->getRealName()));
 			client->setMaxChannels();
 			client->setNewChannel(channelName);
 			return (0);

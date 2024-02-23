@@ -60,9 +60,9 @@ void	Client::setMode(std::string mode)
 	_mode = mode;
 }
 
-void	Client::setIPaddress(char *ip)
+void	Client::setIPaddress(std::string IP)
 {
-	_IPaddress.assign(ip);
+	_IPaddress = IP;
 }
 
 void	Client::setHostName(char *host)
