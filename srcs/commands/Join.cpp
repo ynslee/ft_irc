@@ -145,9 +145,9 @@ int cmdJoin(Message &msg, Client *client, std::map<std::string, Channel*> &chann
 	std::string channelName;
 	std::string hostname = client->getHostName();
 
-	if (msg.params.size() == 0)
+	if (msg.params.size() == 0 && msg.trailing.size() == 0)
 	{
-		send(client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);
+		// send(client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);
 		return (-1);
 	}
 	channelName = getChannelName(msg.params[0]);
