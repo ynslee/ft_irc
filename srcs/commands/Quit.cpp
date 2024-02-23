@@ -24,25 +24,25 @@ void sendMsgtoClients(std::string message, Client *client, Channel *channel)
 {
     if(client == nullptr)
         return ;
-    std::map<const std::string, Client *> clients_list = channel->getClientList();
-    std::map<const std::string, Client *>::const_iterator it;
+    std::map<std::string, Client *> clients_list = channel->getClientList();
+    std::map<std::string, Client *>::const_iterator it;
     for(it = clients_list.begin(); it != clients_list.end() ; ++it)
     {
         if(client != NULL && it->first == client->getNickName())
             continue;
         it->second->setSendbuf(message);       
     }
-    if(channel->isOperator(client->getNickName()) == true)
-    {
-        for(it = clients_list.begin(); it != clients_list.end() ; ++it)
-        {
-            if(it->second->getOperatorStatus() == true)
-            {
-                std::cout << it->second->getNickName() << "is the new operator of the channel" << std::endl;
-                break ;
-            }  
-        }
-    }
+    // if(channel->isOperator(client->getNickName()) == true)
+    // {
+    //     for(it = clients_list.begin(); it != clients_list.end() ; ++it)
+    //     {
+    //         if(it->second->getOperatorStatus() == true)
+    //         {
+    //             std::cout << it->second->getNickName() << "is the new operator of the channel" << std::endl;
+    //             break ;
+    //         }  
+    //     }
+    // }
     channel->removeFromChannel(client->getNickName());
 }
 

@@ -13,6 +13,7 @@ class Channel
 		std::map<std::string, Client *>	_clientList;
 		// std::vector<std::string>		_kickedUsers;
 		std::vector<std::string>		_operators;
+		std::vector<Client *>           _clientOrder;
 		std::string 					_channel;
 		std::string						_channelKey;
 		std::string						_topic;
