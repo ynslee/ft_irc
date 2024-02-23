@@ -16,7 +16,7 @@
 # define ERR_NOSUCHSERVER(hostname, servername)(":" + hostname + " 402 " + servername + " :No such server" + "\r\n")
 # define ERR_NOOPERHOST(hostname)(":" + hostname + " 491 * :You have not registered" + "\r\n")
 # define ERR_BADCHANNELKEY(username, channel) ("475 " + username + " " + channel + " :Cannot join channel (+k)\r\n")
-# define ERR_UNKNOWNMODE(hostname, flag)("472 * :Unknown MODE flag\r\n")
+# define ERR_UNKNOWNMODE()("472 * :Unknown MODE flag\r\n")
 
 //NORMAL REPLIES
 # define QUIT_MESSAGE(nick, username, userIP)(":" + nick + "!" + username + "@" + userIP + " QUIT :Quit: ")
