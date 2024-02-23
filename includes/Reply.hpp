@@ -5,7 +5,7 @@
 # define USER(nick, username, userIP)(":" + nick + "!" + username + "@" + userIP)
 
 //ERROR REPLIES
-# define ERR_NEEDMOREPARAMS(hostname)(":" + hostname + " 461 * :Not enough parameters" + "\r\n")	
+# define ERR_NEEDMOREPARAMS(hostname)(":" + hostname + " 461 * :Not enough parameters" + "\r\n")
 # define ERR_ALREADYREGISTRED(hostname)(":" + hostname + " 462 * :You may not reregister" + "\r\n")
 # define ERR_PASSWDMISMATCH(hostname)(":" + hostname + " 464 * :Password incorrect" + "\r\n")
 # define ERR_NONICKNAMEGIVEN(hostnmae)(":" + hostname + " 431 * :No nickname given" + "\r\n")
@@ -19,6 +19,7 @@
 # define ERR_BADCHANNELKEY(username, channel) ("475 " + username + " " + channel + " :Cannot join channel (+k)\r\n")
 # define ERR_CHANNELISFULL(username, channel) ("471 " + username + " " + channel + " :Cannot join channel (+l)\r\n")
 # define ERR_INVITEONLYCHAN(username, channel) ("473 " + username + " " + channel + " :Cannot join channel (+i)\r\n")
+# define ERR_UNKNOWNMODE()("472 * :Unknown MODE flag\r\n")
 
 //NORMAL REPLIES
 # define QUIT_MESSAGE(nick, username, userIP)(":" + nick + "!" + username + "@" + userIP + " QUIT :Quit: ")
