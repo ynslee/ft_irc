@@ -1,7 +1,7 @@
 #include "../../includes/Commands.hpp"
 #include "../../includes/Server.hpp"
 
-static std::string getChannelName(std::string channel, std::map<std::string, Channel*> &channels)
+static std::string getChannelName(std::string channel)
 {
 	std::size_t found = channel.find('#');
 	std::string channelName;
@@ -10,18 +10,12 @@ static std::string getChannelName(std::string channel, std::map<std::string, Cha
 		channelName = channel;
 	else
 		channelName = "#" + channel;
-	std::map<std::string, Channel*>::iterator it;
-	for (it=channels.begin(); it!=channels.end(); it++)
-	{
-		if (it->first == channelName)
-			return (channelName);
-	}
 	return (channelName);
 }
 
-static bool checkIfClientExists(std::map<const std::string, Client*> &clientList, std::string nick)
+static bool checkIfClientExists(std::map<std::string, Client*> &clientList, std::string nick)
 {
-	std::map<const std::string, Client*>::iterator it;
+	std::map<std::string, Client*>::iterator it;
 	for (it=clientList.begin(); it!=clientList.end(); it++)
 	{
 		if (it->first == nick)
@@ -44,13 +38,17 @@ static int joinExistingServerWithoutKey(std::map<std::string, Channel*> &channel
 			}
 			if (checkIfClientExists(it->second->getClientList(), client->getNickName()) == true)
 				return (0);
+			client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName));
 			it->second->addToChannel(*client);
+			client->setMaxChannels();
 			return (0);
 		}
 	}
-	channels.insert(std::make_pair(channelName, &Channel(channelName)));
+	channels.insert(std::make_pair(channelName, new Channel(channelName)));
 	channels[channelName]->addToChannel(*client);
+	client->setMaxChannels();
 	client->setNewChannel(channelName);
+	client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName));
 	return (0);
 }
 
@@ -65,6 +63,7 @@ static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels,
 			{
 				if (checkIfClientExists(it->second->getClientList(), client->getNickName()) == true)
 					return (0);
+				client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName));
 				it->second->addToChannel(*client);
 				return (0);
 			}
@@ -75,9 +74,12 @@ static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels,
 			}
 		}
 	}
+	channels.insert(std::make_pair(channelName, new Channel(channelName)));
 	channels[channelName]->addToChannel(*client);
 	channels[channelName]->setChannelKey(key);
+	client->setMaxChannels();
 	client->setNewChannel(channelName);
+	client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName));
 	return (0);
 }
 
@@ -105,7 +107,7 @@ static int clientErrorChecks(Client *client, std::map<std::string, Channel*> &ch
 				send(client->getClientFd(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).c_str(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).length(), 0);
 				return (-1);
 			}
-			else if (it->second->getUserLimit() == 10)
+			else if (it->second->getClientList().size() == static_cast<size_t>(it->second->getUserLimit()))
 			{
 				send(client->getClientFd(), ERR_CHANNELISFULL(client->getUserName(), channelName).c_str(), ERR_CHANNELISFULL(client->getUserName(), channelName).length(), 0);
 				return (-1);
@@ -115,45 +117,52 @@ static int clientErrorChecks(Client *client, std::map<std::string, Channel*> &ch
 	return (0);
 }
 
-int cmdJoin(Message &msg, Client *Client, std::map<std::string, Channel*> &channels)
+void printClientList(std::map<std::string, Channel*> &channels)
+{
+	std::map<std::string, Channel*>::iterator it;
+	for (it=channels.begin(); it!=channels.end(); it++)
+	{
+		std::cout << "channel name is " << it->first << std::endl;
+		std::map<std::string, Client*>::iterator it2;
+		for (it2=it->second->getClientList().begin(); it2!=it->second->getClientList().end(); it2++)
+			std::cout << "client is " << it2->second->getNickName() << std::endl;
+	}
+	return;
+}
+
+int cmdJoin(Message &msg, Client *client, std::map<std::string, Channel*> &channels)
 {
 	std::string channelName;
-	std::string hostname = Client->getHostName();
+	std::string hostname = client->getHostName();
 
 	if (msg.params.size() == 0)
 	{
-		send(Client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);
+		send(client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);
 		return (-1);
 	}
-	channelName = getChannelName(msg.params[0], channels);
-	if(Client->getRegisteration() <= 2)
-    {
-        send(Client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);
-        return(-1);
-    }
-	if (Client->getMaxChannels() == 3)
-	{
-		send(Client->getClientFd(), ERR_TOOMANYCHANNELS(Client->getUserName(), channelName).c_str(), ERR_TOOMANYCHANNELS(Client->getUserName(), channelName).length(), 0);
+	channelName = getChannelName(msg.params[0]);
+	if (clientErrorChecks(client, channels, channelName) == -1)
 		return (-1);
-	}
 	if (channels.size() == 0)
 	{
 		if(msg.params.size() <= 2)
 		{
-			channels.insert(std::make_pair(channelName, &Channel(channelName)));
-			channels[channelName]->addToChannel(*Client);
+			channels.insert(std::make_pair(channelName, new Channel(channelName)));
+			channels[channelName]->addToChannel(*client);
 			if (msg.params.size() == 2)
 				channels[channelName]->setChannelKey(msg.params[1]);
-			Client->setSendbuf(RPL_JOIN(USER(Client->getNickName(), Client->getUserName(), Client->getIPaddress()), channelName));
-			Client->setNewChannel(channelName);
+			client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName));
+			client->setMaxChannels();
+			client->setNewChannel(channelName);
 			return (0);
 		}
 		else
+
 			return (-1);
 	}
 	if (channels.size() > 0 && msg.params.size() == 1)
-		return (joinExistingServerWithoutKey(channels, msg.params[0], Client));
+		return (joinExistingServerWithoutKey(channels, msg.params[0], client));
 	if (channels.size() > 0 && msg.params.size() == 2)
-		return (joinExistingServerWithKey(channels, msg.params[0], msg.params[1], Client));
+		return (joinExistingServerWithKey(channels, msg.params[0], msg.params[1], client));
 	return (0);
 }

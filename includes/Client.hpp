@@ -48,6 +48,7 @@ class Client{
 		void	setWelcomeSent(int sent);
 		void	setIsOperator(bool status);
 		void	setNewChannel(std::string channel_name);
+		void 	setMaxChannels(void);
 		const int	&getClientFd(void);
 		const std::string	&getServerName(void);
 		const std::string	&getNickName(void);

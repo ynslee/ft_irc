@@ -8,7 +8,7 @@ Client::Client(){};
  * @param new_fd socket fd
  * @param _mode mode for USER, CHANNEL
  */
-Client::Client(int new_fd): _clientFd(new_fd), _serverName("🐾TYCHUNEN SERVER🐾"), _nickname(""), _mode("+Ziw"), _operatorPassword("TYCHUNEN"),_isRegistered(0), _welcomeSent(0), _isOperator(false), _maxChannels(3) {}
+Client::Client(int new_fd): _clientFd(new_fd), _serverName("🐾TYCHUNEN SERVER🐾"), _nickname(""), _mode("+Ziw"), _operatorPassword("TYCHUNEN"),_isRegistered(0), _welcomeSent(0), _isOperator(false), _maxChannels(0) {}
 
 Client::~Client(){}
 
@@ -87,6 +87,11 @@ void	Client::setIsOperator(bool status)
 void	Client::setNewChannel(std::string channel_name)
 {
 		_channelsJoined.push_back(channel_name);
+}
+
+void	Client::setMaxChannels(void)
+{
+	_maxChannels++;
 }
 
 const int	&Client::getClientFd(void){return(_clientFd);}

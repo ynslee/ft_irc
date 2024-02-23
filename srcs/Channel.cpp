@@ -2,16 +2,22 @@
 #include "../includes/Channel.hpp"
 #include "../includes/Common.hpp"
 
-Channel::Channel(std::string const &name) : _channel(name), _userLimit(10){
+Channel::Channel(std::string const &name) : _channel(name), _userLimit(10), _useramount(0){
 
-	std::map<const std::string, Client>	_clientList;
+	std::map<std::string, Client *>	_clientList;
 	// _kickedUsers.clear();
 	_operators.clear();
 }
 
-Channel::~Channel(){}
+Channel::~Channel(){
+	// std::map<std::string, Client *>::iterator it;
+	// for (it=_clientList.begin(); it!=_clientList.end(); it++)
+	// {
+	// 	delete it->second;
+	// }
+}
 
-std::map <const std::string, Client *>&	Channel::getClientList() { return _clientList; }
+std::map <std::string, Client *>&	Channel::getClientList() { return _clientList; }
 std::vector<std::string>&		Channel::getChannelOperators() { return _operators; }
 const std::string&				Channel::getChannelName() { return _channel; }
 const std::string&				Channel::getChannelKey() { return _channelKey; }
@@ -21,8 +27,9 @@ const int&						Channel::getUserLimit() { return _userLimit; }
 
 void	Channel::addToChannel(Client &client)
 {
-	const std::string nick = client.getNickName();
+	std::string nick = client.getNickName();
 	_clientList.insert(std::make_pair(nick, (&client)));
+	_useramount++;
 }
 
 void	Channel::removeFromChannel(std::string &nick)
@@ -69,16 +76,11 @@ void	Channel::removeMode(std::string const mode)
 		_mode.erase(pos, mode.length());
 }
 
-void	Channel::setUserLimit(int limit)
-{
-	_userLimit = limit;
-}
-
 bool	Channel::isAlreadyInChannel(std::string &nick)
 {
 	if (_clientList.size() == 0)
 		return(false);
-	std::map<const std::string, Client *>::iterator it;
+	std::map<std::string, Client *>::iterator it;
 	for (it=_clientList.begin(); it!=_clientList.end(); it++)
 	{
 		if (it->first == nick)
