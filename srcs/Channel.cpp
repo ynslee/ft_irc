@@ -7,6 +7,7 @@ Channel::Channel(std::string const &name) : _channel(name), _userLimit(10), _use
 	std::map<std::string, Client *>	_clientList;
 	// _kickedUsers.clear();
 	_operators.clear();
+	std::cout << "Channel " << GREEN << _channel << RESET << "created" << std::endl;
 }
 
 Channel::~Channel(){

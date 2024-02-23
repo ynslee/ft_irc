@@ -13,6 +13,11 @@ static std::string getChannelName(std::string channel)
 	return (channelName);
 }
 
+static void printJoinMessage(Client *client, std::string channelName)
+{
+	std::cout << MAGENTA << client->getNickName() << RESET << " [" << MAGENTA << client->getUserName() << "@" << client->getIPaddress() << RESET << "] has joined " << BOLD << channelName << RESET << std::endl;
+}
+
 static bool checkIfClientExists(std::map<std::string, Client*> &clientList, std::string nick)
 {
 	std::map<std::string, Client*>::iterator it;
@@ -38,9 +43,10 @@ static int joinExistingServerWithoutKey(std::map<std::string, Channel*> &channel
 			}
 			if (checkIfClientExists(it->second->getClientList(), client->getNickName()) == true)
 				return (0);
-			client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName));
+			client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
 			it->second->addToChannel(*client);
 			client->setMaxChannels();
+			printJoinMessage(client, channelName);
 			return (0);
 		}
 	}
@@ -48,7 +54,8 @@ static int joinExistingServerWithoutKey(std::map<std::string, Channel*> &channel
 	channels[channelName]->addToChannel(*client);
 	client->setMaxChannels();
 	client->setNewChannel(channelName);
-	client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName));
+	client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
+	printJoinMessage(client, channelName);
 	return (0);
 }
 
@@ -63,8 +70,9 @@ static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels,
 			{
 				if (checkIfClientExists(it->second->getClientList(), client->getNickName()) == true)
 					return (0);
-				client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName));
+				client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
 				it->second->addToChannel(*client);
+				printJoinMessage(client, channelName);
 				return (0);
 			}
 			else
@@ -79,7 +87,8 @@ static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels,
 	channels[channelName]->setChannelKey(key);
 	client->setMaxChannels();
 	client->setNewChannel(channelName);
-	client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName));
+	client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
+	printJoinMessage(client, channelName);
 	return (0);
 }
 
@@ -130,6 +139,7 @@ void printClientList(std::map<std::string, Channel*> &channels)
 	return;
 }
 
+
 int cmdJoin(Message &msg, Client *client, std::map<std::string, Channel*> &channels)
 {
 	std::string channelName;
@@ -151,9 +161,10 @@ int cmdJoin(Message &msg, Client *client, std::map<std::string, Channel*> &chann
 			channels[channelName]->addToChannel(*client);
 			if (msg.params.size() == 2)
 				channels[channelName]->setChannelKey(msg.params[1]);
-			client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, Client->getRealName()));
+			client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
 			client->setMaxChannels();
 			client->setNewChannel(channelName);
+			printJoinMessage(client, channelName);
 			return (0);
 		}
 		else
