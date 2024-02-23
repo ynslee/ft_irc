@@ -41,7 +41,7 @@ class Client{
 		void	setReadbuf(std::string buf);
 		void	setSendbuf(std::string buf);
 		void	setMode(std::string mode);
-		void	setIPaddress(char *ip);
+		void	setIPaddress(std::string IP);
 		void	setHostName(char *host);
 		void	setRegisteration(int reg);
 		void	setWelcomeSent(int sent);

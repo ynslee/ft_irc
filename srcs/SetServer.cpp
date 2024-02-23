@@ -156,9 +156,9 @@ int Server::acceptPendingConnections()
 		close(new_fd);
 	}
 	inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof(s));
-	std::cout << "New conection from" << s << "on socket :" << new_fd << std::endl;
+	std::cout << "New conection from " << s << " on socket :" << new_fd << std::endl;
 	_clients.insert(std::make_pair(new_fd, new Client(new_fd)));
-	_clients[new_fd]->setIPaddress(s);
+	_clients[new_fd]->setIPaddress("::ffff:127.0.0.1");
 	if (gethostname(hostname, sizeof(hostname)) == -1)
 	{
 		std::cerr << "Error in gethostname()" << std::endl;

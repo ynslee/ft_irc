@@ -38,13 +38,13 @@ int cmdUser(Message &msg, Client *Client)
 			int registeration = Client->getRegisteration();
 			Client->setRegisteration(registeration + 1);
 		}
-		Client->setUserName(msg.params[0]);
+		Client->setUserName("~" + msg.params[0]);
 		if (msg.trailing.empty() == true)
 		{
-			Client->setRealName('~' + msg.params[0]);
+			Client->setRealName(msg.params[0]);
 		}
 		else
-			Client->setRealName('~' + msg.trailing);
+			Client->setRealName(msg.trailing);
 		if (Client->getRegisteration() == 3 && Client->getWelcomeSent() == 0)
         	welcomeUser(Client);
 		return (0);
