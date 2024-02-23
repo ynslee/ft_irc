@@ -30,7 +30,7 @@ part will be done after we set the channel*/
 // }
 
 
-void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &channels)
+void cmdQuit(Message &msg, Client *Client) //, std::map<std::string, Channel*> &channels
 {
 
     std::string quit_message;
@@ -45,7 +45,7 @@ void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &chan
 
     }
 
-
+}
 //     // sendMsgtoClients(quit_message,Client, nick_names);
 //     close(Client->getClientFd());
 //     return ;

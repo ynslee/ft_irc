@@ -241,10 +241,10 @@ int Server::findCommand(int client_fd)
 					return(-1);
 				break;
 			}
-			// case command::MODE:
-			// 	if (cmdMode(msg, _clients[client_fd]) == -1)
-			// 		return(-1);
-			// 	break ;
+			case command::MODE:
+				if (cmdMode(msg, _clients[client_fd]) == -1)
+					return(-1);
+				break ;
 			case command::MOTD:
 				if (cmdMotd(msg, _clients[client_fd]) == -1)
 					return(-1);
