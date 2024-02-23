@@ -88,7 +88,7 @@ bool	Channel::isAlreadyInChannel(std::string &nick)
 	return(false);
 }
 
-bool	Channel::isOperator(std::string &operatorName)
+bool	Channel::isOperator(const std::string &operatorName)
 {
 	if (_operators.size() == 0)
 		return(false);

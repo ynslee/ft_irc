@@ -46,7 +46,7 @@ class Channel
 
 		/*helping functions*/
 		bool							isAlreadyInChannel(std::string &nick);
-		bool							isOperator(std::string &operatorName);
+		bool							isOperator(const std::string &operatorName);
 		void							removeChannelPassword();
 
 };

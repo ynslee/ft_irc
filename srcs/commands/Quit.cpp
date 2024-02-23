@@ -32,11 +32,22 @@ void sendMsgtoClients(std::string message, Client *client, Channel *channel)
             continue;
         it->second->setSendbuf(message);       
     }
+    if(channel->isOperator(client->getNickName()) == true)
+    {
+        for(it = clients_list.begin(); it != clients_list.end() ; ++it)
+        {
+            if(it->second->getOperatorStatus() == true)
+            {
+                std::cout << it->second->getNickName() << "is the new operator of the channel" << std::endl;
+                break ;
+            }  
+        }
+    }
     channel->removeFromChannel(client->getNickName());
 }
 
 
-void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &channels)
+void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &channels,  std::vector<std::string> &nick_names)
 {
 
     std::string quit_message;
@@ -62,6 +73,8 @@ void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &chan
             }
         }
     }
+    std::vector<std::string>::iterator iter = std::find(nick_names.begin(),nick_names.end(), Client->getNickName());
+    nick_names.erase(iter);
     close(Client->getClientFd());
     return ;
 }
