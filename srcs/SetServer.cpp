@@ -109,7 +109,7 @@ int Server::pollLoop()
 					{
 						if (sendMsg(this->_pfds[i].fd) == -1)
 						{
-							// std::perror("Error in send()");
+							std::perror("Error in send()");
 							break;
 						}
 					}

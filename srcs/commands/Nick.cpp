@@ -35,7 +35,7 @@ int isValidnick(std::string new_nick)
     for(it = new_nick.begin(); it != new_nick.end(); it++)
     {
 
-        if(!std::isalnum(*it) && *it != '[' && *it != ']' && *it != '{' && *it != '}' && *it != '\\' && *it != '|')
+        if(!std::isalnum(*it) && *it != '[' && *it != ']' && *it != '{' && *it != '}' && *it != '\\' && *it != '|' && *it != '_' && *it != '-')
             return(-1);
     }
     return(0);

@@ -9,4 +9,6 @@ void cmdCap(Message &msg, Client *Client)
 	{
 		Client->setSendbuf(":" + Client->getHostName() + " CAP * LS :" + "\r\n");
 	}
+	else if (msg.params[0] == "END")
+		return ;
 }
