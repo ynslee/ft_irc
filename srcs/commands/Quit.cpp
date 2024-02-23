@@ -56,7 +56,7 @@ void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &chan
             if(channelIt->second->getClientList().size() == 0)
             {
                 std::cout << "Channel " << channelIt->second->getChannelName() << " deleted ";
-                // delete (channelIt->second);
+                delete (channelIt->second);
                 channels.erase(channelIt);
                 continue ;                
             }
