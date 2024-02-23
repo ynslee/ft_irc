@@ -32,7 +32,7 @@ class Client{
 	public:
 		Client(int new_fd);
 		~Client();
-		
+
 		//write setters getters
 		void	setSocketFd(int new_fd);
 		void	setNickName(std::string new_name);
@@ -63,7 +63,7 @@ class Client{
 		const int	&getWelcomeSent(void);
 		const bool 	&getOperatorStatus(void);
 		std::vector<std::string> &getChannelsJoined();
-
+		bool goodModeFLag(std::string modeFlag);
 		void addSendbuf(std::string buf);
 };
 

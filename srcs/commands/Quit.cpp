@@ -3,20 +3,20 @@
 #include "../../includes/Reply.hpp"
 
 /**
- * @brief The QUIT command is used to terminate a client’s connection to the server. The server acknowledges 
+ * @brief The QUIT command is used to terminate a client’s connection to the server. The server acknowledges
  * this by replying with an ERROR message and closing the connection to the client.
  * Syntax: PASS [<reason>]
  *
- * This message may also be sent from the server to a client to show that a client has exited from the network. 
- * This is typically only dispatched to clients that share a channel with the exiting user. 
+ * This message may also be sent from the server to a client to show that a client has exited from the network.
+ * This is typically only dispatched to clients that share a channel with the exiting user.
  * When the QUIT message is sent to clients, <source> represents the client that has exited the network.
- * 
+ *
  *
  * Example : /QUIT Gone to have lunc
  */
 
 /*---------------------------------------IMPORTANT------------------------------------------------------------*/
-/*The quit message stuff is part of the channel stuff, soo in a channel we have to send a message to all 
+/*The quit message stuff is part of the channel stuff, soo in a channel we have to send a message to all
 the clients in the channel, if one of the users quit. But if you are not in a channel just quit the server. That
 part will be done after we set the channel*/
 
@@ -37,8 +37,8 @@ void sendMsgtoClients(std::string message, Client *client, Channel *channel)
 
 
 void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &channels)
-{   
-    
+{
+
     std::string quit_message;
     quit_message = QUIT_MESSAGE(Client->getNickName(), Client->getUserName(), Client->getIPaddress());
     if(msg.params.size())

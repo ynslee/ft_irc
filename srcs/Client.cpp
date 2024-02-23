@@ -1,4 +1,5 @@
 #include "../includes/Client.hpp"
+#include "../includes/Reply.hpp"
 
 Client::Client(){};
 
@@ -57,7 +58,15 @@ void	Client::setSendbuf(std::string buf)
 
 void	Client::setMode(std::string mode)
 {
-	_mode = mode;
+	if (goodModeFLag(mode) == false)
+		send(this->getClientFd(), ERR_UNKNOWNMODE(), strlen(ERR_UNKNOWNMODE()), 0);
+	std::cout << "**** OLD MODE: " << _mode << std::endl;
+	char modeFlag = mode[1];
+	if (mode[0] == '+')
+		_mode += modeFlag;
+	if (mode[0] == '-')
+		_mode.erase(std::remove(_mode.begin(), _mode.end(), modeFlag), _mode.end());
+	std::cout << "**** NEW MODE: " << _mode << std::endl;
 }
 
 void	Client::setIPaddress(std::string IP)
@@ -105,6 +114,18 @@ const int	&Client::getRegisteration(void){return(_isRegistered);}
 const int &Client::getWelcomeSent(void){return(_welcomeSent);}
 const bool &Client::getOperatorStatus(void){return(_isOperator);}
 std::vector<std::string> &Client::getChannelsJoined(void){return(this->_channelsJoined);}
+
+bool Client::goodModeFLag(std::string modeFlag)
+{
+	std::string hostname = this->getHostName();
+	if (modeFlag.size() != 2)
+		return false;
+	else if (modeFlag[0] != '+' && modeFlag[0] != '-')
+		return false;
+	else if (modeFlag[1] != 'i' && modeFlag[1] != 'k' && modeFlag[1] != 'o' && modeFlag[1] != 'l')
+		return false;
+	return true;
+}
 
 void	Client::addSendbuf(std::string buf)
 {

@@ -30,7 +30,7 @@ int isValidnick(std::string new_nick)
 {
     if(!std::isalnum(new_nick[0]))
         return (-1);
-    
+
     std::string::iterator it;
     for(it = new_nick.begin(); it != new_nick.end(); it++)
     {
@@ -44,7 +44,7 @@ int isValidnick(std::string new_nick)
 int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names)
 {
     std::string hostname = Client->getHostName();
-    
+
     if(Client->getRegisteration() == 0)
     {
         send(Client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);

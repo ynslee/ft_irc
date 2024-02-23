@@ -73,7 +73,7 @@ int cmdJoin(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 		send(Client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);
 		return (-1);
 	}
-	if (channels.size() == 0)
+	if (channels.size() == 0) // no channels on the server yet
 	{
 		channelName = getChannelName(msg.params[0]);
 		if(msg.params.size() <= 2)
