@@ -44,6 +44,8 @@ static int joinExistingServerWithoutKey(std::map<std::string, Channel*> &channel
 			if (checkIfClientExists(it->second->getClientList(), client->getNickName()) == true)
 				return (0);
 			client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
+			if(channels[channelName]->getClientList().size() == 0)
+				channels[channelName]->addOperator(client->getNickName());
 			it->second->addToChannel(*client);
 			client->setMaxChannels();
 			printJoinMessage(client, channelName);
@@ -51,6 +53,8 @@ static int joinExistingServerWithoutKey(std::map<std::string, Channel*> &channel
 		}
 	}
 	channels.insert(std::make_pair(channelName, new Channel(channelName)));
+	if(channels[channelName]->getClientList().size() == 0)
+		channels[channelName]->addOperator(client->getNickName());
 	channels[channelName]->addToChannel(*client);
 	client->setMaxChannels();
 	client->setNewChannel(channelName);
@@ -71,6 +75,8 @@ static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels,
 				if (checkIfClientExists(it->second->getClientList(), client->getNickName()) == true)
 					return (0);
 				client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
+				if(channels[channelName]->getClientList().size() == 0)
+					channels[channelName]->addOperator(client->getNickName());
 				it->second->addToChannel(*client);
 				printJoinMessage(client, channelName);
 				return (0);
@@ -83,6 +89,8 @@ static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels,
 		}
 	}
 	channels.insert(std::make_pair(channelName, new Channel(channelName)));
+	if(channels[channelName]->getClientList().size() == 0)
+		channels[channelName]->addOperator(client->getNickName());
 	channels[channelName]->addToChannel(*client);
 	channels[channelName]->setChannelKey(key);
 	client->setMaxChannels();
@@ -158,6 +166,8 @@ int cmdJoin(Message &msg, Client *client, std::map<std::string, Channel*> &chann
 		if(msg.params.size() <= 2)
 		{
 			channels.insert(std::make_pair(channelName, new Channel(channelName)));
+			if(channels[channelName]->getClientList().size() == 0)
+				channels[channelName]->addOperator(client->getNickName());
 			channels[channelName]->addToChannel(*client);
 			if (msg.params.size() == 2)
 				channels[channelName]->setChannelKey(msg.params[1]);
@@ -168,7 +178,6 @@ int cmdJoin(Message &msg, Client *client, std::map<std::string, Channel*> &chann
 			return (0);
 		}
 		else
-
 			return (-1);
 	}
 	if (channels.size() > 0 && msg.params.size() == 1)
