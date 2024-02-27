@@ -173,6 +173,7 @@ int cmdJoin(Message &msg, Client *client, std::map<std::string, Channel*> &chann
 	{
 		if(msg.params.size() <= 2)
 		{
+			std::cout << "beginning of irc. there is no channel" << std::endl;
 			channels.insert(std::make_pair(channelName, new Channel(channelName)));
 			if(channels[channelName]->getClientList().size() == 0)
 				channels[channelName]->addOperator(client->getNickName());
@@ -189,8 +190,8 @@ int cmdJoin(Message &msg, Client *client, std::map<std::string, Channel*> &chann
 			return (-1);
 	}
 	if (channels.size() > 0 && msg.params.size() == 1)
-		return (joinExistingServerWithoutKey(channels, msg.params[0], client));
+		return (joinExistingServerWithoutKey(channels, channelName, client));
 	if (channels.size() > 0 && msg.params.size() == 2)
-		return (joinExistingServerWithKey(channels, msg.params[0], msg.params[1], client));
+		return (joinExistingServerWithKey(channels, channelName, msg.params[1], client));
 	return (0);
 }
