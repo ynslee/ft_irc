@@ -1,7 +1,7 @@
 #include "../../includes/Commands.hpp"
 #include "../../includes/Server.hpp"
 
-static std::string getChannelName(std::string channel)
+static std::string findChannelName(std::string channel)
 {
 	std::size_t found = channel.find('#');
 	std::string channelName;
@@ -161,12 +161,17 @@ int cmdJoin(Message &msg, Client *client, std::map<std::string, Channel*> &chann
 	std::string channelName;
 	std::string hostname = client->getHostName();
 
+	if (client->getWelcomeSent() != 1)
+	{
+		send(client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);
+		return (-1);
+	}
 	if (msg.params.size() == 0 && msg.trailing.size() == 0)
 	{
 		// send(client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);
 		return (-1);
 	}
-	channelName = getChannelName(msg.params[0]);
+	channelName = findChannelName(msg.params[0]);
 	if (clientErrorChecks(client, channels, channelName) == -1)
 		return (-1);
 	if (channels.size() == 0)
