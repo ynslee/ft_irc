@@ -5,26 +5,27 @@
 
 class Client;
 
-
+// _clientlist[channelname] = client class
 //userlimit = user capacity limits in channel
 class Channel
 {
 	private:
-		std::map<const std::string, Client *>	_clientList;
-		std::vector<std::string>		_kickedUsers;
+		std::map<std::string, Client *>	_clientList;
+		// std::vector<std::string>		_kickedUsers;
 		std::vector<std::string>		_operators;
 		std::string 					_channel;
 		std::string						_channelKey;
 		std::string						_topic;
 		std::string						_mode;
 		int								_userLimit;
+		int								_useramount;
 		 
 	public:
 		Channel(std::string const &name);
 		~Channel();
 
 		/*getters and setters*/
-		std::map <const std::string, Client *>	&getClientList();
+		std::map <std::string, Client *>	&getClientList();
 		// std::vector<std::string>&		getKickedUsers();
 		std::vector<std::string>&		getChannelOperators();
 		const std::string&				getChannelName();
@@ -42,7 +43,6 @@ class Channel
 		void							setTopic(std::string& newTopic);
 		void							addMode(std::string const mode);
 		void							removeMode(std::string const mode);
-		void							setUserLimit(int limit);
 
 		/*helping functions*/
 		bool							isAlreadyInChannel(std::string &nick);

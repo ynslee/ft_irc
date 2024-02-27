@@ -25,6 +25,7 @@ class Client{
 		int				_isRegistered;
 		int				_welcomeSent;
 		bool			_isOperator;
+		int				_maxChannels;
 		Client();
 		Client(Client const &other);
 		Client	&operator=(Client const &other);
@@ -47,6 +48,7 @@ class Client{
 		void	setWelcomeSent(int sent);
 		void	setIsOperator(bool status);
 		void	setNewChannel(std::string channel_name);
+		void 	setMaxChannels(void);
 		const int	&getClientFd(void);
 		const std::string	&getServerName(void);
 		const std::string	&getNickName(void);
@@ -62,6 +64,7 @@ class Client{
 		const int	&getRegisteration(void);
 		const int	&getWelcomeSent(void);
 		const bool 	&getOperatorStatus(void);
+		const int	&getMaxChannels(void);
 		std::vector<std::string> &getChannelsJoined();
 		bool goodModeFLag(std::string modeFlag);
 		void addSendbuf(std::string buf);
