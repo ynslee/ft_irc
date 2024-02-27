@@ -2,7 +2,8 @@
 #include "../includes/Channel.hpp"
 #include "../includes/Common.hpp"
 
-Channel::Channel(std::string const &name) : _channel(name), _userLimit(10), _useramount(0){
+Channel::Channel(std::string const &name) : _channel(name), _mode("+nt"), _userLimit(10), _useramount(0)
+{
 
 	std::map<std::string, Client *>	_clientList;
 	// _kickedUsers.clear();
@@ -10,7 +11,8 @@ Channel::Channel(std::string const &name) : _channel(name), _userLimit(10), _use
 	std::cout << "Channel " << GREEN << _channel << RESET << "created" << std::endl;
 }
 
-Channel::~Channel(){
+Channel::~Channel()
+{
 	// std::map<std::string, Client *>::iterator it;
 	// for (it=_clientList.begin(); it!=_clientList.end(); it++)
 	// {
@@ -60,6 +62,19 @@ void	Channel::setTopic(std::string& newTopic)
 	_topic = newTopic;
 }
 
+void	Channel::setMode(std::string mode, Client *client)
+{
+	if (goodModeFLag(mode) == false)
+		send(client->getClientFd(), ERR_UNKNOWNMODE(), strlen(ERR_UNKNOWNMODE()), 0);
+	std::cout << "**** OLD MODE CHANNEL: " << _mode << std::endl;
+	char modeFlag = mode[1];
+	if (mode[0] == '+')
+		_mode += modeFlag;
+	if (mode[0] == '-')
+		_mode.erase(std::remove(_mode.begin(), _mode.end(), modeFlag), _mode.end());
+	std::cout << "**** NEW MODE CHANNEL: " << _mode << std::endl;
+}
+
 void	Channel::addMode(std::string const mode)
 {
 	if (_mode.empty() == true)
@@ -105,4 +120,13 @@ void	Channel::removeChannelPassword()
 	_channelKey.clear();
 }
 
-
+bool Channel::goodModeFLag(std::string modeFlag)
+{
+	if (modeFlag.size() != 2)
+		return false;
+	else if (modeFlag[0] != '+' && modeFlag[0] != '-')
+		return false;
+	else if (modeFlag[1] != 'i' && modeFlag[1] != 'k' && modeFlag[1] != 'o' && modeFlag[1] != 'l')
+		return false;
+	return true;
+}

@@ -60,13 +60,13 @@ void	Client::setMode(std::string mode)
 {
 	if (goodModeFLag(mode) == false)
 		send(this->getClientFd(), ERR_UNKNOWNMODE(), strlen(ERR_UNKNOWNMODE()), 0);
-	std::cout << "**** OLD MODE: " << _mode << std::endl;
+	// std::cout << "**** OLD MODE: " << _mode << std::endl;
 	char modeFlag = mode[1];
 	if (mode[0] == '+')
 		_mode += modeFlag;
 	if (mode[0] == '-')
 		_mode.erase(std::remove(_mode.begin(), _mode.end(), modeFlag), _mode.end());
-	std::cout << "**** NEW MODE: " << _mode << std::endl;
+	// std::cout << "**** NEW MODE: " << _mode << std::endl;
 }
 
 void	Client::setIPaddress(std::string IP)
@@ -123,7 +123,6 @@ std::vector<std::string> &Client::getChannelsJoined(void){return(this->_channels
 
 bool Client::goodModeFLag(std::string modeFlag)
 {
-	std::string hostname = this->getHostName();
 	if (modeFlag.size() != 2)
 		return false;
 	else if (modeFlag[0] != '+' && modeFlag[0] != '-')

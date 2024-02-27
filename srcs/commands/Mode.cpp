@@ -16,8 +16,10 @@ int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 			{
 				std::string clientNick = Client->getNickName();
 				std::cout << "clientNick: " << clientNick << std::endl;
-				if (it->second->isOperator(clientNick) == true)
+				if (it->second->isOperator(clientNick) == true) // doesnt come here if flag param!!!!
 				{
+					std::cout << "msg.params[1]" << msg.params[1] << std::endl;
+					it->second->setMode(msg.params[1], Client);
 					std::cout << "apply changes to channel mode!" << std::endl; // continue here!!
 					return (0);
 				}
