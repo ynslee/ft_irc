@@ -37,7 +37,7 @@ class Channel
 		void							removeFromChannel(std::string &nick);
 		// void							addToKicked(std::string &nick);
 		// void							removeFromKicked(std::string &nick);
-		void							addOperator(std::string operatorName);
+		void							addOperator(std::string clientNickName);
 		void							removeOperator(std::string operatoName);
 		void							setChannelKey(std::string password);
 		void							setTopic(std::string& newTopic);
@@ -47,7 +47,7 @@ class Channel
 
 		/*helping functions*/
 		bool							isAlreadyInChannel(std::string &nick);
-		bool							isOperator(std::string &operatorName);
+		bool							isOperator(std::string &clientNickName);
 		void							removeChannelPassword();
 		bool 							goodModeFLag(std::string modeFlag);
 

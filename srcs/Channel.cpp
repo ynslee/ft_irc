@@ -41,14 +41,14 @@ void	Channel::removeFromChannel(std::string &nick)
 	removeOperator(nick);
 }
 
-void	Channel::addOperator(std::string operatorName)
+void	Channel::addOperator(std::string clientNickName)
 {
-	_operators.push_back(operatorName);
+	_operators.push_back(clientNickName);
 }
 
-void	Channel::removeOperator(std::string operatorName)
+void	Channel::removeOperator(std::string clientNickName)
 {
-	std::vector<std::string>::iterator it = std::find(_operators.begin(), _operators.end(), operatorName);
+	std::vector<std::string>::iterator it = std::find(_operators.begin(), _operators.end(), clientNickName);
 	_operators.erase(it);
 }
 
@@ -105,11 +105,11 @@ bool	Channel::isAlreadyInChannel(std::string &nick)
 	return(false);
 }
 
-bool	Channel::isOperator(std::string &operatorName)
+bool	Channel::isOperator(std::string &clientNickName)
 {
 	if (_operators.size() == 0)
 		return(false);
-	std::vector<std::string>::iterator it = std::find(_operators.begin(), _operators.end(), operatorName);
+	std::vector<std::string>::iterator it = std::find(_operators.begin(), _operators.end(), clientNickName);
 	if (it == _operators.end())
 		return(false);
 	return(true);
