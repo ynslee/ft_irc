@@ -50,14 +50,14 @@ void	Channel::removeOperator(std::string operatorName)
 	std::vector<std::string>::iterator it = std::find(_operators.begin(), _operators.end(), operatorName);
 	if(it != _operators.end())
 	{
-		std::cout << "its coming here even with one" << std::endl;
+		std::cout << "its coming here even with one" << _clientOrder.back() << std::endl;
 		_operators.erase(it);
 		if(!_operators.empty())
 			std::cout << _operators.back() << "is the new operator of the channeeeel" << std::endl;
 		else if(_clientOrder.size() > 1) 
 		{
-			(_clientOrder.back() - 1)->setIsOperator(true);
-			std::cout << (_clientOrder.back() - 1)->getNickName() << " is the new operator of the channel" << std::endl;
+			(_clientOrder.back() - 2)->setIsOperator(true);
+			std::cout << (_clientOrder.back() - 2)->getNickName() << " is the new operator of the channel" << std::endl;
 		}
 	}
 }
