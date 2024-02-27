@@ -49,8 +49,10 @@ void	Channel::addOperator(std::string operatorName)
 void	Channel::removeOperator(std::string operatorName)
 {
 	std::vector<std::string>::iterator it = std::find(_operators.begin(), _operators.end(), operatorName);
+	std::cout << operatorName << std::endl;
 	if(it != _operators.end())
 	{
+		std::cout << "viene aqui" << std::endl;
 		_operators.erase(it);
 		if(!_operators.empty())
 			std::cout << _operators.back() << "is the new operator of the channeeeel" << std::endl;

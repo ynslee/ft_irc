@@ -57,9 +57,12 @@ void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &chan
     else
         quit_message.append("\r\n");
     std::vector<std::string>::iterator it;
+    std::cout << "are you here bro" << std::endl;
+    std::cout << Client->getNickName() << std::endl;
     for(it = Client->getChannelsJoined().begin(); it < Client->getChannelsJoined().end(); it++)
     {
         std::string channel_name = *it;
+        std::cout << "are you here bro fuck you" << std::endl;
         std::map<std::string, Channel*>::iterator channelIt = channels.find(channel_name);  
         if(channelIt != channels.end())
         {
