@@ -6,10 +6,13 @@ static std::string getChannelName(std::string channel)
 	std::size_t found = channel.find('#');
 	std::string channelName;
 
-	if (found != std::string::npos)
+	if (found == 0)
 		channelName = channel;
-	else
+	else if (found == std::string::npos)
 		channelName = "#" + channel;
+	else 
+		channelName = "";
+	std::cout << "channel name is " << channelName << std::endl;
 	return (channelName);
 }
 
@@ -104,6 +107,11 @@ static int clientErrorChecks(Client *client, std::map<std::string, Channel*> &ch
 {
 	std::string hostname = client->getHostName();
 
+	if (channelName.empty())
+	{
+		send(client->getClientFd(), "Wrong channel Name. Write such as ex) #chat or chat", 52, 0);
+		return (-1);
+	}
 	if(client->getRegisteration() <= 2)
 	{
 		send(client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);
