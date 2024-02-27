@@ -240,7 +240,7 @@ int Server::findCommand(int client_fd)
 				break;
 			}
 			case command::MODE:
-				if (cmdMode(msg, _clients[client_fd]) == -1)
+				if (cmdMode(msg, _clients[client_fd], _channels) == -1)
 					return(-1);
 				break ;
 			case command::MOTD:

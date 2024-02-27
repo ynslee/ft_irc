@@ -20,6 +20,8 @@
 # define ERR_CHANNELISFULL(username, channel) ("471 " + username + " " + channel + " :Cannot join channel (+l)\r\n")
 # define ERR_INVITEONLYCHAN(username, channel) ("473 " + username + " " + channel + " :Cannot join channel (+i)\r\n")
 # define ERR_UNKNOWNMODE()("472 * :Unknown MODE flag\r\n")
+# define ERR_CHANOPRIVSNEEDED(username, channel) ("482 " + username + " " + channel + " :You're not channel operator\r\n")
+# define ERR_NOSUCHCHANNEL(username, channel) ("403 " + username + " " + channel + " :No such channel\r\n")
 
 //NORMAL REPLIES
 # define QUIT_MESSAGE(nick, username, userIP)(":" + nick + "!" + username + "@" + userIP + " QUIT :Quit: ")

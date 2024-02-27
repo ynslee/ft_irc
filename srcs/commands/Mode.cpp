@@ -3,33 +3,68 @@
 #include "../../includes/Reply.hpp"
 #include "../../includes/Common.hpp"
 
-int cmdMode(Message &msg, Client *Client)
+int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &channels)
 {
-	/*
-	if (target is this->client)
+	if (msg.params[0][0] == '#') //if mode command is used on a channel
 	{
-		if (modestring)
-			apply changes
-		if (one or more unknown modestrings)
-			send ERR_UMODEUNKNOWNFLAG (501)
-		send mode message RPL_UMODEIS (221)
+		std::map<std::string, Channel*>::iterator it;
+		for (it = channels.begin(); it != channels.end(); it++)
+		{
+			std::cout << "msg.params[0]: " << msg.params[0] << std::endl;
+			std::cout << "it->first: " << it->first << std::endl;
+			if (it->first == msg.params[0])
+			{
+				std::string clientNick = Client->getNickName();
+				std::cout << "clientNick: " << clientNick << std::endl;
+				if (it->second->isOperator(clientNick) == true)
+				{
+					std::cout << "apply changes to channel mode!" << std::endl; // continue here!!
+					return (0);
+				}
+				else
+				{
+					send(Client->getClientFd(), ERR_CHANOPRIVSNEEDED(Client->getUserName(), msg.params[0]).c_str(), ERR_CHANOPRIVSNEEDED(Client->getNickName(), msg.params[0]).length(), 0);
+					return (-1);
+				}
+			}
+		}
+		send(Client->getClientFd(), ERR_NOSUCHCHANNEL(Client->getUserName(), msg.params[0]).c_str(), ERR_NOSUCHCHANNEL(Client->getNickName(), msg.params[0]).length(), 0);
+		return (-1);
 	}
-	if (target is an existing channelname)
+	return (0);
+
+	/*
+	if (client is operator on the channel that is in the message)
 	{
-		if (modestring)
-			if (client has priviledges)
-				apply changes
-			else
-				ERR_CHANOPRIVSNEEDED (482) 
-		if (one or more unknown modestrings)
-			send ERR_UMODEUNKNOWNFLAG (501)
-		RPL_CHANNELMODEIS (324)
+		setMode(message param)
+		-> apply changes to the channel
 	}
 	else
-		ERR_NOSUCHNICK (401)
-		ERR_NOSUCHCHANNEL (403)
-
+		ERR_CHANOPRIVSNEEDED (482)
 	*/
-	std::cout << &msg << Client->getMode() << std::endl;
-	return (0);
 }
+/*
+if (target is this->client)
+{
+	if (modestring)
+		apply changes
+	if (one or more unknown modestrings)
+		send ERR_UMODEUNKNOWNFLAG (501)
+	send mode message RPL_UMODEIS (221)
+}
+if (target is an existing channelname)
+{
+	if (modestring)
+		if (client has priviledges)
+			apply changes
+		else
+			ERR_CHANOPRIVSNEEDED (482)
+	if (one or more unknown modestrings)
+		send ERR_UMODEUNKNOWNFLAG (501)
+	RPL_CHANNELMODEIS (324)
+}
+else
+	ERR_NOSUCHNICK (401)
+	ERR_NOSUCHCHANNEL (403)
+
+*/
