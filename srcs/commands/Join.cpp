@@ -1,7 +1,7 @@
 #include "../../includes/Commands.hpp"
 #include "../../includes/Server.hpp"
 
-static std::string getChannelName(std::string channel)
+static std::string findChannelName(std::string channel)
 {
 	std::size_t found = channel.find('#');
 	std::string channelName;
