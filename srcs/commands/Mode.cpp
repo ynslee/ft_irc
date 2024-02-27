@@ -25,8 +25,9 @@ int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 				}
 				else
 				{
+					std::cout << "Coming in else" << std::endl;
 					send(Client->getClientFd(), ERR_CHANOPRIVSNEEDED(Client->getUserName(), msg.params[0]).c_str(), ERR_CHANOPRIVSNEEDED(Client->getNickName(), msg.params[0]).length(), 0);
-					return (-1);
+					// return (0);
 				}
 			}
 		}
