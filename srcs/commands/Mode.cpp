@@ -10,17 +10,17 @@ int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 		std::map<std::string, Channel*>::iterator it;
 		for (it = channels.begin(); it != channels.end(); it++)
 		{
-			std::cout << "msg.params[0]: " << msg.params[0] << std::endl;
-			std::cout << "it->first: " << it->first << std::endl;
+			// std::cout << "msg.params[0]: " << msg.params[0] << std::endl;
+			// std::cout << "it->first: " << it->first << std::endl;
 			if (it->first == msg.params[0])
 			{
 				std::string clientNick = Client->getNickName();
-				std::cout << "clientNick: " << clientNick << std::endl;
-				if (it->second->isOperator(clientNick) == true) // doesnt come here if flag param!!!!
+				// std::cout << "clientNick: " << clientNick << std::endl;
+				if (it->second->isOperator(clientNick) == true)
 				{
-					std::cout << "msg.params[1]" << msg.params[1] << std::endl;
+					// std::cout << "msg.params[1]" << msg.params[1] << std::endl;
 					it->second->setMode(msg.params[1], Client);
-					std::cout << "apply changes to channel mode!" << std::endl; // continue here!!
+					// std::cout << "apply changes to channel mode!" << std::endl; // continue here!!
 					return (0);
 				}
 				else
@@ -33,17 +33,7 @@ int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 		send(Client->getClientFd(), ERR_NOSUCHCHANNEL(Client->getUserName(), msg.params[0]).c_str(), ERR_NOSUCHCHANNEL(Client->getNickName(), msg.params[0]).length(), 0);
 		return (-1);
 	}
-	return (0);
-
-	/*
-	if (client is operator on the channel that is in the message)
-	{
-		setMode(message param)
-		-> apply changes to the channel
-	}
-	else
-		ERR_CHANOPRIVSNEEDED (482)
-	*/
+	return (0); // if command does not have # before channel name ignore command
 }
 /*
 if (target is this->client)
