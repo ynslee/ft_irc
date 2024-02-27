@@ -1,15 +1,18 @@
 #include "../../includes/Commands.hpp"
 #include "../../includes/Server.hpp"
 
-static std::string getChannelName(std::string channel)
+static std::string findChannelName(std::string channel)
 {
 	std::size_t found = channel.find('#');
 	std::string channelName;
 
-	if (found != std::string::npos)
+	if (found == 0)
 		channelName = channel;
-	else
+	else if (found == std::string::npos)
 		channelName = "#" + channel;
+	else 
+		channelName = "";
+	std::cout << "channel name is " << channelName << std::endl;
 	return (channelName);
 }
 
@@ -104,6 +107,11 @@ static int clientErrorChecks(Client *client, std::map<std::string, Channel*> &ch
 {
 	std::string hostname = client->getHostName();
 
+	if (channelName.empty())
+	{
+		send(client->getClientFd(), "Wrong channel Name. Write such as ex) #chat or chat", 52, 0);
+		return (-1);
+	}
 	if(client->getRegisteration() <= 2)
 	{
 		send(client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);
@@ -153,18 +161,24 @@ int cmdJoin(Message &msg, Client *client, std::map<std::string, Channel*> &chann
 	std::string channelName;
 	std::string hostname = client->getHostName();
 
+	if (client->getWelcomeSent() != 1)
+	{
+		send(client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);
+		return (-1);
+	}
 	if (msg.params.size() == 0 && msg.trailing.size() == 0)
 	{
 		// send(client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);
 		return (-1);
 	}
-	channelName = getChannelName(msg.params[0]);
+	channelName = findChannelName(msg.params[0]);
 	if (clientErrorChecks(client, channels, channelName) == -1)
 		return (-1);
 	if (channels.size() == 0)
 	{
 		if(msg.params.size() <= 2)
 		{
+			std::cout << "beginning of irc. there is no channel" << std::endl;
 			channels.insert(std::make_pair(channelName, new Channel(channelName)));
 			if(channels[channelName]->getClientList().size() == 0)
 				channels[channelName]->addOperator(client->getNickName());
@@ -181,8 +195,8 @@ int cmdJoin(Message &msg, Client *client, std::map<std::string, Channel*> &chann
 			return (-1);
 	}
 	if (channels.size() > 0 && msg.params.size() == 1)
-		return (joinExistingServerWithoutKey(channels, msg.params[0], client));
+		return (joinExistingServerWithoutKey(channels, channelName, client));
 	if (channels.size() > 0 && msg.params.size() == 2)
-		return (joinExistingServerWithKey(channels, msg.params[0], msg.params[1], client));
+		return (joinExistingServerWithKey(channels, channelName, msg.params[1], client));
 	return (0);
 }

@@ -39,6 +39,7 @@ void	Channel::removeFromChannel(std::string &nick)
 {
 	_clientList.erase(nick);
 	removeOperator(nick);
+	_useramount--;
 }
 
 void	Channel::addOperator(std::string clientNickName)
