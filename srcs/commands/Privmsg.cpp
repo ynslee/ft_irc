@@ -53,7 +53,7 @@ static int privmsgChannel(Message &msg, Client *client, std::map<std::string, Ch
 			return (0);
 		}
 	}
-	send(client->getClientFd(), ERR_NOSUCHCHANNEL(channelName).c_str(), ERR_NOSUCHCHANNEL(channelName).length(), 0);
+	send(client->getClientFd(), ERR_NOSUCHCHANNEL(channelName,client->getHostName()).c_str(), ERR_NOSUCHCHANNEL(channelName,client->getHostName()).length(), 0);
 	return (-1);
 }
 
