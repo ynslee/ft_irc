@@ -100,7 +100,6 @@ static int joinExistingServerWithoutKey(std::map<std::string, Channel*> &channel
 			if(channels[channelName]->getClientList().size() == 0)
 				channels[channelName]->addOperator(client->getNickName());
 			it->second->addToChannel(*client);
-			client->setMaxChannels();
 			topicMessage(channels[channelName], client);
 			successfulJoinMessage(client, channelName, channels[channelName]->getClientList(), client->getNickName());
 			printJoinMessage(client, channelName);

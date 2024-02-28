@@ -35,11 +35,12 @@ const int&						Channel::getUserLimit() { return _userLimit; }
 void	Channel::addToChannel(Client &client)
 {
 	std::string nick = client.getNickName();
+	_clientOrder.push_back(&client);
 	_clientList.insert(std::make_pair(nick, (&client)));
 	_useramount++;
 }
 
-void	Channel::removeFromChannel(std::string &nick)
+void	Channel::removeFromChannel(const std::string &nick)
 {
 	_clientList.erase(nick);
 	removeOperator(nick);
@@ -54,7 +55,19 @@ void	Channel::addOperator(std::string operatorName)
 void	Channel::removeOperator(std::string operatorName)
 {
 	std::vector<std::string>::iterator it = std::find(_operators.begin(), _operators.end(), operatorName);
-	_operators.erase(it);
+	if(it != _operators.end())
+	{
+		_operators.erase(it);
+		if(!_operators.empty())
+			std::cout << _operators.back() << "is the new operator of the channel" << std::endl;
+		else if(_clientOrder.size() > 1) 
+		{
+			_clientOrder.erase(_clientOrder.begin());
+			_clientOrder.front()->setIsOperator(true);
+			_operators.push_back(_clientOrder.front()->getNickName());
+			std::cout << _clientOrder.front()->getNickName() << " is the new operator of the channel" << std::endl;
+		}
+	}
 }
 
 void	Channel::setChannelKey(std::string password)
@@ -97,7 +110,7 @@ bool	Channel::isAlreadyInChannel(std::string &nick)
 	return(false);
 }
 
-bool	Channel::isOperator(std::string &operatorName)
+bool	Channel::isOperator(const std::string &operatorName)
 {
 	if (_operators.size() == 0)
 		return(false);
