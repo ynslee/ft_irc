@@ -1,12 +1,18 @@
 #include "../includes/Server.hpp"
 #include "../includes/Channel.hpp"
 #include "../includes/Common.hpp"
+#include <cstdlib>
+#include <ctime>
 
 Channel::Channel(std::string const &name) : _channel(name), _mode("+nt"), _userLimit(10), _useramount(0)
 {
 
 	std::map<std::string, Client *>	_clientList;
 	// _kickedUsers.clear();
+	std::srand(std::time(0));
+	int randomise = rand();
+	if (randomise % 2 == 0)
+		_topic = "Welcome to 🐾TYCHUNEN SERVER🐾 support | Not a channel for politics, drama, fights | FAQ and guides: please ask Pets around you | Usable commands: MODE, INVITE, QUIT, PRIVMSG, KICK, TOPIC" ;
 	_operators.clear();
 	std::cout << "Channel " << GREEN << _channel << RESET << "created" << std::endl;
 }
@@ -31,11 +37,12 @@ const int&						Channel::getUserLimit() { return _userLimit; }
 void	Channel::addToChannel(Client &client)
 {
 	std::string nick = client.getNickName();
+	_clientOrder.push_back(&client);
 	_clientList.insert(std::make_pair(nick, (&client)));
 	_useramount++;
 }
 
-void	Channel::removeFromChannel(std::string &nick)
+void	Channel::removeFromChannel(const std::string &nick)
 {
 	_clientList.erase(nick);
 	removeOperator(nick);
@@ -50,7 +57,19 @@ void	Channel::addOperator(std::string clientNickName)
 void	Channel::removeOperator(std::string clientNickName)
 {
 	std::vector<std::string>::iterator it = std::find(_operators.begin(), _operators.end(), clientNickName);
-	_operators.erase(it);
+	if(it != _operators.end())
+	{
+		_operators.erase(it);
+		if(!_operators.empty())
+			std::cout << _operators.back() << "is the new operator of the channel" << std::endl;
+		else if(_clientOrder.size() > 1)
+		{
+			_clientOrder.erase(_clientOrder.begin());
+			_clientOrder.front()->setIsOperator(true);
+			_operators.push_back(_clientOrder.front()->getNickName());
+			std::cout << _clientOrder.front()->getNickName() << " is the new operator of the channel" << std::endl;
+		}
+	}
 }
 
 void	Channel::setChannelKey(std::string password)
@@ -106,7 +125,7 @@ bool	Channel::isAlreadyInChannel(std::string &nick)
 	return(false);
 }
 
-bool	Channel::isOperator(std::string &clientNickName)
+bool	Channel::isOperator(const std::string &clientNickName)
 {
 	if (_operators.size() == 0)
 		return(false);

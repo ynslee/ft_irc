@@ -13,6 +13,7 @@ class Channel
 		std::map<std::string, Client *>	_clientList;
 		// std::vector<std::string>		_kickedUsers;
 		std::vector<std::string>		_operators;
+		std::vector<Client *>           _clientOrder;
 		std::string 					_channel;
 		std::string						_channelKey;
 		std::string						_topic;
@@ -34,7 +35,7 @@ class Channel
 		const std::string&				getMode();
 		const int&						getUserLimit();
 		void							addToChannel(Client &client);
-		void							removeFromChannel(std::string &nick);
+		void							removeFromChannel(const std::string &nick);
 		// void							addToKicked(std::string &nick);
 		// void							removeFromKicked(std::string &nick);
 		void							addOperator(std::string clientNickName);
@@ -47,7 +48,7 @@ class Channel
 
 		/*helping functions*/
 		bool							isAlreadyInChannel(std::string &nick);
-		bool							isOperator(std::string &clientNickName);
+		bool							isOperator(const std::string &operatorName);
 		void							removeChannelPassword();
 		bool 							goodModeFLag(std::string modeFlag);
 

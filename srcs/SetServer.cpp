@@ -206,6 +206,7 @@ int Server::findCommand(int client_fd)
 {
 	while (1)
 	{
+
 		if (_clients[client_fd]->getReadbuf().empty())
 			return (0);
 		std::string input = extractInput(_clients, client_fd);
@@ -239,10 +240,10 @@ int Server::findCommand(int client_fd)
 					return(-1);
 				break;
 			}
-			case command::MODE:
-				if (cmdMode(msg, _clients[client_fd], _channels) == -1)
-					return(-1);
-				break ;
+			// case command::MODE:
+			// 	if (cmdMode(msg, _clients[client_fd], _channels) == -1)
+			// 		return(-1);
+			// 	break ;
 			case command::MOTD:
 				if (cmdMotd(msg, _clients[client_fd]) == -1)
 					return(-1);
@@ -251,12 +252,12 @@ int Server::findCommand(int client_fd)
 				if (cmdOper(msg, _clients[client_fd]) == -1)
 					return(-1);
 				break ;
-			// case command::QUIT:
-			// {
-			// 	cmdQuit(msg, _clients[client_fd],_channels);
-			// 	removeClientfromPoll(client_fd);
-			// 	break ;
-			// }
+			case command::QUIT:
+			{
+				cmdQuit(msg, _clients[client_fd],_channels, getNicknames());
+				removeClientfromPoll(client_fd);
+				return(0);
+			}
 			case command::INVALID:
 				std::cerr << "Invalid command" << std::endl;
 				break ;

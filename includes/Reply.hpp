@@ -26,7 +26,7 @@
 //NORMAL REPLIES
 # define QUIT_MESSAGE(nick, username, userIP)(":" + nick + "!" + username + "@" + userIP + " QUIT :Quit: ")
 # define NICK_REPLY(old_nick, usesrname, userIP, new_nick)(":" + old_nick + "!~" + usesrname + "@" + userIP + " Nick :" + new_nick+ "\r\n")
-# define RPL_MOTDSTART(hostname, usersname)(":" + hostname+ " 375 * :- " + username + " Message of the day - " + "\r\n")
+# define RPL_MOTDSTART(hostname, username)(":" + hostname+ " 375 * :- " + username + " Message of the day - " + "\r\n")
 # define RPL_MOTD(hostname, username, motd_line) (":" + hostname + " 372 " + username + " :" + motd_line + "\r\n")
 # define RPL_ENDOFMOTD(hostname, username) (":" + hostname + " 376 " + username + " :End of /MOTD command.\r\n")
 # define RPL_WELCOME(hostname, username, servername, nick, userIP)(":" + hostname + " 001 " + username + " :Welcome to the Internet Relay Network " + servername + "!" + nick + "@" + userIP + "\r\n")
@@ -35,6 +35,9 @@
 # define RPL_MODE(username, mode)(":" + username + " MODE " + username + " :" + mode + "\r\n")
 # define RPL_YOUREOPER(hostname, username)(":" + hostname + " 381 " + username + " :You are now an IRC operator " + "\r\n")
 # define RPL_JOIN(USER, channel, realname)(USER + " JOIN " + channel + " * :" + realname + "\r\n")
-
+# define RPL_NAMREPLY(hostname, username, channel, nicklist) (":" + hostname + " 353 " + username + " = " + channel + " :" + nicklist + "\r\n")
+# define RPL_ENDOFNAMES(hostname, username, channel) (":" + hostname + " 366 " + username + " " + channel + " :End of /NAMES list.\r\n")
+# define RPL_TOPIC(hostname, username, channel, topic) (":" + hostname + " 332 " + username + " " + channel + " :" + topic + "\r\n")
+# define RPL_NOTOPIC(hostname, username, channel) (":" + hostname + " 331 " + username + " " + channel + " :No topic is set\r\n")
 
 #endif
