@@ -31,5 +31,6 @@ int cmdMotd(Message &msg, Client *Client);
 int cmdOper(Message &msg, Client *Client);
 
 void welcomeUser(Client *Client);
+int isValidnick(std::string new_nick);
 
 #endif
