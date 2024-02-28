@@ -1,6 +1,26 @@
 #include "../../includes/Commands.hpp"
 #include "../../includes/Server.hpp"
 
+/**
+ * @brief Indicates that the client wants to join the given channel(s), each channel using the given key for it.
+ * 	The server receiving the command checks whether or not the client can join the given channel,
+ * 	and processes the request. 
+ * 
+ * 	While a client is joined to a channel, they receive all relevant information about 
+ * 	that channel including who are in the channel and the commands that could be used in the channel.
+ * 	They receive all PRIVMSG and when someone joins to the channel, and they also 
+ * 	receive QUIT messages from other clients joined to the same channel (to let them 
+ * 	know those users have left the channel and the network). 
+ * 
+ *  
+ *  Examples:
+ * 	[CLIENT]  JOIN #foobar
+ *  [SERVER] ; join channel #foobar.
+ * 
+ * 	[CLIENT]  JOIN #foo foobar
+ * 	[SERVER]; join channel #foo using key "foobar".
+ */
+
 static std::string findChannelName(std::string channel)
 {
 	std::size_t found = channel.find('#');

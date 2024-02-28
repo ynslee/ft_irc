@@ -17,7 +17,7 @@ int cmdPass(Message &msg, Client *Client, std::string password);
 int cmdUser(Message &msg, Client *Client);
 int cmdWhois(Message &msg, Client *Client);
 int cmdKill(Message &msg, Client *Client);
-int cmdPrivmsg(Message &msg, Client *Client);
+int cmdPrivmsg(Message &msg, Client *Client, std::map<std::string, Channel*> &channels);
 
 
 /*channel commands*/

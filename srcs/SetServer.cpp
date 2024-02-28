@@ -251,6 +251,10 @@ int Server::findCommand(int client_fd)
 				if (cmdOper(msg, _clients[client_fd]) == -1)
 					return(-1);
 				break ;
+			case command::PRIVMSG:
+				if (cmdPrivmsg(msg, _clients[client_fd], _channels) == -1)
+					return(-1);
+				break ;
 			// case command::QUIT:
 			// {
 			// 	cmdQuit(msg, _clients[client_fd],_channels);
