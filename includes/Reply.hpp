@@ -21,7 +21,6 @@
 # define ERR_INVITEONLYCHAN(username, channel) ("473 " + username + " " + channel + " :Cannot join channel (+i)\r\n")
 # define ERR_UNKNOWNMODE()("472 * :Unknown MODE flag\r\n")
 # define ERR_NOSUCHNICK(nick)("401 * " + nick + " :No such nick/channel" + "\r\n")
-# define ERR_NOSUCHSERVER(hostname)("402 * " + hostname + " :No such server" + "\r\n")
 # define ERR_NOSUCHCHANNEL(channel)("403 * " + channel + " :No such channel" + "\r\n")
 # define ERR_CANNOTSENDTOCHAN(hostname, channel)(":" + hostname + " 404 * " + channel + " :Cannot send to channel" + "\r\n")
 # define ERR_NORECIPIENT(hostname)(":" + hostname + " 411 * :No recipient given" + "\r\n")

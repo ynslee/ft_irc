@@ -1,3 +1,4 @@
+
 #include "../../includes/Commands.hpp"
 #include "../../includes/Server.hpp"
 
@@ -22,88 +23,123 @@
  *   yoonslee1!~yoonslee@194.136.126.51 PRIVMSG #hello :hello
  */
 
-void broadcastToAllClients(std::map<std::string, Client*>_clientList, std::string message)
+void broadcastToAllClients(Message &msg, std::map<std::string, Client*>_clientList)
 {
 	std::map<std::string, Client*>::iterator it;
 	for (it=_clientList.begin(); it!=_clientList.end(); it++)
 	{
+		std::string message = RPL_PRIVMSG(USER(it->second->getNickName(), it->second->getUserName(), it->second->getIPaddress()), msg.params[0], msg.trailing);
+		std::cout << "message is: "	<< message << std::endl;
 		send(it->second->getClientFd(), message.c_str(), message.length(), 0);
 	}
 }
 
-static int privmsgChannel(Message &msg, Client *Client, std::map<std::string, Channel*> &channels)
+static int privmsgChannel(Message &msg, Client *client, std::map<std::string, Channel*> &channels)
 {
 	std::string channelName = msg.params[0];
-	std::string hostname = Client->getHostName();
-	std::string nickname = Client->getNickName();
-	std::string username = Client->getUserName();
+	std::string hostname = client->getHostName();
+	std::string nickname = client->getNickName();
+	std::string username = client->getUserName();
 	std::string text = msg.trailing;
 	std::map<std::string, Channel*>::iterator it;
 	for (it=channels.begin(); it!=channels.end(); it++)
 	{
 		if(it->second->getChannelName() == channelName)
 		{
-			broadcastToAllClients(channels[channelName]->getClientList(), RPL_PRIVMSG(USER(nickname, username, Client->getIPaddress()), msg.params[0], msg.trailing));
+			std::cout << "channel name is: " << channelName << std::endl;
+			broadcastToAllClients(msg, channels[channelName]->getClientList());
 			return (0);
 		}
 	}
-	send(Client->getClientFd(), ERR_NOSUCHCHANNEL(channelName).c_str(), ERR_NOSUCHCHANNEL(channelName).length(), 0);
+	send(client->getClientFd(), ERR_NOSUCHCHANNEL(channelName).c_str(), ERR_NOSUCHCHANNEL(channelName).length(), 0);
 	return (-1);
 }
 
-static int privmsgClient(Message &msg, Client *Client, std::map<std::string, Channel*> &channels)
+static int privmsgClient(Message &msg, Client *client, std::map<int, Client*> &clients)
 {
 	std::string nickname = msg.params[0];
-	std::string hostname = Client->getHostName();
-	std::string username = Client->getUserName();
+	std::string hostname = client->getHostName();
+	std::string username = client->getUserName();
 	std::string text = msg.trailing;
-	std::map<std::string, Client*>::iterator it;
-	for (it=Client->getServer()->getClientList().begin(); it!=Client->getServer()->getClientList().end(); it++)
+	
+	std::map<int, Client*>::iterator it;
+	for (it=clients.begin(); it!=clients.end(); it++)
 	{
 		if(it->second->getNickName() == nickname)
 		{
-			send(it->second->getClientFd(), RPL_PRIVMSG(USER(Client->getNickName(), Client->getUserName(), Client->getIPaddress()), msg.params[0], msg.trailing).c_str(), RPL_PRIVMSG(USER(Client->getNickName(), Client->getUserName(), Client->getIPaddress()), msg.params[0], msg.trailing).length(), 0);
+			send(it->second->getClientFd(), RPL_PRIVMSG(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), msg.params[0], text).c_str(), RPL_PRIVMSG(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), msg.params[0], text).length(), 0);
 			return (0);
 		}
 	}
-	send(Client->getClientFd(), ERR_NOSUCHNICK(nickname).c_str(), ERR_NOSUCHNICK(nickname).length(), 0);
+	send(client->getClientFd(), ERR_NOSUCHNICK(nickname).c_str(), ERR_NOSUCHNICK(nickname).length(), 0);
 	return (-1);
 }
 
-int cmdPrivmsg(Message &msg, Client *Client, std::map<std::string, Channel*> &channels, std::map<int, Client*> &clients)
+static int privmsgServer(Message &msg, Client *client, std::map<int, Client*> &clients)
 {
+	std::string serverName = msg.params[0];
+	std::string hostname = client->getHostName();
+	std::string nickname = client->getNickName();
+	std::string username = client->getUserName();
+	std::string text = msg.trailing;
+	
+	std::map<int, Client*>::iterator it;
+	for (it=clients.begin(); it!=clients.end(); it++)
+	{
+		if(it->second->getHostName() == hostname)
+		{
+			send(it->second->getClientFd(), RPL_PRIVMSG(USER(nickname, username, client->getIPaddress()), msg.params[0], msg.trailing).c_str(), RPL_PRIVMSG(USER(nickname, username, client->getIPaddress()), msg.params[0], msg.trailing).length(), 0);
+			return (0);
+		}
+	}
+	send(client->getClientFd(), ERR_NOSUCHSERVER(hostname, serverName).c_str(), ERR_NOSUCHSERVER(hostname, serverName).length(), 0);
+	return (-1);
+}
+
+int cmdPrivmsg(Message &msg, Client *client, std::map<std::string, Channel*> &channels, std::map<int, Client*> &clients)
+{
+	std::cout << "are you coming here" << std::endl;
 	if (msg.params.size() == 0)
 	{
-		send(Client->getClientFd(), ERR_NORECIPIENT(Client->getHostName()).c_str(), ERR_NORECIPIENT(Client->getHostName()).length(), 0);
+		send(client->getClientFd(), ERR_NORECIPIENT(client->getHostName()).c_str(), ERR_NORECIPIENT(client->getHostName()).length(), 0);
+		return (-1);
 	}
-	if (msg.trailing.empty() == true)
+	else if (msg.trailing.empty())
 	{
-		send(Client->getClientFd(), ERR_NOTEXTTOSEND(Client->getHostName()).c_str(), ERR_NOTEXTTOSEND(Client->getHostName()).length(), 0);
+		send(client->getClientFd(), ERR_NOTEXTTOSEND(client->getHostName()).c_str(), ERR_NOTEXTTOSEND(client->getHostName()).length(), 0);
+		return (-1);
 	}
+	std::cout << "are you coming here2" << std::endl;
 	if (msg.params.size() == 1 && msg.trailing.empty() == false)
 	{
+		std::cout << "are you coming inside at least?" << std::endl;
 		if (msg.params[0].find(',') != std::string::npos)
 		{
-			send(Client->getClientFd(), ERR_TOOMANYTARGETS(Client->getHostName()).c_str(), ERR_TOOMANYTARGETS(Client->getHostName()).length(), 0);
+			send(client->getClientFd(), ERR_TOOMANYTARGETS(client->getHostName()).c_str(), ERR_TOOMANYTARGETS(client->getHostName()).length(), 0);
 			return (-1);
 		}
-		if (msg.params[0].find('.') != std::string::npos)
+		else if (msg.params[0].find('.') != std::string::npos)
 		{
-			if (privmsgServer(msg, Client) == -1)
+			std::cout << "are you coming here server" << std::endl;
+			if (privmsgServer(msg, client, clients) == -1)
 				return (-1);
 		}
 		else if (msg.params[0].find('.') == std::string::npos && msg.params[0][0] != '#')
 		{
+			std::cout << "are you coming here nick" << std::endl;
 			if (isValidnick(msg.params[0]) == -1)
 			{
-				send(Client->getClientFd(), ERR_NOSUCHNICK(Client->getNickName()).c_str(), ERR_NOSUCHNICK(Client->getNickName()).length(), 0);
+				send(client->getClientFd(), ERR_NOSUCHNICK(client->getNickName()).c_str(), ERR_NOSUCHNICK(client->getNickName()).length(), 0);
 				return (-1);
 			}
-			if (privmsgClient(msg, Client, channels) == -1)
+			if (privmsgClient(msg, client, clients) == -1)
 				return (-1);
 		}
 		else if (msg.params[0][0] == '#')
-			privmsgChannel(msg, Client, channels);
+		{
+			std::cout << "are you coming here channel" << std::endl;
+			privmsgChannel(msg, client, channels);
+		}
 		else
 			return (-1);
 	}

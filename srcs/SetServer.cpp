@@ -236,7 +236,7 @@ int Server::findCommand(int client_fd)
 				break ;
 			case command::JOIN:
 			{
-				if(cmdJoin(msg, _clients[client_fd], getChannels()) == -1)
+				if(cmdJoin(msg, _clients[client_fd], _channels) == -1)
 					return(-1);
 				break;
 			}
@@ -253,7 +253,7 @@ int Server::findCommand(int client_fd)
 					return(-1);
 				break ;
 			case command::PRIVMSG:
-				if (cmdPrivmsg(msg, _clients[client_fd], getChannels(), _clients) == -1)
+				if (cmdPrivmsg(msg, _clients[client_fd], _channels, _clients) == -1)
 					return(-1);
 				break ;
 			case command::QUIT:
