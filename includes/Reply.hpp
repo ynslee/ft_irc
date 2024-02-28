@@ -43,6 +43,6 @@
 # define RPL_ENDOFNAMES(hostname, username, channel) (":" + hostname + " 366 " + username + " " + channel + " :End of /NAMES list.\r\n")
 # define RPL_TOPIC(hostname, username, channel, topic) (":" + hostname + " 332 " + username + " " + channel + " :" + topic + "\r\n")
 # define RPL_NOTOPIC(hostname, username, channel) (":" + hostname + " 331 " + username + " " + channel + " :No topic is set\r\n")
-# define RPL_PRIVMSG(USER, target, text) (":" + USER + " PRIVMSG " + target + " :" + text + "\r\n")
+# define RPL_PRIVMSG(USER, target, text) (USER + " PRIVMSG " + target + " :" + text + "\r\n")
 
 #endif
