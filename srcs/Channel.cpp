@@ -64,7 +64,6 @@ void	Channel::removeOperator(std::string operatorName)
 		{
 			_clientOrder.erase(_clientOrder.begin());
 			_clientOrder.front()->setIsOperator(true);
-			_clientOrder.front()->setMode("+o");
 			_operators.push_back(_clientOrder.front()->getNickName());
 			std::cout << _clientOrder.front()->getNickName() << " is the new operator of the channel" << std::endl;
 		}

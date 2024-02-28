@@ -20,7 +20,7 @@
 the clients in the channel, if one of the users quit. But if you are not in a channel just quit the server. That
 part will be done after we set the channel*/
 
-static void sendMsgtoClients(std::string message, Client *client, Channel *channel)
+static void sendQuitMsg(std::string message, Client *client, Channel *channel)
 {
     if(client == nullptr)
         return ;
@@ -52,7 +52,7 @@ void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &chan
         std::map<std::string, Channel*>::iterator channelIt = channels.find(channel_name);  
         if(channelIt != channels.end())
         {
-            sendMsgtoClients(quit_message,Client,channelIt->second);
+            sendQuitMsg(quit_message,Client,channelIt->second);
             if(channelIt->second->getClientList().size() == 0)
             {
                 std::cout << "Channel " << channelIt->second->getChannelName() << " deleted ";
