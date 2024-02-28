@@ -23,14 +23,17 @@
  *   yoonslee1!~yoonslee@194.136.126.51 PRIVMSG #hello :hello
  */
 
-void broadcastToAllClients(Message &msg, std::map<std::string, Client*>_clientList)
+void messageToChannelClients(Message &msg, std::string nickname, std::map<std::string, Client*>_clientList)
 {
 	std::map<std::string, Client*>::iterator it;
 	for (it=_clientList.begin(); it!=_clientList.end(); it++)
 	{
-		std::string message = RPL_PRIVMSG(USER(it->second->getNickName(), it->second->getUserName(), it->second->getIPaddress()), msg.params[0], msg.trailing);
-		std::cout << "message is: "	<< message << std::endl;
-		send(it->second->getClientFd(), message.c_str(), message.length(), 0);
+		if (it->second->getNickName() != nickname)
+		{
+			std::string message = RPL_PRIVMSG(USER(it->second->getNickName(), it->second->getUserName(), it->second->getIPaddress()), msg.params[0], msg.trailing);
+			std::cout << "message is: "	<< message << std::endl;
+			send(it->second->getClientFd(), message.c_str(), message.length(), 0);
+		}
 	}
 }
 
@@ -46,8 +49,7 @@ static int privmsgChannel(Message &msg, Client *client, std::map<std::string, Ch
 	{
 		if(it->second->getChannelName() == channelName)
 		{
-			std::cout << "channel name is: " << channelName << std::endl;
-			broadcastToAllClients(msg, channels[channelName]->getClientList());
+			messageToChannelClients(msg, nickname, channels[channelName]->getClientList());
 			return (0);
 		}
 	}
@@ -98,21 +100,18 @@ static int privmsgServer(Message &msg, Client *client, std::map<int, Client*> &c
 
 int cmdPrivmsg(Message &msg, Client *client, std::map<std::string, Channel*> &channels, std::map<int, Client*> &clients)
 {
-	std::cout << "are you coming here" << std::endl;
 	if (msg.params.size() == 0)
 	{
 		send(client->getClientFd(), ERR_NORECIPIENT(client->getHostName()).c_str(), ERR_NORECIPIENT(client->getHostName()).length(), 0);
 		return (-1);
 	}
-	else if (msg.trailing.empty())
+	if (msg.trailing.empty() == true)
 	{
 		send(client->getClientFd(), ERR_NOTEXTTOSEND(client->getHostName()).c_str(), ERR_NOTEXTTOSEND(client->getHostName()).length(), 0);
 		return (-1);
 	}
-	std::cout << "are you coming here2" << std::endl;
 	if (msg.params.size() == 1 && msg.trailing.empty() == false)
 	{
-		std::cout << "are you coming inside at least?" << std::endl;
 		if (msg.params[0].find(',') != std::string::npos)
 		{
 			send(client->getClientFd(), ERR_TOOMANYTARGETS(client->getHostName()).c_str(), ERR_TOOMANYTARGETS(client->getHostName()).length(), 0);
@@ -120,13 +119,11 @@ int cmdPrivmsg(Message &msg, Client *client, std::map<std::string, Channel*> &ch
 		}
 		else if (msg.params[0].find('.') != std::string::npos)
 		{
-			std::cout << "are you coming here server" << std::endl;
 			if (privmsgServer(msg, client, clients) == -1)
 				return (-1);
 		}
 		else if (msg.params[0].find('.') == std::string::npos && msg.params[0][0] != '#')
 		{
-			std::cout << "are you coming here nick" << std::endl;
 			if (isValidnick(msg.params[0]) == -1)
 			{
 				send(client->getClientFd(), ERR_NOSUCHNICK(client->getNickName()).c_str(), ERR_NOSUCHNICK(client->getNickName()).length(), 0);
@@ -137,8 +134,8 @@ int cmdPrivmsg(Message &msg, Client *client, std::map<std::string, Channel*> &ch
 		}
 		else if (msg.params[0][0] == '#')
 		{
-			std::cout << "are you coming here channel" << std::endl;
-			privmsgChannel(msg, client, channels);
+			if (privmsgChannel(msg, client, channels) == -1 )
+				return (-1);
 		}
 		else
 			return (-1);
