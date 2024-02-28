@@ -10,6 +10,8 @@ Message::Message(std::string input)
 
 	while (iss >> token)
 	{
+		if (token.empty())
+			break;
 		if (index == 0)
 		{
 			for (int i = 0; i < static_cast<int>(token.length()); i++)
@@ -19,6 +21,8 @@ Message::Message(std::string input)
 		}
 		else if (index >= 1  && token[0] != ':')
 		{
+			if (token.find('\n') != std::string::npos)
+				token.erase(token.find('\n', 1));
 			this->params.push_back(token);
 			std::cout << "PARAM: " << token << std::endl;
 		}
@@ -26,7 +30,7 @@ Message::Message(std::string input)
 		{
 			std::string trail  = token.substr(1);
 			std::string temp;
-			getline(iss, temp, '\r');
+			getline(iss, temp, '\n');
 			trail += temp;
 			this->trailing = trail;
 			std::cout << "TRAILING: " << trailing << std::endl;
