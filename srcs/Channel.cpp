@@ -59,7 +59,7 @@ void	Channel::removeOperator(std::string operatorName)
 	{
 		_operators.erase(it);
 		if(!_operators.empty())
-			std::cout << _operators.back() << "is the new operator of the channeeeel" << std::endl;
+			std::cout << _operators.back() << "is the new operator of the channel" << std::endl;
 		else if(_clientOrder.size() > 1) 
 		{
 			_clientOrder.erase(_clientOrder.begin());

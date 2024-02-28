@@ -20,7 +20,7 @@
 the clients in the channel, if one of the users quit. But if you are not in a channel just quit the server. That
 part will be done after we set the channel*/
 
-void sendMsgtoClients(std::string message, Client *client, Channel *channel)
+static void sendMsgtoClients(std::string message, Client *client, Channel *channel)
 {
     if(client == nullptr)
         return ;
