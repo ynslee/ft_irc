@@ -26,13 +26,14 @@ int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 				}
 				else
 				{
-					std::cout << "Coming in else" << std::endl;
+					std::cout << "Coming in else 1" << std::endl;
 					send(Client->getClientFd(), ERR_CHANOPRIVSNEEDED(Client->getUserName(), channelName).c_str(), ERR_CHANOPRIVSNEEDED(Client->getNickName(), channelName).length(), 0);
-					break ;
+					return (0) ;
 				}
 			}
 			else
 			{
+				std::cout << "Coming in else 2" << std::endl;
 				send(Client->getClientFd(), ERR_NOSUCHCHANNEL(Client->getUserName(), channelName).c_str(), ERR_NOSUCHCHANNEL(Client->getNickName(), channelName).length(), 0);
 				return (-1);
 			}
