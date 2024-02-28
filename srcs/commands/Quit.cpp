@@ -5,7 +5,7 @@
 /**
  * @brief The QUIT command is used to terminate a client’s connection to the server. The server acknowledges
  * this by replying with an ERROR message and closing the connection to the client.
- * Syntax: PASS [<reason>]
+ * Syntax: QUIT [<reason>]
  *
  * This message may also be sent from the server to a client to show that a client has exited from the network.
  * This is typically only dispatched to clients that share a channel with the exiting user.

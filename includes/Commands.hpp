@@ -23,7 +23,7 @@ int cmdPrivmsg(Message &msg, Client *Client);
 /*channel commands*/
 
 int cmdJoin(Message &msg, Client *Client, std::map<std::string, Channel*> &channels);
-int cmdKick(Message &msg, Client *Client);
+int cmdKick(Message &msg, Client *Client,  std::map<std::string, Channel*> &channels);
 int cmdInvite(Message &msg, Client *Client);
 int cmdTopic(Message &msg, Client *Client);
 // int cmdMode(Message &msg, Client *Client);

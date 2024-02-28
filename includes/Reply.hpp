@@ -19,10 +19,14 @@
 # define ERR_BADCHANNELKEY(username, channel) ("475 " + username + " " + channel + " :Cannot join channel (+k)\r\n")
 # define ERR_CHANNELISFULL(username, channel) ("471 " + username + " " + channel + " :Cannot join channel (+l)\r\n")
 # define ERR_INVITEONLYCHAN(username, channel) ("473 " + username + " " + channel + " :Cannot join channel (+i)\r\n")
+# define ERR_NOSUCHCHANNEL(username, channel) ("403 " + username + " " + channel + " :No such channel\r\n")
 # define ERR_UNKNOWNMODE()("472 * :Unknown MODE flag\r\n")
+# define ERR_CHANOPRIVSNEEDED(username, channel) ("482 " + username + " " + channel + " :You're not channel operator\r\n")
+# define ERR_NOTONCHANNEL(username,channel) ("442 " + username + " " + channel + " :You're not on that channel\r\n")
 
 //NORMAL REPLIES
 # define QUIT_MESSAGE(nick, username, userIP)(":" + nick + "!" + username + "@" + userIP + " QUIT :Quit: ")
+# define KICK_MESSAGE(nick, channel)(":Command to kick " + nick + " from " + channel)
 # define NICK_REPLY(old_nick, usesrname, userIP, new_nick)(":" + old_nick + "!~" + usesrname + "@" + userIP + " Nick :" + new_nick+ "\r\n")
 # define RPL_MOTDSTART(hostname, username)(":" + hostname+ " 375 * :- " + username + " Message of the day - " + "\r\n")
 # define RPL_MOTD(hostname, username, motd_line) (":" + hostname + " 372 " + username + " :" + motd_line + "\r\n")
