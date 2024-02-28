@@ -30,7 +30,7 @@ static void sendQuitMsg(std::string message, Client *client, Channel *channel)
     {
         if(client != NULL && it->first == client->getNickName())
             continue;
-        it->second->setSendbuf(message);       
+        send(it->second->getClientFd(), message.c_str(), message.length(), 0);
     }
     channel->removeFromChannel(client->getNickName());
 }
@@ -41,8 +41,8 @@ void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &chan
 
     std::string quit_message;
     quit_message = QUIT_MESSAGE(Client->getNickName(), Client->getUserName(), Client->getIPaddress());
-    if(msg.params.size())
-        quit_message.append(msg.params.front() + "\r\n");
+    if(msg.trailing.empty() == false)
+        quit_message.append(msg.trailing + "\r\n");
     else
         quit_message.append("\r\n");
     std::vector<std::string>::iterator it;

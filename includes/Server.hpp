@@ -65,6 +65,7 @@ class Server
 		std::vector<std::string> &getNicknames();
 		void removeClientfromPoll(int fd);
 		std::map<std::string, Channel*> &getChannels();
+		std::map<int, Client*> &getClients();
 		bool ChannelExists(std::map<std::string, Channel*> &channels, std::string &channelName);
 };
 

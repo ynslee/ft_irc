@@ -226,7 +226,7 @@ int Server::findCommand(int client_fd)
 				break ;
 			case command::NICK:
 			{
-				if(cmdNick(msg,_clients[client_fd],getNicknames()))
+				if(cmdNick(msg,_clients[client_fd], getNicknames()))
 					return(-1);
 				break ;
 			}
@@ -250,6 +250,10 @@ int Server::findCommand(int client_fd)
 				break ;
 			case command::OPER:
 				if (cmdOper(msg, _clients[client_fd]) == -1)
+					return(-1);
+				break ;
+			case command::PRIVMSG:
+				if (cmdPrivmsg(msg, _clients[client_fd], _channels, _clients) == -1)
 					return(-1);
 				break ;
 			case command::QUIT:
@@ -310,6 +314,11 @@ int Server::sendMsg(int client_fd)
 std::map<std::string, Channel*> &Server::getChannels()
 {
 	return(this->_channels);
+}
+
+std::map<int, Client*> &Server::getClients()
+{
+	return(this->_clients);
 }
 
 
