@@ -23,6 +23,7 @@
 # define ERR_UNKNOWNMODE()("472 * :Unknown MODE flag\r\n")
 # define ERR_CHANOPRIVSNEEDED(username, channel) ("482 " + username + " " + channel + " :You're not channel operator\r\n")
 # define ERR_NOTONCHANNEL(username,channel) ("442 " + username + " " + channel + " :You're not on that channel\r\n")
+# define ERR_USERNOTINCHANNEL(username,nick,channel) ("441 " + username + " " + nick + " " + channel + " :Not on that channel\r\n")
 
 //NORMAL REPLIES
 # define QUIT_MESSAGE(nick, username, userIP)(":" + nick + "!" + username + "@" + userIP + " QUIT :Quit: ")

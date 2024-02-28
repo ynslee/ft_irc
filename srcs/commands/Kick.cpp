@@ -41,6 +41,11 @@ int cmdKick(Message &msg, Client *client,  std::map<std::string, Channel*> &chan
             return(-1);
     }
     std::map<std::string, Client*>::iterator userChannelIt = channelIt->second->getClientList().find(msg.params[1]);
+    if(userChannelIt == channelIt->second->getClientList().end())
+    {
+        send(client->getClientFd(), ERR_USERNOTINCHANNEL(hostname,msg.params[1],msg.params[0]).c_str(), ERR_USERNOTINCHANNEL(hostname,msg.params[1],msg.params[0]).length(), 0);
+            return(-1);
+    }
     std::string kick_message;
     kick_message = KICK_MESSAGE(client->getNickName(), msg.params[0]);
     if(!msg.params[2].empty())
