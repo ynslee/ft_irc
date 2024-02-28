@@ -17,7 +17,7 @@ void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &chan
 int cmdUser(Message &msg, Client *Client);
 int cmdWhois(Message &msg, Client *Client);
 int cmdKill(Message &msg, Client *Client);
-int cmdPrivmsg(Message &msg, Client *Client, std::map<std::string, Channel*> &channels);
+int cmdPrivmsg(Message &msg, Client *Client, std::map<std::string, Channel*> &channels, std::map<int, Client*> &clients);
 
 
 /*channel commands*/
