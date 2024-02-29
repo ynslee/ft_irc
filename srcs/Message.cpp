@@ -46,8 +46,6 @@ Message::Message(std::string input)
 			this->trailing = trail;
 			std::cout << "TRAILING: " << trailing << std::endl;
 		}
-		if (token.empty())
-			break;
 	}
 }
 
