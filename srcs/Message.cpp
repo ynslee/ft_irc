@@ -24,9 +24,9 @@ Message::Message(std::string input)
 		}
 		else if (index >= 1 && token[0] == ':')
 		{
-			std::string trail  = token.substr(1);
+			std::string trail = token.substr(1);
 			std::string temp;
-			getline(iss, temp, '\r');
+			getline(iss, temp, '\n');
 			trail += temp;
 			this->trailing = trail;
 			std::cout << "TRAILING: " << trailing << std::endl;

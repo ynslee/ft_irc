@@ -5,20 +5,19 @@
 
 int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &channels)
 {
-	if (msg.params[0][0] == '#' && msg.params.size() > 1) //if mode command is used on a channel and by user
+	if (msg.params[0][0] == '#') //if mode command is used on a channel
 	{
-		std::cout << "Tulin sisalle!!!" << std::endl;
 		std::map<std::string, Channel*>::iterator it;
 		for (it = channels.begin(); it != channels.end(); it++)
 		{
 			// std::cout << "msg.params[0]: " << msg.params[0] << std::endl;
 			// std::cout << "it->first: " << it->first << std::endl;
 			std::string channelName = msg.params[0];
-			if (it->first == channelName) // looking for the right channel
+			if (it->first == channelName)
 			{
 				std::string clientNick = Client->getNickName();
 				// std::cout << "clientNick: " << clientNick << std::endl;
-				if (it->second->isOperator(clientNick) == true) // checking if cient is operator
+				if (it->second->isOperator(clientNick) == true)
 				{
 					// std::cout << "msg.params[1]" << msg.params[1] << std::endl;
 					it->second->setMode(msg.params[1], Client);
@@ -27,21 +26,15 @@ int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 				}
 				else
 				{
-					// send(Client->getClientFd(), ERR_CHANOPRIVSNEEDED(Client->getHostName(), Client->getNickName(), channelName).c_str(), ERR_CHANOPRIVSNEEDED(Client->getHostName(), Client->getNickName(), channelName).length(), MSG_DONTWAIT);
-					ssize_t bytesSent = send(Client->getClientFd(), ERR_CHANOPRIVSNEEDED(channelName).c_str(), ERR_CHANOPRIVSNEEDED(channelName).length(), MSG_DONTWAIT);
-					if (bytesSent == -1)
-					{
-						// Handle the error
-						std::cerr << "Error sending ERR_CHANOPRIVSNEEDED: " << strerror(errno) << std::endl;
-					}
 					std::cout << "Coming in else 1" << std::endl;
-					return (0);
+					send(Client->getClientFd(), ERR_CHANOPRIVSNEEDED(Client->getUserName(), channelName).c_str(), ERR_CHANOPRIVSNEEDED(Client->getNickName(), channelName).length(), 0);
+					return (0) ;
 				}
 			}
 			else
 			{
 				std::cout << "Coming in else 2" << std::endl;
-				send(Client->getClientFd(), ERR_NOSUCHCHANNEL(channelName).c_str(), ERR_NOSUCHCHANNEL(channelName).length(), 0);
+				send(Client->getClientFd(), clientNickName(Client->getUserName(), channelName).c_str(), clientNickName(Client->getNickName(), channelName).length(), 0);
 				return (-1);
 			}
 		}
