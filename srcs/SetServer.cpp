@@ -399,8 +399,6 @@ void Server::setMessage(std::string msg)
 		int key = it->first;
 		if(key == this->_clientId)
 		{
-			if (msg.find("\r") != std::string::npos)
-				msg.erase(msg.find("\r"), 1);
 			it->second->setReadbuf(msg);
 			msg.clear();
 		}
