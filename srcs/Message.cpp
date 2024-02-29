@@ -41,7 +41,7 @@ Message::Message(std::string input)
 		{
 			std::string trail = token.substr(1);
 			std::string temp;
-			getline(iss, temp, '\n');
+			getline(iss, temp, '\r');
 			trail += temp;
 			this->trailing = trail;
 			std::cout << "TRAILING: " << trailing << std::endl;
