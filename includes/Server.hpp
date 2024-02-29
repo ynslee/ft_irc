@@ -9,6 +9,8 @@
 # include "Commands.hpp"
 # include "Channel.hpp"
 
+extern bool surverShutdown;
+
 class Client;
 class Message;
 class Channel;

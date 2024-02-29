@@ -79,7 +79,7 @@ int Server::pollLoop()
 	this->_pollfdCount = this->_pfds.size();
 	// std::cout << this->_pollfdCount << std::endl;
 
-	while(42)
+	while(surverShutdown == false)
 	{
 		poll_count = poll(&this->_pfds[0], this->_pollfdCount, 0);
 		if (poll_count == -1)
@@ -206,7 +206,6 @@ int Server::findCommand(int client_fd)
 {
 	while (1)
 	{
-
 		if (_clients[client_fd]->getReadbuf().empty())
 			return (0);
 		std::string input = extractInput(_clients, client_fd);
@@ -393,14 +392,23 @@ std::vector<std::string> &Server::getNicknames()
 
 void Server::setMessage(std::string msg)
 {
+	size_t index = 0;
+
 	std::map<int, Client*>::iterator it;
 	for(it=_clients.begin(); it!=_clients.end(); it++)
 	{
 		int key = it->first;
 		if(key == this->_clientId)
 		{
-			it->second->setReadbuf(msg);
-			msg.clear();
+			while (1)
+			{
+				while ((index = msg.find("^D", index)) != std::string::npos)
+					msg.replace(index, 2, "");
+				it->second->addReadbuf(msg);
+				msg.clear();
+				if (it->second->getReadbuf().find('\n') != std::string::npos)
+					return ;
+			}
 		}
 	}
 }

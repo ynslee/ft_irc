@@ -139,3 +139,8 @@ void	Client::addSendbuf(std::string buf)
 {
 	_sendbuf += buf;
 }
+
+void	Client::addReadbuf(std::string buf)
+{
+	_readbuf += buf;
+}

@@ -1,12 +1,13 @@
 
 #include "../includes/Server.hpp"
 
+bool surverShutdown = false;
+
 void sig_handler(int signal)
 {
 	if (signal == SIGINT)
 	{
-		std::cerr << "Server shut down" << std::endl;
-		exit(0);
+		surverShutdown = true;
 	}
 }
 
