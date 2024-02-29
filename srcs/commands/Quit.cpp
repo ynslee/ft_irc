@@ -49,7 +49,7 @@ void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &chan
     for(it = Client->getChannelsJoined().begin(); it < Client->getChannelsJoined().end(); it++)
     {
         std::string channel_name = *it;
-        std::map<std::string, Channel*>::iterator channelIt = channels.find(channel_name);  
+        std::map<std::string, Channel*>::iterator channelIt = channels.find(channel_name);
         if(channelIt != channels.end())
         {
             sendQuitMsg(quit_message,Client,channelIt->second);
@@ -58,7 +58,7 @@ void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &chan
                 std::cout << "Channel " << channelIt->second->getChannelName() << " deleted ";
                 delete (channelIt->second);
                 channels.erase(channelIt);
-                continue ;                
+                continue ;
             }
         }
     }
