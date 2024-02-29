@@ -263,8 +263,10 @@ int Server::findCommand(int client_fd)
 				return(0);
 			}
 			case command::INVALID:
-				std::cerr << "Invalid command" << std::endl;
+			{
+				std::cout << "Invalid command" << std::endl;
 				return (-1);
+			}
 		}
 	}
 	return (0);
@@ -399,6 +401,8 @@ void Server::setMessage(std::string msg)
 		int key = it->first;
 		if(key == this->_clientId)
 		{
+			// if (msg.find("\n") != std::string::npos)
+			// 	msg = msg.substr(0, msg.length() - 1);
 			it->second->setReadbuf(msg);
 			msg.clear();
 		}

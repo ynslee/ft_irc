@@ -14,37 +14,46 @@ Message::Message(std::string input)
 		{
 			for (int i = 0; i < static_cast<int>(token.length()); i++)
 				token[i] = std::toupper(token[i]);
-			if (token.find('\r') != std::string::npos)
+			if (token.find('\n') != std::string::npos)
 			{
-					token.erase(token.find('\r', 1));
+				size_t pos = token.find('\n');
+				token = token.substr(0, pos);
 				this->command = token;
 				std::cout << " COMMAND ONLY: " << this->command << std::endl;
-				break ;
+				return ;
 			}
-			this->command = token;
-			std::cout << "COMMAND: " << this->command << std::endl;
-			index ++;
-		}
-		else if (index >= 1  && token[0] != ':')
-		{
-			if (token.find('\r') != std::string::npos)
+			else
 			{
-				token.erase(token.find('\r', 1));
+				this->command = token;
+				std::cout << "COMMAND: " << this->command << std::endl;
+				index ++;
+				continue ;
+			}
+		}
+		else if (index >= 1  && token[0] != ':' && command.empty() == false)
+		{
+			if (token.find('\n') != std::string::npos)
+			{
+				size_t pos = token.find('\n');
+				token = token.substr(0, pos);
 				this->params.push_back(token);
 				std::cout << "PARAM WITH NO TRAILING: " << token << std::endl;
-				break ;
+				return ;
 			}
 			this->params.push_back(token);
 			std::cout << "PARAM: " << token << std::endl;
+			continue ;
 		}
-		else if (index >= 1 && token[0] == ':')
+		else if (index >= 1 && token[0] == ':' && command.empty() == false)
 		{
 			std::string trail = token.substr(1);
 			std::string temp;
-			getline(iss, temp, '\r');
+			getline(iss, temp, '\n');
 			trail += temp;
 			this->trailing = trail;
 			std::cout << "TRAILING: " << trailing << std::endl;
+			if (!(iss >> token))
+				break ;
 		}
 	}
 }
