@@ -4,7 +4,8 @@
 #include <cstdlib>
 #include <ctime>
 
-Channel::Channel(std::string const &name) : _channel(name), _userLimit(10), _useramount(0){
+Channel::Channel(std::string const &name) : _channel(name), _mode("+nt"), _userLimit(10), _useramount(0)
+{
 
 	std::map<std::string, Client *>	_clientList;
 	// _kickedUsers.clear();
@@ -16,7 +17,8 @@ Channel::Channel(std::string const &name) : _channel(name), _userLimit(10), _use
 	std::cout << "Channel " << GREEN << _channel << RESET << "created" << std::endl;
 }
 
-Channel::~Channel(){
+Channel::~Channel()
+{
 	// std::map<std::string, Client *>::iterator it;
 	// for (it=_clientList.begin(); it!=_clientList.end(); it++)
 	// {
@@ -47,20 +49,20 @@ void	Channel::removeFromChannel(const std::string &nick)
 	_useramount--;
 }
 
-void	Channel::addOperator(std::string operatorName)
+void	Channel::addOperator(std::string clientNickName)
 {
-	_operators.push_back(operatorName);
+	_operators.push_back(clientNickName);
 }
 
-void	Channel::removeOperator(std::string operatorName)
+void	Channel::removeOperator(std::string clientNickName)
 {
-	std::vector<std::string>::iterator it = std::find(_operators.begin(), _operators.end(), operatorName);
+	std::vector<std::string>::iterator it = std::find(_operators.begin(), _operators.end(), clientNickName);
 	if(it != _operators.end())
 	{
 		_operators.erase(it);
 		if(!_operators.empty())
 			std::cout << _operators.back() << "is the new operator of the channel" << std::endl;
-		else if(_clientOrder.size() > 1) 
+		else if(_clientOrder.size() > 1)
 		{
 			_clientOrder.erase(_clientOrder.begin());
 			_clientOrder.front()->setIsOperator(true);
@@ -78,6 +80,19 @@ void	Channel::setChannelKey(std::string password)
 void	Channel::setTopic(std::string& newTopic)
 {
 	_topic = newTopic;
+}
+
+void	Channel::setMode(std::string mode, Client *client)
+{
+	if (goodModeFLag(mode) == false)
+		send(client->getClientFd(), ERR_UNKNOWNMODE(), strlen(ERR_UNKNOWNMODE()), 0);
+	std::cout << "**** OLD MODE CHANNEL: " << _mode << std::endl;
+	char modeFlag = mode[1];
+	if (mode[0] == '+')
+		_mode += modeFlag;
+	if (mode[0] == '-')
+		_mode.erase(std::remove(_mode.begin(), _mode.end(), modeFlag), _mode.end());
+	std::cout << "**** NEW MODE CHANNEL: " << _mode << std::endl;
 }
 
 void	Channel::addMode(std::string const mode)
@@ -110,11 +125,11 @@ bool	Channel::isAlreadyInChannel(std::string &nick)
 	return(false);
 }
 
-bool	Channel::isOperator(const std::string &operatorName)
+bool	Channel::isOperator(const std::string &clientNickName)
 {
 	if (_operators.size() == 0)
 		return(false);
-	std::vector<std::string>::iterator it = std::find(_operators.begin(), _operators.end(), operatorName);
+	std::vector<std::string>::iterator it = std::find(_operators.begin(), _operators.end(), clientNickName);
 	if (it == _operators.end())
 		return(false);
 	return(true);
@@ -125,4 +140,13 @@ void	Channel::removeChannelPassword()
 	_channelKey.clear();
 }
 
-
+bool Channel::goodModeFLag(std::string modeFlag)
+{
+	if (modeFlag.size() != 2)
+		return false;
+	else if (modeFlag[0] != '+' && modeFlag[0] != '-')
+		return false;
+	else if (modeFlag[1] != 'i' && modeFlag[1] != 'k' && modeFlag[1] != 'o' && modeFlag[1] != 'l')
+		return false;
+	return true;
+}

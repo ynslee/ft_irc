@@ -20,7 +20,7 @@ class Channel
 		std::string						_mode;
 		int								_userLimit;
 		int								_useramount;
-		 
+
 	public:
 		Channel(std::string const &name);
 		~Channel();
@@ -38,10 +38,11 @@ class Channel
 		void							removeFromChannel(const std::string &nick);
 		// void							addToKicked(std::string &nick);
 		// void							removeFromKicked(std::string &nick);
-		void							addOperator(std::string operatorName);
+		void							addOperator(std::string clientNickName);
 		void							removeOperator(std::string operatoName);
 		void							setChannelKey(std::string password);
 		void							setTopic(std::string& newTopic);
+		void							setMode(std::string mode, Client *client);
 		void							addMode(std::string const mode);
 		void							removeMode(std::string const mode);
 
@@ -49,5 +50,6 @@ class Channel
 		bool							isAlreadyInChannel(std::string &nick);
 		bool							isOperator(const std::string &operatorName);
 		void							removeChannelPassword();
+		bool 							goodModeFLag(std::string modeFlag);
 
 };
