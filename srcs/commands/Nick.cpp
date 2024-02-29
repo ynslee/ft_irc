@@ -55,7 +55,7 @@ int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names)
         send(Client->getClientFd(), ERR_NONICKNAMEGIVEN(hostname).c_str(), ERR_NONICKNAMEGIVEN(hostname).length(), 0);
         return(-1);
     }
-    std::string new_nick = msg.params.front();
+    std::string new_nick = msg.params[0];
     if(isValidnick(new_nick))
     {
         send(Client->getClientFd(), ERR_ERRONEUSNICKNAME(hostname, new_nick).c_str(), ERR_ERRONEUSNICKNAME(hostname, new_nick).length(), 0);
@@ -63,7 +63,6 @@ int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names)
     }
     if(std::find(nick_names.begin(), nick_names.end(), new_nick) != nick_names.end())
     {
-
         send(Client->getClientFd(), ERR_NICKNAMEINUSE(hostname, new_nick).c_str(), ERR_NICKNAMEINUSE(hostname, new_nick).length(), 0);
         return(0);
     }

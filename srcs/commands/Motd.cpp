@@ -35,7 +35,7 @@ static std::string readFile(const std::string &filename)
 int cmdMotd(Message &msg, Client *Client)
 {
 	std::string hostname = Client->getHostName();
-	std::string username = Client->getUserName();
+	std::string nickname = Client->getNickName();
 	std::string readline = readFile("./motd.txt");
 	std::istringstream iss(readline);
 	std::string motd_line;
@@ -47,14 +47,14 @@ int cmdMotd(Message &msg, Client *Client)
 	}
 	if (msg.params.empty() == true)
 	{
-		Client->setSendbuf(RPL_MOTDSTART(hostname, username));
+		Client->setSendbuf(RPL_MOTDSTART(hostname, nickname));
 		while(std::getline(iss, motd_line))
 		{
 			if (motd_line.empty() == false)
-				Client->addSendbuf(RPL_MOTD(hostname, username, motd_line));
+				Client->addSendbuf(RPL_MOTD(hostname, nickname, motd_line));
 		}
 		if (readline.empty() == false)
-			Client->addSendbuf(RPL_ENDOFMOTD(hostname, username));
+			Client->addSendbuf(RPL_ENDOFMOTD(hostname, nickname));
 	}
 	else if (msg.params[0].compare("localhost") != 0 || msg.params[0].compare("127.0.0.1") != 0)
 	{

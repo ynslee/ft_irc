@@ -240,16 +240,16 @@ int Server::findCommand(int client_fd)
 					return(-1);
 				break;
 			}
+			case command::MODE:
+				if (cmdMode(msg, _clients[client_fd], _channels) == -1)
+					return(-1);
+				break ;
 			case command::KICK:
 			{
 				if(cmdKick(msg, _clients[client_fd], _channels) == -1)
 					return(-1);
 				break ;
 			}
-			// case command::MODE:
-			// 	if (cmdMode(msg, _clients[client_fd]) == -1)
-			// 		return(-1);
-			// 	break ;
 			case command::MOTD:
 				if (cmdMotd(msg, _clients[client_fd]) == -1)
 					return(-1);
@@ -270,7 +270,7 @@ int Server::findCommand(int client_fd)
 			}
 			case command::INVALID:
 				std::cerr << "Invalid command" << std::endl;
-				break ;
+				return (-1);
 		}
 	}
 	return (0);
