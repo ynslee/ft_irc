@@ -43,7 +43,7 @@ int cmdKick(Message &msg, Client *client,  std::map<std::string, Channel*> &chan
     std::map<std::string, Channel*>::iterator channelIt = channels.find(msg.params[0]);
     if(channelIt == channels.end())
     {
-        send(client->getClientFd(), ERR_NOSUCHCHANNEL(hostname,msg.params[0]).c_str(), ERR_NOSUCHCHANNEL(hostname,msg.params[0]).length(), 0);
+        send(client->getClientFd(), ERR_NOSUCHCHANNEL(msg.params[0]).c_str(), ERR_NOSUCHCHANNEL(msg.params[0]).length(), 0);
             return(-1);
     }
     std::vector<std::string>::iterator it = std::find(client->getChannelsJoined().begin(), client->getChannelsJoined().end(), msg.params[0]);
@@ -64,7 +64,7 @@ int cmdKick(Message &msg, Client *client,  std::map<std::string, Channel*> &chan
             return(-1);
     }
     std::string kick_message;
-    kick_message = KICK_MESSAGE(userChannelIt->second->getNickName(), msg.params[0]);
+    kick_message = KICK_MESSAGE(USER(client->getNickName(),client->getUserName(),client->getIPaddress()), msg.params[0], userChannelIt->second->getNickName(), client->getNickName());
     if(msg.trailing.empty() == false)
         kick_message.append(" using " + msg.trailing + " as the reason \r\n");
     else
