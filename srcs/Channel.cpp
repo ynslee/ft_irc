@@ -85,13 +85,16 @@ void	Channel::setTopic(std::string& newTopic)
 void	Channel::setMode(std::string mode, Client *client)
 {
 	if (goodModeFLag(mode) == false)
+	{
 		send(client->getClientFd(), ERR_UNKNOWNMODE(), strlen(ERR_UNKNOWNMODE()), 0);
+		return ;
+	}
 	std::cout << "**** OLD MODE CHANNEL: " << _mode << std::endl;
 	char modeFlag = mode[1];
-	if (mode[0] == '+')
+	if (mode[0] == '+' && isChannelFlag(mode) == false)
 		_mode += modeFlag;
-	if (mode[0] == '-')
-		_mode.erase(std::remove(_mode.begin(), _mode.end(), modeFlag), _mode.end());
+	if (mode[0] == '-' && isChannelFlag(mode) == true)
+			_mode.erase(std::remove(_mode.begin(), _mode.end(), modeFlag), _mode.end());
 	std::cout << "**** NEW MODE CHANNEL: " << _mode << std::endl;
 }
 
@@ -146,7 +149,17 @@ bool Channel::goodModeFLag(std::string modeFlag)
 		return false;
 	else if (modeFlag[0] != '+' && modeFlag[0] != '-')
 		return false;
-	else if (modeFlag[1] != 'i' && modeFlag[1] != 'k' && modeFlag[1] != 'o' && modeFlag[1] != 'l')
+	else if (modeFlag[1] != 'i' && modeFlag[1] != 't' && modeFlag[1] != 'k' && modeFlag[1] != 'o' && modeFlag[1] != 'l')
 		return false;
 	return true;
+}
+
+bool Channel::isChannelFlag(std::string flag)
+{
+	std::string currentMode = this->getMode();
+	size_t pos = 0;
+	pos = currentMode.find(flag[1]);
+	if (pos != 0 && pos != std::string::npos) //flagi loytyy
+		return true;
+	return false;
 }

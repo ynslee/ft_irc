@@ -11,18 +11,14 @@ int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 		std::map<std::string, Channel*>::iterator it;
 		for (it = channels.begin(); it != channels.end(); it++)
 		{
-			// std::cout << "msg.params[0]: " << msg.params[0] << std::endl;
-			// std::cout << "it->first: " << it->first << std::endl;
 			std::string channelName = msg.params[0];
 			if (it->first == channelName) // looking for the right channel
 			{
 				std::string clientNick = Client->getNickName();
-				// std::cout << "clientNick: " << clientNick << std::endl;
 				if (it->second->isOperator(clientNick) == true) // checking if cient is operator
 				{
-					// std::cout << "msg.params[1]" << msg.params[1] << std::endl;
+					// check which flag and do accordingly
 					it->second->setMode(msg.params[1], Client);
-					// std::cout << "apply changes to channel mode!" << std::endl; // continue here!!
 					return (0);
 				}
 				else
