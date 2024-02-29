@@ -27,20 +27,12 @@ int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 				}
 				else
 				{
-					// send(Client->getClientFd(), ERR_CHANOPRIVSNEEDED(Client->getHostName(), Client->getNickName(), channelName).c_str(), ERR_CHANOPRIVSNEEDED(Client->getHostName(), Client->getNickName(), channelName).length(), MSG_DONTWAIT);
-					ssize_t bytesSent = send(Client->getClientFd(), ERR_CHANOPRIVSNEEDED(channelName).c_str(), ERR_CHANOPRIVSNEEDED(channelName).length(), MSG_DONTWAIT);
-					if (bytesSent == -1)
-					{
-						// Handle the error
-						std::cerr << "Error sending ERR_CHANOPRIVSNEEDED: " << strerror(errno) << std::endl;
-					}
-					std::cout << "Coming in else 1" << std::endl;
+					send(Client->getClientFd(), ERR_CHANOPRIVSNEEDED(channelName).c_str(), ERR_CHANOPRIVSNEEDED(channelName).length(), 0);
 					return (0);
 				}
 			}
 			else
 			{
-				std::cout << "Coming in else 2" << std::endl;
 				send(Client->getClientFd(), ERR_NOSUCHCHANNEL(channelName).c_str(), ERR_NOSUCHCHANNEL(channelName).length(), 0);
 				return (-1);
 			}
