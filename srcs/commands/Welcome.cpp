@@ -34,17 +34,17 @@ void welcomeUser(Client *Client)
 	std::istringstream iss(readline);
 	std::string motd_line;
 
-	Client->setSendbuf(RPL_WELCOME(hostname, username, Client->getServerName(), nick, userIP));
-	Client->addSendbuf(RPL_YOURHOST(hostname, username, Client->getServerName()));
-	Client->addSendbuf(RPL_CREATED(hostname, username, currentDateTime()));
-	Client->addSendbuf(RPL_MOTDSTART(hostname, username));
+	Client->setSendbuf(RPL_WELCOME(hostname, Client->getServerName(), nick, userIP));
+	Client->addSendbuf(RPL_YOURHOST(hostname, nick, Client->getServerName()));
+	Client->addSendbuf(RPL_CREATED(hostname, nick, currentDateTime()));
+	Client->addSendbuf(RPL_MOTDSTART(hostname, nick));
 	while(std::getline(iss, motd_line))
 	{
 		if (motd_line.empty() == false)
-			Client->addSendbuf(RPL_MOTD(hostname, username, motd_line));
+			Client->addSendbuf(RPL_MOTD(hostname, nick, motd_line));
 	}
 	if (readline.empty() == false)
-		Client->addSendbuf(RPL_ENDOFMOTD(hostname, username));
-	Client->addSendbuf(RPL_MODE(username, mode));
+		Client->addSendbuf(RPL_ENDOFMOTD(hostname, nick));
+	Client->addSendbuf(RPL_MODE(nick, mode));
 	Client->setWelcomeSent(1);
 }
