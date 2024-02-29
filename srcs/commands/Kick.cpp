@@ -15,6 +15,23 @@
  * Example :    KICK #Finnish Matthew ; Command to kick Matthew from #Finnish
  */
 
+static void sendKickMsg(std::string message, Client *client, Client *client_kicked, Channel *channel)
+{
+    if(client == nullptr || client_kicked == nullptr)
+        return ;
+    std::map<std::string, Client *> clients_list = channel->getClientList();
+    std::map<std::string, Client *>::const_iterator it;
+    for(it = clients_list.begin(); it != clients_list.end() ; ++it)
+    {
+        if(client != NULL && it->first == client->getNickName())
+            continue;
+        send(it->second->getClientFd(), message.c_str(), message.length(), 0);
+    }
+    channel->removeFromChannel(client_kicked->getNickName());
+    std::vector<std::string>::iterator iter = std::find(client_kicked->getChannelsJoined().begin(), client_kicked->getChannelsJoined().end(), channel->getChannelName());
+    client_kicked->getChannelsJoined().erase(iter);
+}
+
 int cmdKick(Message &msg, Client *client,  std::map<std::string, Channel*> &channels)
 {
     std::string hostname = client->getHostName();
@@ -37,7 +54,7 @@ int cmdKick(Message &msg, Client *client,  std::map<std::string, Channel*> &chan
     }
     if(!channelIt->second->isOperator(client->getNickName()))
     {
-        send(client->getClientFd(), ERR_CHANOPRIVSNEEDED(hostname,msg.params[0]).c_str(), ERR_CHANOPRIVSNEEDED(hostname,msg.params[0]).length(), 0);
+        send(client->getClientFd(), ERR_CHANOPRIVSNEEDED(msg.params[0]).c_str(), ERR_CHANOPRIVSNEEDED(msg.params[0]).length(), 0);
             return(-1);
     }
     std::map<std::string, Client*>::iterator userChannelIt = channelIt->second->getClientList().find(msg.params[1]);
@@ -47,10 +64,11 @@ int cmdKick(Message &msg, Client *client,  std::map<std::string, Channel*> &chan
             return(-1);
     }
     std::string kick_message;
-    kick_message = KICK_MESSAGE(client->getNickName(), msg.params[0]);
-    if(!msg.params[2].empty())
-        kick_message.append(" using" + msg.params[2] + "as the reason \r\n");
+    kick_message = KICK_MESSAGE(userChannelIt->second->getNickName(), msg.params[0]);
+    if(msg.trailing.empty() == false)
+        kick_message.append(" using " + msg.trailing + " as the reason \r\n");
     else
         kick_message.append("\r\n");
+    sendKickMsg(kick_message,client,userChannelIt->second,channelIt->second);
     return(0);
 }

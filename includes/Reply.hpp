@@ -27,7 +27,7 @@
 # define ERR_NORECIPIENT(hostname)(":" + hostname + " 411 * :No recipient given" + "\r\n")
 # define ERR_NOTEXTTOSEND(hostname)(":" + hostname + " 412 * :No text to send" + "\r\n")
 # define ERR_TOOMANYTARGETS(hostname)(":" + hostname + " 407 * :Too many recipients" + "\r\n")
-# define ERR_CHANOPRIVSNEEDED(username, channel) ("482 " + username + " " + channel + " :You're not channel operator\r\n")
+# define ERR_CHANOPRIVSNEEDED(channel)("482 " + channel + " :You're not channel operator\r\n")
 # define ERR_NOTONCHANNEL(username,channel) ("442 " + username + " " + channel + " :You're not on that channel\r\n")
 # define ERR_USERNOTINCHANNEL(username,nick,channel) ("441 " + username + " " + nick + " " + channel + " :Not on that channel\r\n")
 
