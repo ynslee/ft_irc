@@ -12,7 +12,7 @@ class Channel
 	private:
 		std::map<std::string, Client *>	_clientList;
 		// std::vector<std::string>		_kickedUsers;
-		std::vector<std::string>		_operators;
+		std::vector<std::string>		_operators; // nickname
 		std::vector<Client *>           _clientOrder;
 		std::string 					_channel;
 		std::string						_channelKey;
