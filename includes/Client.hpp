@@ -68,6 +68,7 @@ class Client{
 		std::vector<std::string> &getChannelsJoined();
 		bool goodModeFLag(std::string modeFlag);
 		void addSendbuf(std::string buf);
+		void addReadbuf(std::string buf);
 };
 
 #endif
