@@ -22,6 +22,17 @@ int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 						it->second->setMode(msg.params[1], Client);
 						return (0);
 					}
+					else if (msg.params[1][1] == 'k')
+					{
+						if (msg.params[1][0] == '+')
+							it->second->setChannelKey(msg.params[2]);
+						if (msg.params[1][0] == '-')
+							it->second->setChannelKey("");
+					}
+					else if (msg.params[1][1] == 'o')
+					{
+						// add client to channels operator list
+					}
 				}
 				else
 				{
