@@ -148,3 +148,8 @@ bool Client::isChannelFlag(std::string flagParameter)
 		return true;
 	return false;
 }
+
+void	Client::addReadbuf(std::string buf)
+{
+	_readbuf += buf;
+}
