@@ -213,8 +213,6 @@ int Server::findCommand(int client_fd)
 		std::string input = extractInput(_clients, client_fd);
 		Message msg(input);
 
-		std::cout << "read buf leftover is " << _clients[client_fd]->getReadbuf() << std::endl;
-
 		int i = getCommandType(msg.command);
 		switch(i)
 		{
