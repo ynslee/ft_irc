@@ -17,9 +17,11 @@ int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 				std::string clientNick = Client->getNickName();
 				if (it->second->isOperator(clientNick) == true) // checking if cient is operator
 				{
-					// check which flag and do accordingly
-					it->second->setMode(msg.params[1], Client);
-					return (0);
+					if (msg.params[1][1] == 'i' || msg.params[1][1] == 't') // these get added to channel mode flags
+					{
+						it->second->setMode(msg.params[1], Client);
+						return (0);
+					}
 				}
 				else
 				{
