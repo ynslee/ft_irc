@@ -39,7 +39,7 @@ int cmdOper(Message &msg, Client *Client)
         send(Client->getClientFd(), ERR_NOOPERHOST(hostname).c_str(), ERR_NOOPERHOST(hostname).length(), 0);
         return(-1);
     }
-    else
+    else if (Client->isChannelFlag("+o") == false)
     {
         Client->setIsOperator(true);
 		Client->setMode("+o");
