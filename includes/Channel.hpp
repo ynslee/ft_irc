@@ -13,6 +13,7 @@ class Channel
 		std::map<std::string, Client *>	_clientList;
 		// std::vector<std::string>		_kickedUsers;
 		std::vector<std::string>		_operators;
+		std::vector<std::string>		_invitedList;
 		std::vector<Client *>           _clientOrder;
 		std::string 					_channel;
 		std::string						_channelKey;
@@ -29,6 +30,7 @@ class Channel
 		std::map <std::string, Client *>	&getClientList();
 		// std::vector<std::string>&		getKickedUsers();
 		std::vector<std::string>&		getChannelOperators();
+		std::vector<std::string>&		getInvitedList();
 		const std::string&				getChannelName();
 		const std::string&				getChannelKey();
 		const std::string&				getTopic();

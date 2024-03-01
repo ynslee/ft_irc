@@ -259,6 +259,12 @@ int Server::findCommand(int client_fd)
 				if (cmdOper(msg, _clients[client_fd]) == -1)
 					return(-1);
 				break ;
+			// case command::INVITE:
+			// {
+			// 	if (Message &msg, Client *client,  std::map<std::string, Channel*> &channels]) == -1)
+			// 		return(-1);
+			// 	break ;
+			// }
 			case command::PRIVMSG:
 				if (cmdPrivmsg(msg, _clients[client_fd], _channels, _clients) == -1)
 					return(-1);

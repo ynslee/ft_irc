@@ -28,6 +28,7 @@ Channel::~Channel()
 
 std::map <std::string, Client *>&	Channel::getClientList() { return _clientList; }
 std::vector<std::string>&		Channel::getChannelOperators() { return _operators; }
+std::vector<std::string>&		Channel::getInvitedList() { return _invitedList; }
 const std::string&				Channel::getChannelName() { return _channel; }
 const std::string&				Channel::getChannelKey() { return _channelKey; }
 const std::string&				Channel::getTopic() { return _topic; }

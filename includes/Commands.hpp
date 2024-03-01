@@ -25,7 +25,7 @@ int cmdPrivmsg(Message &msg, Client *client, std::map<std::string, Channel*> &ch
 
 int cmdJoin(Message &msg, Client *Client, std::map<std::string, Channel*> &channels);
 int cmdKick(Message &msg, Client *Client,  std::map<std::string, Channel*> &channels);
-int cmdInvite(Message &msg, Client *Client);
+int cmdInvite(Message &msg, Client *client,  std::map<std::string, Channel*> &channels, std::vector<std::string> &nick_names, std::map<int, Client*> &clients);
 int cmdTopic(Message &msg, Client *Client);
 int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &channels);
 int cmdMotd(Message &msg, Client *Client);
