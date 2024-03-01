@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: jpelaez- <jpelaez-@student.hive.fi>        +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/02/05 16:26:39 by jpelaez-          #+#    #+#              #
-#    Updated: 2024/02/29 12:56:30 by jpelaez-         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME = ircserv
 
 SRC = main.cpp SetServer.cpp Client.cpp SetServer_utils.cpp Message.cpp Channel.cpp commands/Pass.cpp commands/Cap.cpp \

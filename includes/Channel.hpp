@@ -51,5 +51,5 @@ class Channel
 		bool							isOperator(const std::string &operatorName);
 		void							removeChannelPassword();
 		bool 							goodModeFLag(std::string modeFlag);
-
+		bool							isChannelFlag(std::string flag);
 };

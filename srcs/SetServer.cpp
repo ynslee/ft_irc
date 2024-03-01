@@ -193,7 +193,8 @@ int Server::recieveMsg(int client_fd, int i)
 	else
 	{
 		setClientId(client_fd);
-		setMessage(static_cast<std::string>(buf));
+		if (setMessage(static_cast<std::string>(buf)) == -1)
+			return (-1);
 		if(findCommand(client_fd) == -1)
 			return(-1);
 		// std::cout << "received<< " << buf << std::endl;
@@ -269,8 +270,10 @@ int Server::findCommand(int client_fd)
 				return(0);
 			}
 			case command::INVALID:
-				std::cerr << "Invalid command" << std::endl;
+			{
+				std::cout << "Invalid command" << std::endl;
 				return (-1);
+			}
 		}
 	}
 	return (0);
@@ -278,7 +281,9 @@ int Server::findCommand(int client_fd)
 
 std::string extractInput(std::map<int, Client *> _clients, int client_fd)
 {
-	size_t pos =  _clients[client_fd]->getReadbuf().find("\n");
+	size_t pos = 0;
+
+	pos = _clients[client_fd]->getReadbuf().find('\n');
 	std::string input =  _clients[client_fd]->getReadbuf().substr(0, pos);
 	std::string temp = _clients[client_fd]->getReadbuf();
 	temp.erase(0, pos + 1);
@@ -397,7 +402,7 @@ std::vector<std::string> &Server::getNicknames()
 	return(this->_nicknames);
 }
 
-void Server::setMessage(std::string msg)
+int Server::setMessage(std::string msg)
 {
 	std::map<int, Client*>::iterator it;
 	for(it=_clients.begin(); it!=_clients.end(); it++)
@@ -405,10 +410,13 @@ void Server::setMessage(std::string msg)
 		int key = it->first;
 		if(key == this->_clientId)
 		{
-			it->second->setReadbuf(msg);
+			it->second->addReadbuf(msg);
 			msg.clear();
+			if (it->second->getReadbuf().find('\n') == std::string::npos)
+				return (-1);
 		}
 	}
+	return (0);
 }
 
 const std::string &Server::getServerName() const
