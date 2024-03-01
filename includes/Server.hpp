@@ -9,7 +9,7 @@
 # include "Commands.hpp"
 # include "Channel.hpp"
 
-extern bool surverShutdown;
+extern bool serverShutdown;
 
 class Client;
 class Message;
