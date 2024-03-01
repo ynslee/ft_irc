@@ -397,7 +397,7 @@ std::vector<std::string> &Server::getNicknames()
 
 int Server::setMessage(std::string msg)
 {
-	size_t index = 0;
+	// size_t index = 0;
 
 	std::map<int, Client*>::iterator it;
 	for(it=_clients.begin(); it!=_clients.end(); it++)
