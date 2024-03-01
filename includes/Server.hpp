@@ -31,6 +31,7 @@ class Channel;
 		KILL,
 		OPER,
 		QUIT,
+		PING,
 		INVALID,
 		// what else?
 	};

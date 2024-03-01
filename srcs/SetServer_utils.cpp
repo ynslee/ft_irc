@@ -13,7 +13,7 @@ void Server::closeClient(int i, int fd)
 
 int Server::getCommandType(std::string command)
 {
-    std::string commands[15] =
+    std::string commands[16] =
     {
         "CAP",
         "PASS",
@@ -30,9 +30,10 @@ int Server::getCommandType(std::string command)
         "KILL",
         "OPER",
         "QUIT",
+        "PING"
     };
 
-    for (int i = 0; i < 15; i++)
+    for (int i = 0; i < 16; i++)
     { 
         if (command == commands[i])
         {
