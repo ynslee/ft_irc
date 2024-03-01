@@ -29,7 +29,7 @@ int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 						if (msg.params[1][0] == '-')
 							it->second->setChannelKey("");
 					}
-					else if (msg.params[1][1] == 'o') // not working
+					else if (msg.params[1][1] == 'o') // +o works test -o
 					{
 						if (msg.params[1][0] == '+')
 							it->second->addOperator(msg.params[2]);
