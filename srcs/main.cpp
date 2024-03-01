@@ -1,13 +1,13 @@
 
 #include "../includes/Server.hpp"
 
-bool surverShutdown = false;
+bool serverShutdown = false;
 
 void sig_handler(int signal)
 {
 	if (signal == SIGINT)
 	{
-		surverShutdown = true;
+		serverShutdown = true;
 	}
 }
 
