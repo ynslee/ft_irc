@@ -30,6 +30,7 @@ static void sendInviteMsg(std::string message, std::map<int, Client*> &clients, 
 int cmdInvite(Message &msg, Client *client,  std::map<std::string, Channel*> &channels,  std::vector<std::string> &nick_names, std::map<int, Client*> &clients)
 {
     std::string hostname = client->getHostName();
+    std::cout << "come here" << std::endl; 
     if(msg.params.size() < 2)
     {
         send(client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);
@@ -52,15 +53,15 @@ int cmdInvite(Message &msg, Client *client,  std::map<std::string, Channel*> &ch
         send(client->getClientFd(), ERR_CHANOPRIVSNEEDED(msg.params[1]).c_str(), ERR_CHANOPRIVSNEEDED(msg.params[1]).length(), 0);
             return(-1);
     }
-    if(std::find(nick_names.begin(), nick_names.end(), msg.params[0]) != nick_names.end())
+    if(std::find(nick_names.begin(), nick_names.end(), msg.params[0]) == nick_names.end())
     {
         send(client->getClientFd(), ERR_NOSUCHNICK(msg.params[0]).c_str(), ERR_NOSUCHNICK(msg.params[0]).length(), 0);
         return(0);
     }
     std::map<std::string, Client*>::iterator userChannelIt = channelIt->second->getClientList().find(msg.params[0]);
-    if(userChannelIt == channelIt->second->getClientList().end())
+    if(userChannelIt != channelIt->second->getClientList().end())
     {
-        send(client->getClientFd(), ERR_USERONCHANNEL(hostname,msg.params[0],msg.params[1]).c_str(), ERR_USERNOTINCHANNEL(hostname,msg.params[0],msg.params[1]).length(), 0);
+        send(client->getClientFd(), ERR_USERONCHANNEL(hostname,msg.params[0],msg.params[1]).c_str(), ERR_USERONCHANNEL(hostname,msg.params[0],msg.params[1]).length(), 0);
             return(-1);
     }
     channelIt->second->getInvitedList().push_back(msg.params[0]);
