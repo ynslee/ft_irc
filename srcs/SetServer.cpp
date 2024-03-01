@@ -79,7 +79,7 @@ int Server::pollLoop()
 	this->_pollfdCount = this->_pfds.size();
 	// std::cout << this->_pollfdCount << std::endl;
 
-	while(surverShutdown == false)
+	while(serverShutdown == false)
 	{
 		poll_count = poll(&this->_pfds[0], this->_pollfdCount, 0);
 		if (poll_count == -1)
