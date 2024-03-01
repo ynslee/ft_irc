@@ -52,8 +52,6 @@ Message::Message(std::string input)
 			trail += temp;
 			this->trailing = trail;
 			std::cout << "TRAILING: " << trailing << std::endl;
-			if (!(iss >> token))
-				break ;
 		}
 	}
 }

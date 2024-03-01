@@ -279,14 +279,10 @@ std::string extractInput(std::map<int, Client *> _clients, int client_fd)
 {
 	size_t pos = 0;
 
-	std::cout << "right before we extract Input is :" << _clients[client_fd]->getReadbuf() << std::endl;
 	pos = _clients[client_fd]->getReadbuf().find('\n');
 	std::string input =  _clients[client_fd]->getReadbuf().substr(0, pos);
 	std::string temp = _clients[client_fd]->getReadbuf();
 	temp.erase(0, pos + 1);
-	std::cout << "pos is " << pos << std::endl;
-	std::cout << "input is " << input << std::endl;
-	std::cout << "temp is " << temp << std::endl;
 	_clients[client_fd]->setReadbuf(temp);
 	return (input);
 }
