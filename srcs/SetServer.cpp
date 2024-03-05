@@ -268,6 +268,11 @@ int Server::findCommand(int client_fd)
 				removeClientfromPoll(client_fd);
 				return(0);
 			}
+			case command::PING:
+			{
+				cmdPing(msg, _clients[client_fd]);
+				break ;
+			}
 			case command::INVALID:
 			{
 				std::cout << "Invalid command" << std::endl;
