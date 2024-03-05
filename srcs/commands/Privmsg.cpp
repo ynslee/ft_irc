@@ -7,9 +7,9 @@
  *  Syntax : PRIVMSG <target> <text to be sent>
  * 
  *  we are only hanlding nickname or channel. Here, channel syntax should be '#<channel>.
- *  PRIVMSG is used to send private messages between users, as well as to send messages to channels. 
+ *  PRIVMSG is used to send private messages between users, as well as to send messages to channels.
+ *  IN IRC, user/operator does not have a right to send message to all the clients in the server therefore, we don't implement that.
  * 	
- * 
  *  Numeric replies:
  *   ERR_NOSUCHNICK (401)
  *   ERR_NOSUCHSERVER (402)
@@ -82,28 +82,6 @@ static int privmsgClient(Message &msg, Client *client, std::map<int, Client*> &c
 	return (-1);
 }
 
-static int privmsgServer(Message &msg, Client *client, std::map<int, Client*> &clients)
-{
-	std::string serverName = msg.params[0].substr(1, msg.params[0].length() - 1);
-	std::string hostname = client->getHostName();
-	std::string nickname = client->getNickName();
-	std::string username = client->getUserName();
-	std::string text = msg.trailing;
-
-	std::cout << "target is ->"	<< serverName << std::endl;
-	std::map<int, Client*>::iterator it;
-	for (it=clients.begin(); it!=clients.end(); it++)
-	{
-		if(it->second->getIPaddress() == serverName)
-		{
-			send(it->second->getClientFd(), RPL_PRIVMSG(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), serverName, msg.trailing).c_str(), RPL_PRIVMSG(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), serverName, msg.trailing).length(), 0);
-			return (0);
-		}
-	}
-	send(client->getClientFd(), ERR_NOSUCHSERVER(hostname, serverName).c_str(), ERR_NOSUCHSERVER(hostname, serverName).length(), 0);
-	return (-1);
-}
-
 int cmdPrivmsg(Message &msg, Client *client, std::map<std::string, Channel*> &channels, std::map<int, Client*> &clients)
 {
 	if (msg.params.size() == 0)
@@ -122,11 +100,6 @@ int cmdPrivmsg(Message &msg, Client *client, std::map<std::string, Channel*> &ch
 		{
 			send(client->getClientFd(), ERR_TOOMANYTARGETS(client->getHostName()).c_str(), ERR_TOOMANYTARGETS(client->getHostName()).length(), 0);
 			return (-1);
-		}
-		else if (msg.params[0][0] == '$')
-		{
-			if (privmsgServer(msg, client, clients) == -1)
-				return (-1);
 		}
 		else if (msg.params[0].find('.') == std::string::npos && msg.params[0][0] != '#')
 		{

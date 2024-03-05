@@ -119,8 +119,10 @@ int Server::pollLoop()
 			}
 		}
 	}
+	std::cout << "before deleting pollfds" << std::endl;
 	for(int i = 0; i < this->_pollfdCount; i++)
 		close(this->_pfds[i].fd);
+	std::cout << "after deleting pollfds" << std::endl;
 	return(0);
 }
 
@@ -205,10 +207,10 @@ int Server::recieveMsg(int client_fd, int i)
 
 int Server::findCommand(int client_fd)
 {
-	while (1)
+	while (serverShutdown == false)
 	{
-		if (_clients[client_fd]->getReadbuf().empty())
-			return (0);
+		// if (_clients[client_fd]->getReadbuf().empty() == true)
+		// 	return (-1);
 		std::string input = extractInput(_clients, client_fd);
 		Message msg(input);
 
@@ -387,7 +389,7 @@ Server::~Server()
 	std::map<std::string, Channel*>::iterator it2;
 	for(it2=_channels.begin(); it2!=_channels.end(); it++)
 	{
-		delete it->second;
+		delete it2->second;
 	}
 }
 
