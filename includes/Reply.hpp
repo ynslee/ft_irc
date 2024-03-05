@@ -23,7 +23,7 @@
 # define ERR_UNKNOWNMODE()("472 * :Unknown MODE flag\r\n")
 // # define ERR_CHANOPRIVSNEEDED(hostname, nickname, channel) (":" + hostname + " 482 " + nickname + " " + channel + " :You're not channel operator\r\n")
 # define ERR_CHANOPRIVSNEEDED(channel) (":"  + channel + " :You're not channel operator\r\n")
-# define ERR_NOSUCHNICK(nick)("401 * " + nick + " :No such nick/channel" + "\r\n")
+# define ERR_NOSUCHNICK(nick)("401 * " + nick + " :No such nick" + "\r\n")
 # define ERR_NOSUCHCHANNEL(channel)("403 * " + channel + " :No such channel" + "\r\n")
 # define ERR_CANNOTSENDTOCHAN(hostname, channel)(":" + hostname + " 404 * " + channel + " :Cannot send to channel" + "\r\n")
 # define ERR_NORECIPIENT(hostname)(":" + hostname + " 411 * :No recipient given" + "\r\n")
@@ -32,10 +32,12 @@
 // # define ERR_CHANOPRIVSNEEDED(channel)("482 " + channel + " :You're not channel operator\r\n")
 # define ERR_NOTONCHANNEL(hostname,channel) (":" + hostname + " 442 " + channel + " :You're not on that channel\r\n")
 # define ERR_USERNOTINCHANNEL(hostname,nick,channel) (":" + hostname + " 441 " + channel + " " + nick + " :Not on this channel\r\n")
+# define ERR_USERONCHANNEL(hostname,nick,channel) (":" + hostname + " 443 " + channel + " " + nick + " :is already on the channel\r\n")
 
 //NORMAL REPLIES
 # define QUIT_MESSAGE(nick, username, userIP)(":" + nick + "!" + username + "@" + userIP + " QUIT :Quit: ")
 # define KICK_MESSAGE(USER, channel, nick, usernick)(USER + " KICK " + channel + " " + nick +  " :" + usernick)
+# define INVITE_MESSAGE(USER, nick, channel)(USER + " INVITE " + nick + " :" + channel + "\r\n")
 # define NICK_REPLY(old_nick, usesrname, userIP, new_nick)(":" + old_nick + "!~" + usesrname + "@" + userIP + " Nick :" + new_nick+ "\r\n")
 # define RPL_MOTDSTART(hostname, nickname)(":" + hostname+ " 375 * :- " + nickname + " Message of the day - " + "\r\n")
 # define RPL_MOTD(hostname, nickname, motd_line) (":" + hostname + " 372 " + nickname + " :" + motd_line + "\r\n")
@@ -51,5 +53,6 @@
 # define RPL_TOPIC(hostname, username, channel, topic) (":" + hostname + " 332 " + username + " " + channel + " :" + topic + "\r\n")
 # define RPL_NOTOPIC(hostname, username, channel) (":" + hostname + " 331 " + username + " " + channel + " :No topic is set\r\n")
 # define RPL_PRIVMSG(USER, target, text) (USER + " PRIVMSG " + target + " :" + text + "\r\n")
+# define RPL_INVITING(hostname, nick, invited, channel) (":" + hostname + " 341 " + nick + " " + invited + " " + channel + "\r\n")
 
 #endif
