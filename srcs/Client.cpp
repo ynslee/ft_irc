@@ -130,7 +130,7 @@ bool Client::goodModeFLag(std::string modeFlag)
 		return false;
 	else if (modeFlag[0] != '+' && modeFlag[0] != '-')
 		return false;
-	else if (modeFlag[1] != 'i' && modeFlag[1] != 't' && modeFlag[1] != 'k' && modeFlag[1] != 'o' && modeFlag[1] != 'l')
+	else if (modeFlag[1] != 'i' && modeFlag[1] != 'Z' && modeFlag[1] != 'w' && modeFlag[1] != 'o')
 		return false;
 	return true;
 }
@@ -144,7 +144,7 @@ bool Client::isChannelFlag(std::string flagParameter)
 	std::string currentMode = this->getMode();
 	size_t pos = 0;
 	pos = currentMode.find(flagParameter[1]);
-	if (pos != 0 && pos != std::string::npos) //flagi loytyy
+	if (pos != 0 && pos != std::string::npos)
 		return true;
 	return false;
 }
