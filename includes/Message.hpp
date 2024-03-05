@@ -15,6 +15,7 @@ class Message {
 		std::string	command;
 		int command_flag;
 		std::string	trailing;
+		int trailing_flag;
 		std::vector<std::string> params;
 		~Message();
 } ;

@@ -51,6 +51,7 @@ Message::Message(std::string input)
 			getline(iss, temp, '\r');
 			trail += temp;
 			this->trailing = trail;
+			trailing_flag = 1;
 			std::cout << "TRAILING: " << trailing << std::endl;
 		}
 	}

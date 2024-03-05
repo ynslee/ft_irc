@@ -166,6 +166,7 @@ static int clientErrorChecks(Client *client, std::map<std::string, Channel*> &ch
 {
 	std::string hostname = client->getHostName();
 	bool invited = false;
+	std::vector <std::string> invitedClients;
 
 	if (channelName.empty())
 	{
@@ -189,15 +190,16 @@ static int clientErrorChecks(Client *client, std::map<std::string, Channel*> &ch
 		{
 			if (it->second->getMode().find('i') != std::string::npos)
 			{
+				invitedClients = it->second->getInvitedList();
 				std::vector<std::string>::iterator it2;
-				for (it2=it->second->getInvitedList().begin(); it2!=it->second->getInvitedList().end(); it2++)
+				for (it2=invitedClients.begin(); it2!=invitedClients.end(); it2++)
 				{
 					if (*it2 == client->getNickName())
 						invited = true;
 				}
 				if (invited == false)
 				{
-					(client->getClientFd(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).c_str(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).length(), 0);
+					send(client->getClientFd(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).c_str(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).length(), 0);
 					return (-1);
 				}
 			}
@@ -235,9 +237,12 @@ int cmdJoin(Message &msg, Client *client, std::map<std::string, Channel*> &chann
 		send(client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);
 		return (-1);
 	}
-	if (msg.params.size() == 0 && msg.trailing.size() == 0)
+	if (msg.trailing.size() > 0)
+		return (-1);	
+	if (msg.params.size() == 0 && msg.trailing.empty() == true)
 	{
-		// send(client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);
+		if (msg.trailing_flag == 0)
+			send(client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);
 		return (-1);
 	}
 	channelName = findChannelName(msg.params[0]);
