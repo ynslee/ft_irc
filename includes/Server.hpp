@@ -9,6 +9,8 @@
 # include "Commands.hpp"
 # include "Channel.hpp"
 
+extern bool serverShutdown;
+
 class Client;
 class Message;
 class Channel;
@@ -29,6 +31,7 @@ class Channel;
 		KILL,
 		OPER,
 		QUIT,
+		PING,
 		INVALID,
 		// what else?
 	};

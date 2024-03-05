@@ -19,7 +19,7 @@ int cmdUser(Message &msg, Client *Client);
 int cmdWhois(Message &msg, Client *Client);
 int cmdKill(Message &msg, Client *Client);
 int cmdPrivmsg(Message &msg, Client *client, std::map<std::string, Channel*> &channels, std::map<int, Client*> &clients);
-
+int cmdPing(Message &msg, Client *Client);
 
 /*channel commands*/
 
