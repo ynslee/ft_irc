@@ -26,8 +26,6 @@ int main(int argc, char **argv)
 	{
 		if (New_server.pollLoop() < 0)
 			throw std::runtime_error("Poll");
-		else
-			return (0);
 	}
 	catch(const std::exception& e)
 	{
