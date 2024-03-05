@@ -3,23 +3,65 @@
 #include "../../includes/Reply.hpp"
 #include "../../includes/Common.hpp"
 
+void	changeUserLimit(Message &msg, Channel *channel)
+{
+	if (msg.params[1][0] == '+' && !msg.params[2].empty())
+	{
+		unsigned int temp = 0;
+		try
+		{
+			temp = static_cast<unsigned int>(stoi(msg.params[2]));
+		}
+		catch (const std::invalid_argument& e)
+		{
+			return ;
+		}
+		catch (const std::out_of_range& e)
+		{
+			return ;
+		}
+		channel->setUserLimit(temp);
+	}
+	if (msg.params[1][0] == '-' && msg.params[2].empty())
+	{
+		channel->setUserLimit(10);
+	}
+}
+
 int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &channels)
 {
-	if (msg.params[0][0] == '#' && msg.params.size() > 1) //if mode command is used on a channel and by user
+	if (msg.params[0][0] == '#' && msg.params.size() > 1)
 	{
-		std::cout << "Tulin sisalle!!!" << std::endl;
 		std::map<std::string, Channel*>::iterator it;
 		for (it = channels.begin(); it != channels.end(); it++)
 		{
 			std::string channelName = msg.params[0];
-			if (it->first == channelName) // looking for the right channel
+			if (it->first == channelName)
 			{
 				std::string clientNick = Client->getNickName();
-				if (it->second->isOperator(clientNick) == true) // checking if cient is operator
+				if (it->second->isOperator(clientNick) == true)
 				{
-					// check which flag and do accordingly
-					it->second->setMode(msg.params[1], Client);
-					return (0);
+					if (msg.params[1][1] == 'i' || msg.params[1][1] == 't')
+					{
+						it->second->setMode(msg.params[1], Client);
+						return (0);
+					}
+					else if (msg.params[1][1] == 'k')
+					{
+						if (msg.params[1][0] == '+')
+							it->second->setChannelKey(msg.params[2]);
+						if (msg.params[1][0] == '-')
+							it->second->setChannelKey("");
+					}
+					else if (msg.params[1][1] == 'o')
+					{
+						if (msg.params[1][0] == '+')
+							it->second->addOperator(msg.params[2]);
+						if (msg.params[1][0] == '-')
+							it->second->removeOperator(msg.params[2]);
+					}
+					else if (msg.params[1][1] == 'l')
+						changeUserLimit(msg, it->second);
 				}
 				else
 				{

@@ -3,9 +3,9 @@
 #include "../../includes/Server.hpp"
 
 /**
- * @brief 
+ * @brief
  *  Syntax : PRIVMSG <target> <text to be sent>
- * 
+ *
  *  we are only hanlding nickname or channel. Here, channel syntax should be '#<channel>.
  *  PRIVMSG is used to send private messages between users, as well as to send messages to channels.
  *  IN IRC, user/operator does not have a right to send message to all the clients in the server therefore, we don't implement that.
@@ -19,7 +19,7 @@
  *   ERR_NOTEXTTOSEND (412)
  *   ERR_TOOMANYTARGETS (407)
  *   RPL_PRIVMSG
- * 
+ *
  *   yoonslee1!~yoonslee@194.136.126.51 PRIVMSG #hello :hello
  */
 
