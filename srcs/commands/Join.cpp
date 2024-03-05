@@ -113,7 +113,7 @@ static int joinExistingServerWithoutKey(std::map<std::string, Channel*> &channel
 	client->setMaxChannels();
 	client->setNewChannel(channelName);
 	client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
-	topicMessage(channels[channelName], client);
+	// topicMessage(channels[channelName], client);
 	successfulJoinMessage(client, channelName, channels[channelName]->getClientList(), client->getNickName());
 	printJoinMessage(client, channelName);
 	return (0);
@@ -156,7 +156,7 @@ static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels,
 	client->setMaxChannels();
 	client->setNewChannel(channelName);
 	client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
-	topicMessage(channels[channelName], client);
+	// topicMessage(channels[channelName], client);
 	successfulJoinMessage(client, channelName, channels[channelName]->getClientList(), client->getNickName());
 	printJoinMessage(client, channelName);
 	return (0);
@@ -165,6 +165,7 @@ static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels,
 static int clientErrorChecks(Client *client, std::map<std::string, Channel*> &channels, std::string channelName)
 {
 	std::string hostname = client->getHostName();
+	bool invited = false;
 
 	if (channelName.empty())
 	{
@@ -188,8 +189,17 @@ static int clientErrorChecks(Client *client, std::map<std::string, Channel*> &ch
 		{
 			if (it->second->getMode().find('i') != std::string::npos)
 			{
-				send(client->getClientFd(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).c_str(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).length(), 0);
-				return (-1);
+				std::vector<std::string>::iterator it2;
+				for (it2=it->second->getInvitedList().begin(); it2!=it->second->getInvitedList().end(); it2++)
+				{
+					if (*it2 == client->getNickName())
+						invited = true;
+				}
+				if (invited == false)
+				{
+					(client->getClientFd(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).c_str(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).length(), 0);
+					return (-1);
+				}
 			}
 			else if (it->second->getClientList().size() == static_cast<size_t>(it->second->getUserLimit()))
 			{
