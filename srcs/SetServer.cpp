@@ -264,6 +264,12 @@ int Server::findCommand(int client_fd)
 					return(-1);
 				break ;
 			}
+			case command::TOPIC:
+			{
+				if(cmdTopic(msg, _clients[client_fd], _channels) == -1)
+					return(-1);
+				break ;
+			}
 			case command::PRIVMSG:
 				if (cmdPrivmsg(msg, _clients[client_fd], _channels, _clients) == -1)
 					return(-1);
