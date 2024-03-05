@@ -27,12 +27,18 @@ Channel::~Channel()
 }
 
 std::map <std::string, Client *>&	Channel::getClientList() { return _clientList; }
-std::vector<std::string>&		Channel::getChannelOperators() { return _operators; }
-const std::string&				Channel::getChannelName() { return _channel; }
-const std::string&				Channel::getChannelKey() { return _channelKey; }
-const std::string&				Channel::getTopic() { return _topic; }
-const std::string&				Channel::getMode() { return _mode; }
-const int&						Channel::getUserLimit() { return _userLimit; }
+
+std::vector<std::string>&	Channel::getChannelOperators() { return _operators; }
+
+const std::string&	Channel::getChannelName() { return _channel; }
+
+const std::string&	Channel::getChannelKey() { return _channelKey; }
+
+const std::string&	Channel::getTopic() { return _topic; }
+
+const std::string&	Channel::getMode() { return _mode; }
+
+const unsigned int&	Channel::getUserLimit() { return _userLimit; }
 
 void	Channel::addToChannel(Client &client)
 {
@@ -96,6 +102,14 @@ void	Channel::setMode(std::string mode, Client *client)
 	if (mode[0] == '-' && isChannelFlag(mode) == true)
 			_mode.erase(std::remove(_mode.begin(), _mode.end(), modeFlag), _mode.end());
 	std::cout << "**** NEW MODE CHANNEL: " << _mode << std::endl;
+}
+
+void	Channel::setUserLimit(unsigned int newLimit)
+{
+
+	if (newLimit <= 100)
+		_userLimit = newLimit;
+	std::cout << "In setUSerLimit, newLimit: " << _userLimit << std::endl;
 }
 
 void	Channel::addMode(std::string const mode)
