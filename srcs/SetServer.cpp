@@ -391,9 +391,9 @@ Server::~Server()
 		delete it->second;
 	}
 	std::map<std::string, Channel*>::iterator it2;
-	for(it2=_channels.begin(); it2!=_channels.end(); it++)
+	for(it2=_channels.begin(); it2!=_channels.end(); it2++)
 	{
-		delete it->second;
+		delete it2->second;
 	}
 }
 

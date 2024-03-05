@@ -68,5 +68,6 @@ int cmdInvite(Message &msg, Client *client,  std::map<std::string, Channel*> &ch
     std::string invite_message;
     invite_message = INVITE_MESSAGE(USER(client->getNickName(),client->getUserName(),client->getIPaddress()), msg.params[0], msg.params[1]);
     sendInviteMsg(invite_message,clients, msg.params[0]);
+    std::cout << "shit x1" << std::endl;
     return(0);
 }
