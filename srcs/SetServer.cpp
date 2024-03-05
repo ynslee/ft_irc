@@ -77,7 +77,6 @@ int Server::pollLoop()
 {
 	int poll_count;
 	this->_pollfdCount = this->_pfds.size();
-	// std::cout << this->_pollfdCount << std::endl;
 
 	while(serverShutdown == false)
 	{
@@ -119,10 +118,8 @@ int Server::pollLoop()
 			}
 		}
 	}
-	std::cout << "before deleting pollfds" << std::endl;
 	for(int i = 0; i < this->_pollfdCount; i++)
 		close(this->_pfds[i].fd);
-	std::cout << "after deleting pollfds" << std::endl;
 	return(0);
 }
 
@@ -209,8 +206,8 @@ int Server::findCommand(int client_fd)
 {
 	while (serverShutdown == false)
 	{
-		// if (_clients[client_fd]->getReadbuf().empty() == true)
-		// 	return (-1);
+		if (_clients[client_fd]->getReadbuf().empty() == true)
+			return (-1);
 		std::string input = extractInput(_clients, client_fd);
 		Message msg(input);
 
@@ -387,7 +384,7 @@ Server::~Server()
 		delete it->second;
 	}
 	std::map<std::string, Channel*>::iterator it2;
-	for(it2=_channels.begin(); it2!=_channels.end(); it++)
+	for(it2=_channels.begin(); it2!=_channels.end(); it2++)
 	{
 		delete it2->second;
 	}
