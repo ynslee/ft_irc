@@ -3,13 +3,13 @@
 #include "../../includes/Server.hpp"
 
 /**
- * @brief 
+ * @brief
  *  Syntax : PRIVMSG <target> <text to be sent>
- * 
+ *
  *  we are only hanlding nickname or channel. Here, channel syntax should be '#<channel>.
- *  PRIVMSG is used to send private messages between users, as well as to send messages to channels. 
- * 	
- * 
+ *  PRIVMSG is used to send private messages between users, as well as to send messages to channels.
+ *
+ *
  *  Numeric replies:
  *   ERR_NOSUCHNICK (401)
  *   ERR_NOSUCHSERVER (402)
@@ -19,7 +19,7 @@
  *   ERR_NOTEXTTOSEND (412)
  *   ERR_TOOMANYTARGETS (407)
  *   RPL_PRIVMSG
- * 
+ *
  *   yoonslee1!~yoonslee@194.136.126.51 PRIVMSG #hello :hello
  */
 
@@ -63,7 +63,7 @@ static int privmsgClient(Message &msg, Client *client, std::map<int, Client*> &c
 	std::string hostname = client->getHostName();
 	std::string username = client->getUserName();
 	std::string text = msg.trailing;
-	
+
 	std::map<int, Client*>::iterator it;
 	for (it=clients.begin(); it!=clients.end(); it++)
 	{
@@ -84,7 +84,7 @@ static int privmsgServer(Message &msg, Client *client, std::map<int, Client*> &c
 	std::string nickname = client->getNickName();
 	std::string username = client->getUserName();
 	std::string text = msg.trailing;
-	
+
 	std::map<int, Client*>::iterator it;
 	for (it=clients.begin(); it!=clients.end(); it++)
 	{
