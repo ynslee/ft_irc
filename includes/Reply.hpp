@@ -43,6 +43,7 @@
 # define RPL_WELCOME(hostname, servername, nick, userIP)(":" + hostname + " 001 " + nick + " :Welcome to the Internet Relay Network " + servername + "!" + nick + "@" + userIP + "\r\n")
 # define RPL_YOURHOST(hostname, nickname, servername)(":" + hostname + " 002 " + nickname + " :Your host is " + servername + ", running version 1.0\r\n")
 # define RPL_CREATED(hostname, nickname, date)(":" + hostname + " 003 " + nickname + " :This server was created " + date + "\r\n")
+# define RPL_MYINFO(hostname, version, usermodes, channelmodes)(":" + hostname + " 004 " + version + usermodes + channelmodes + "\r\n")
 # define RPL_MODE(nickname, mode)(":" + nickname + " MODE " + nickname + " :" + mode + "\r\n")
 # define RPL_YOUREOPER(hostname, username)(":" + hostname + " 381 " + username + " :You are now an IRC operator " + "\r\n")
 # define RPL_JOIN(USER, channel, realname)(USER + " JOIN " + channel + " * :" + realname + "\r\n")

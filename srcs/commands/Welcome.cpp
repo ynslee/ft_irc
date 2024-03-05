@@ -29,7 +29,8 @@ void welcomeUser(Client *Client)
 	std::string username = Client->getUserName();
 	std::string userIP = Client->getIPaddress();
 	std::string nick = Client->getNickName();
-	std::string mode = Client->getMode();
+	std::string userMmode = Client->getMode();
+	std::string channelMmode = "+itkol";
 	std::string readline = readFile("./motd.txt");
 	std::istringstream iss(readline);
 	std::string motd_line;
@@ -37,6 +38,7 @@ void welcomeUser(Client *Client)
 	Client->setSendbuf(RPL_WELCOME(hostname, Client->getServerName(), nick, userIP));
 	Client->addSendbuf(RPL_YOURHOST(hostname, nick, Client->getServerName()));
 	Client->addSendbuf(RPL_CREATED(hostname, nick, currentDateTime()));
+	// client->addSendbuf(RPL_MYINFO(hostname, version, mode, channelmodes));
 	Client->addSendbuf(RPL_MOTDSTART(hostname, nick));
 	while(std::getline(iss, motd_line))
 	{
