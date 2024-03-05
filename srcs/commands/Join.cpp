@@ -113,7 +113,7 @@ static int joinExistingServerWithoutKey(std::map<std::string, Channel*> &channel
 	client->setMaxChannels();
 	client->setNewChannel(channelName);
 	client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
-	topicMessage(channels[channelName], client);
+	// topicMessage(channels[channelName], client);
 	successfulJoinMessage(client, channelName, channels[channelName]->getClientList(), client->getNickName());
 	printJoinMessage(client, channelName);
 	return (0);
@@ -156,7 +156,7 @@ static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels,
 	client->setMaxChannels();
 	client->setNewChannel(channelName);
 	client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
-	topicMessage(channels[channelName], client);
+	// topicMessage(channels[channelName], client);
 	successfulJoinMessage(client, channelName, channels[channelName]->getClientList(), client->getNickName());
 	printJoinMessage(client, channelName);
 	return (0);
