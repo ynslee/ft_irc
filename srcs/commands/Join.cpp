@@ -4,19 +4,19 @@
 /**
  * @brief Indicates that the client wants to join the given channel(s), each channel using the given key for it.
  * 	The server receiving the command checks whether or not the client can join the given channel,
- * 	and processes the request. 
- * 
- * 	While a client is joined to a channel, they receive all relevant information about 
+ * 	and processes the request.
+ *
+ * 	While a client is joined to a channel, they receive all relevant information about
  * 	that channel including who are in the channel and the commands that could be used in the channel.
- * 	They receive all PRIVMSG and when someone joins to the channel, and they also 
- * 	receive QUIT messages from other clients joined to the same channel (to let them 
- * 	know those users have left the channel and the network). 
- * 
- *  
+ * 	They receive all PRIVMSG and when someone joins to the channel, and they also
+ * 	receive QUIT messages from other clients joined to the same channel (to let them
+ * 	know those users have left the channel and the network).
+ *
+ *
  *  Examples:
  * 	[CLIENT]  JOIN #foobar
  *  [SERVER] ; join channel #foobar.
- * 
+ *
  * 	[CLIENT]  JOIN #foo foobar
  * 	[SERVER]; join channel #foo using key "foobar".
  */
@@ -30,7 +30,7 @@ static std::string findChannelName(std::string channel)
 		channelName = channel;
 	else if (found == std::string::npos)
 		channelName = "#" + channel;
-	else 
+	else
 		channelName = "";
 	std::cout << "channel name is " << channelName << std::endl;
 	return (channelName);
@@ -245,7 +245,7 @@ int cmdJoin(Message &msg, Client *client, std::map<std::string, Channel*> &chann
 		return (-1);
 	if (channels.size() == 0)
 	{
-		if(msg.params.size() <= 2)
+		if(msg.params.size() <= 2 && validChannelName(channelName) == true)
 		{
 			std::cout << "beginning of irc. there is no channel" << std::endl;
 			channels.insert(std::make_pair(channelName, new Channel(channelName)));

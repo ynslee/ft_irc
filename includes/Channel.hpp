@@ -55,4 +55,5 @@ class Channel
 		void							removeChannelPassword();
 		bool 							goodModeFLag(std::string modeFlag);
 		bool							isChannelFlag(std::string flag);
+		bool							validChannelName(std::string channelName);
 };
