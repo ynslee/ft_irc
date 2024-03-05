@@ -258,6 +258,12 @@ int Server::findCommand(int client_fd)
 				if (cmdOper(msg, _clients[client_fd]) == -1)
 					return(-1);
 				break ;
+			case command::INVITE:
+			{
+				if (cmdInvite(msg, _clients[client_fd], _channels, getNicknames(), _clients) == -1)
+					return(-1);
+				break ;
+			}
 			case command::PRIVMSG:
 				if (cmdPrivmsg(msg, _clients[client_fd], _channels, _clients) == -1)
 					return(-1);
@@ -385,9 +391,9 @@ Server::~Server()
 		delete it->second;
 	}
 	std::map<std::string, Channel*>::iterator it2;
-	for(it2=_channels.begin(); it2!=_channels.end(); it++)
+	for(it2=_channels.begin(); it2!=_channels.end(); it2++)
 	{
-		delete it->second;
+		delete it2->second;
 	}
 }
 
