@@ -29,7 +29,7 @@ void welcomeUser(Client *Client)
 	std::string username = Client->getUserName();
 	std::string userIP = Client->getIPaddress();
 	std::string nick = Client->getNickName();
-	std::string userMmode = Client->getMode(); // WHAT CLIENT MODES OUR SERER SUPPORTS??
+	std::string userMode = Client->getMode(); // WHAT CLIENT MODES OUR SERVER SUPPORTS??
 	std::string channelMmode = "+itkol";
 	std::string readline = readFile("./motd.txt");
 	std::istringstream iss(readline);
@@ -47,6 +47,6 @@ void welcomeUser(Client *Client)
 	}
 	if (readline.empty() == false)
 		Client->addSendbuf(RPL_ENDOFMOTD(hostname, nick));
-	Client->addSendbuf(RPL_MODE(nick, mode));
+	Client->addSendbuf(RPL_MODE(nick, userMode));
 	Client->setWelcomeSent(1);
 }
