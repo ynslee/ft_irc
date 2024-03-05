@@ -38,30 +38,30 @@ int cmdKick(Message &msg, Client *client,  std::map<std::string, Channel*> &chan
     if(msg.params.size() < 2)
     {
         send(client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);
-            return(-1);
+        return(-1);
     }
     std::map<std::string, Channel*>::iterator channelIt = channels.find(msg.params[0]);
     if(channelIt == channels.end())
     {
         send(client->getClientFd(), ERR_NOSUCHCHANNEL(msg.params[0]).c_str(), ERR_NOSUCHCHANNEL(msg.params[0]).length(), 0);
-            return(-1);
+        return(-1);
     }
     std::vector<std::string>::iterator it = std::find(client->getChannelsJoined().begin(), client->getChannelsJoined().end(), msg.params[0]);
     if(it == client->getChannelsJoined().end())
     {
         send(client->getClientFd(), ERR_NOTONCHANNEL(hostname,msg.params[0]).c_str(), ERR_NOTONCHANNEL(hostname,msg.params[0]).length(), 0);
-            return(-1);
+        return(-1);
     }
     if(!channelIt->second->isOperator(client->getNickName()))
     {
         send(client->getClientFd(), ERR_CHANOPRIVSNEEDED(msg.params[0]).c_str(), ERR_CHANOPRIVSNEEDED(msg.params[0]).length(), 0);
-            return(-1);
+        return(-1);
     }
     std::map<std::string, Client*>::iterator userChannelIt = channelIt->second->getClientList().find(msg.params[1]);
     if(userChannelIt == channelIt->second->getClientList().end())
     {
         send(client->getClientFd(), ERR_USERNOTINCHANNEL(hostname,msg.params[1],msg.params[0]).c_str(), ERR_USERNOTINCHANNEL(hostname,msg.params[1],msg.params[0]).length(), 0);
-            return(-1);
+        return(-1);
     }
     std::string kick_message;
     kick_message = KICK_MESSAGE(USER(client->getNickName(),client->getUserName(),client->getIPaddress()), msg.params[0], userChannelIt->second->getNickName(), client->getNickName());

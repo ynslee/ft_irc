@@ -5,6 +5,7 @@ bool serverShutdown = false;
 
 void sig_handler(int signal)
 {
+
 	if (signal == SIGINT)
 	{
 		serverShutdown = true;
@@ -31,7 +32,6 @@ int main(int argc, char **argv)
 		std::cerr << e.what() << std::endl;
 		return (1);
 	}
-
 	// Should we pulling here??
 	return (0);
 }

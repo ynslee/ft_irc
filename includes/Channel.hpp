@@ -12,13 +12,14 @@ class Channel
 	private:
 		std::map<std::string, Client *>	_clientList;
 		// std::vector<std::string>		_kickedUsers;
-		std::vector<std::string>		_operators;
+		std::vector<std::string>		_operators; // nickname
+		std::vector<std::string>		_invitedList;
 		std::vector<Client *>           _clientOrder;
 		std::string 					_channel;
 		std::string						_channelKey;
 		std::string						_topic;
 		std::string						_mode;
-		int								_userLimit;
+		unsigned int					_userLimit;
 		int								_useramount;
 
 	public:
@@ -29,11 +30,12 @@ class Channel
 		std::map <std::string, Client *>	&getClientList();
 		// std::vector<std::string>&		getKickedUsers();
 		std::vector<std::string>&		getChannelOperators();
+		std::vector<std::string>&		getInvitedList();
 		const std::string&				getChannelName();
 		const std::string&				getChannelKey();
 		const std::string&				getTopic();
 		const std::string&				getMode();
-		const int&						getUserLimit();
+		const unsigned int&				getUserLimit();
 		void							addToChannel(Client &client);
 		void							removeFromChannel(const std::string &nick);
 		// void							addToKicked(std::string &nick);
@@ -43,6 +45,7 @@ class Channel
 		void							setChannelKey(std::string password);
 		void							setTopic(std::string& newTopic);
 		void							setMode(std::string mode, Client *client);
+		void							setUserLimit(unsigned int newLimit);
 		void							addMode(std::string const mode);
 		void							removeMode(std::string const mode);
 
