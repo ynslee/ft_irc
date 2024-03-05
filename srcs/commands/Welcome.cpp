@@ -29,7 +29,7 @@ void welcomeUser(Client *Client)
 	std::string username = Client->getUserName();
 	std::string userIP = Client->getIPaddress();
 	std::string nick = Client->getNickName();
-	std::string userMmode = Client->getMode();
+	std::string userMmode = Client->getMode(); // WHAT CLIENT MODES OUR SERER SUPPORTS??
 	std::string channelMmode = "+itkol";
 	std::string readline = readFile("./motd.txt");
 	std::istringstream iss(readline);
