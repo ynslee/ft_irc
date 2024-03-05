@@ -207,7 +207,6 @@ int Server::findCommand(int client_fd)
 {
 	while (1)
 	{
-
 		if (_clients[client_fd]->getReadbuf().empty())
 			return (0);
 		std::string input = extractInput(_clients, client_fd);

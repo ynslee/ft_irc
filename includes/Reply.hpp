@@ -23,7 +23,7 @@
 # define ERR_UNKNOWNMODE()("472 * :Unknown MODE flag\r\n")
 // # define ERR_CHANOPRIVSNEEDED(hostname, nickname, channel) (":" + hostname + " 482 " + nickname + " " + channel + " :You're not channel operator\r\n")
 # define ERR_CHANOPRIVSNEEDED(channel) (":"  + channel + " :You're not channel operator\r\n")
-# define ERR_NOSUCHNICK(nick)("401 * " + nick + " :No such nick/channel" + "\r\n")
+# define ERR_NOSUCHNICK(nick)("401 * " + nick + " :No such nick" + "\r\n")
 # define ERR_NOSUCHCHANNEL(channel)("403 * " + channel + " :No such channel" + "\r\n")
 # define ERR_CANNOTSENDTOCHAN(hostname, channel)(":" + hostname + " 404 * " + channel + " :Cannot send to channel" + "\r\n")
 # define ERR_NORECIPIENT(hostname)(":" + hostname + " 411 * :No recipient given" + "\r\n")
