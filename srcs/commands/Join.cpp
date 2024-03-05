@@ -165,7 +165,7 @@ static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels,
 static int clientErrorChecks(Client *client, std::map<std::string, Channel*> &channels, std::string channelName)
 {
 	std::string hostname = client->getHostName();
-	// bool invited = false;
+	bool invited = false;
 
 	if (channelName.empty())
 	{
@@ -185,28 +185,28 @@ static int clientErrorChecks(Client *client, std::map<std::string, Channel*> &ch
 	std::map<std::string, Channel*>::iterator it;
 	for (it=channels.begin(); it!=channels.end(); it++)
 	{
-		// if (it->first == channelName)
-		// {
-		// 	if (it->second->getMode().find('i') != std::string::npos)
-		// 	{
-		// 		std::vector<std::string>::iterator it2;
-		// 		for (it2=it->second->getInvitedList().begin(); it2!=it->second->getInvitedList().end(); it2++)
-		// 		{
-		// 			if (*it2 == client->getNickName())
-		// 				invited = true;
-		// 		}
-		// 		if (invited == false)
-		// 		{
-		// 			(client->getClientFd(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).c_str(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).length(), 0);
-		// 			return (-1);
-		// 		}
-		// 	}
-		// 	else if (it->second->getClientList().size() == static_cast<size_t>(it->second->getUserLimit()))
-		// 	{
-		// 		send(client->getClientFd(), ERR_CHANNELISFULL(client->getUserName(), channelName).c_str(), ERR_CHANNELISFULL(client->getUserName(), channelName).length(), 0);
-		// 		return (-1);
-		// 	}
-		// }
+		if (it->first == channelName)
+		{
+			if (it->second->getMode().find('i') != std::string::npos)
+			{
+				std::vector<std::string>::iterator it2;
+				for (it2=it->second->getInvitedList().begin(); it2!=it->second->getInvitedList().end(); it2++)
+				{
+					if (*it2 == client->getNickName())
+						invited = true;
+				}
+				if (invited == false)
+				{
+					(client->getClientFd(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).c_str(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).length(), 0);
+					return (-1);
+				}
+			}
+			else if (it->second->getClientList().size() == static_cast<size_t>(it->second->getUserLimit()))
+			{
+				send(client->getClientFd(), ERR_CHANNELISFULL(client->getUserName(), channelName).c_str(), ERR_CHANNELISFULL(client->getUserName(), channelName).length(), 0);
+				return (-1);
+			}
+		}
 	}
 	return (0);
 }
