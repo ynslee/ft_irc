@@ -22,6 +22,7 @@
 #include <utility>
 #include <vector>
 #include <cstring>
+#include <cstdio>
 #include "Reply.hpp"
 
 # define LIGHT BLACK  "\033[90m"

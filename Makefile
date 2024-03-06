@@ -12,7 +12,7 @@ HEADER = Server.hpp
 
 DEP = $(OBJS:%.o=%.d)
 
-FLAGS = -Wall -Wextra -Werror -MMD -MP -g3 -c -std=c++11
+FLAGS = -Wall -Wextra -Werror -MMD -MP -g3 -c -std=c++17
 CC = c++
 INCLUDES = -I includes/
 

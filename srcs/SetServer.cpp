@@ -396,7 +396,11 @@ Server::~Server()
 	{
 		delete it2->second;
 	}
-	delete "log.txt";
+	const std::string filename = "log.txt";
+	if (std::remove(filename.c_str()) != 0)
+	{
+		std::cerr << "Error in removing log file" << std::endl;
+	}
 }
 
 int Server::getClientId()
