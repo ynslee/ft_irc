@@ -179,9 +179,3 @@ bool Channel::isChannelFlag(std::string flag)
 	return false;
 }
 
-bool	Channel::validChannelName(std::string channelName)
-{
-	if (channelName.empty())
-		return false;
-	return true;
-}
