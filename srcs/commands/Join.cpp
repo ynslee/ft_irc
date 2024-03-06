@@ -25,7 +25,7 @@ static bool validChannelName(std::string channel)
 {
 	std::size_t found = channel.find('#');
 
-	if (found == 0)
+	if (channel.size() < 50 && found == 0)
 	{
 		if (channel.find(',') == std::string::npos && channel.find(':') == std::string::npos)
 			return true;
