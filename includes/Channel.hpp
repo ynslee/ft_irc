@@ -33,7 +33,7 @@ class Channel
 		std::vector<std::string>&		getInvitedList();
 		const std::string&				getChannelName();
 		const std::string&				getChannelKey();
-		std::string&					getTopic();
+		const std::string&					getTopic();
 		const std::string&				getMode();
 		const unsigned int&				getUserLimit();
 		void							addToChannel(Client &client);
