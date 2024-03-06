@@ -37,6 +37,7 @@
 //NORMAL REPLIES
 # define QUIT_MESSAGE(nick, username, userIP)(":" + nick + "!" + username + "@" + userIP + " QUIT :Quit: ")
 # define KICK_MESSAGE(USER, channel, nick, usernick)(USER + " KICK " + channel + " " + nick +  " :" + usernick)
+# define TOPIC_MESSAGE(USER, channel, topic)(USER + " TOPIC " + channel + " :")
 # define INVITE_MESSAGE(USER, nick, channel)(USER + " INVITE " + nick + " :" + channel + "\r\n")
 # define NICK_REPLY(old_nick, usesrname, userIP, new_nick)(":" + old_nick + "!~" + usesrname + "@" + userIP + " Nick :" + new_nick+ "\r\n")
 # define RPL_MOTDSTART(hostname, nickname)(":" + hostname+ " 375 * :- " + nickname + " Message of the day - " + "\r\n")
