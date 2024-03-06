@@ -166,7 +166,7 @@ static int clientErrorChecks(Client *client, std::map<std::string, Channel*> &ch
 
 	if (channelName.empty())
 	{
-		send(client->getClientFd(), "Wrong channel Name. Write such as ex) #chat or chat", 52, 0);
+		send(client->getClientFd(), "Wrong channel Name. Write such as ex) #chat", 44, 0);
 		return (-1);
 	}
 	if(client->getRegisteration() <= 2)
