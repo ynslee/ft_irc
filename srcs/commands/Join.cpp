@@ -37,7 +37,8 @@ static void topicMessage(Channel *channel, Client *client)
 {
 	if (channel->getTopic().empty() == false)
 		client->addSendbuf(RPL_TOPIC(client->getHostName(), client->getNickName(), channel->getChannelName(), channel->getTopic()));
-	client->addSendbuf(RPL_NOTOPIC(client->getHostName(), client->getNickName(), channel->getChannelName()));
+	else
+		client->addSendbuf(RPL_NOTOPIC(client->getHostName(), client->getNickName(), channel->getChannelName()));
 }
 
 static void successfulJoinMessage(Client *client, std::string channelName, std::map<std::string, Client*> &clientList, std::string nick)
