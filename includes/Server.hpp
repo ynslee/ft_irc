@@ -57,11 +57,11 @@ class Server
 		void setClientId(const int id);
 		int serverSetup();
 		int acceptPendingConnections();
-		int recieveMsg(int new_fd, int i);
-		int sendMsg(int send_fd);
+		int recieveMsg(int new_fd, int i, std::ofstream &log);
+		int sendMsg(int send_fd, std::ofstream &log);
 		int pollLoop();
 		void closeClient(int i, int fd);
-		int setMessage(std::string msg);
+		int setMessage(std::string msg, std::ofstream &log);
 		int findCommand(int client_fd);
 		int getCommandType(std::string command);
 		const std::string &getServerName() const;
