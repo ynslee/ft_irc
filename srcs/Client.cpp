@@ -9,7 +9,7 @@ Client::Client(){};
  * @param new_fd socket fd
  * @param _mode mode for USER, CHANNEL
  */
-Client::Client(int new_fd): _clientFd(new_fd), _serverName("🐾TYCHUNEN SERVER🐾"), _nickname(""), _mode("+Ziw"), _operatorPassword("TYCHUNEN"),_isRegistered(0), _welcomeSent(0), _isOperator(false), _maxChannels(0)
+Client::Client(int new_fd): _clientFd(new_fd), _serverName("🐾TYCHUNEN SERVER🐾"), _nickname(""), _mode("+iw"), _operatorPassword("TYCHUNEN"),_isRegistered(0), _welcomeSent(0), _isOperator(false), _maxChannels(0)
 {
 	std::vector<std::string>	_channelsJoined;
 }
