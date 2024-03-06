@@ -14,7 +14,7 @@ Channel::Channel(std::string const &name) : _channel(name), _mode("+nt"), _userL
 	if (randomise % 2 == 0)
 		_topic = "Welcome to 🐾TYCHUNEN SERVER🐾 support | Not a channel for politics, drama, fights | FAQ and guides: please ask Pets around you | Usable commands: MODE, INVITE, QUIT, PRIVMSG, KICK, TOPIC" ;
 	_operators.clear();
-	std::cout << "Channel " << GREEN << _channel << RESET << "created" << std::endl;
+	std::cout << "Channel " << GREEN << _channel << RESET << " created" << std::endl;
 }
 
 Channel::~Channel()
@@ -178,3 +178,4 @@ bool Channel::isChannelFlag(std::string flag)
 		return true;
 	return false;
 }
+

@@ -4,36 +4,33 @@
 /**
  * @brief Indicates that the client wants to join the given channel(s), each channel using the given key for it.
  * 	The server receiving the command checks whether or not the client can join the given channel,
- * 	and processes the request. 
- * 
- * 	While a client is joined to a channel, they receive all relevant information about 
+ * 	and processes the request.
+ *
+ * 	While a client is joined to a channel, they receive all relevant information about
  * 	that channel including who are in the channel and the commands that could be used in the channel.
- * 	They receive all PRIVMSG and when someone joins to the channel, and they also 
- * 	receive QUIT messages from other clients joined to the same channel (to let them 
- * 	know those users have left the channel and the network). 
- * 
- *  
+ * 	They receive all PRIVMSG and when someone joins to the channel, and they also
+ * 	receive QUIT messages from other clients joined to the same channel (to let them
+ * 	know those users have left the channel and the network).
+ *
+ *
  *  Examples:
  * 	[CLIENT]  JOIN #foobar
  *  [SERVER] ; join channel #foobar.
- * 
+ *
  * 	[CLIENT]  JOIN #foo foobar
  * 	[SERVER]; join channel #foo using key "foobar".
  */
 
-static std::string findChannelName(std::string channel)
+static bool validChannelName(std::string channel)
 {
 	std::size_t found = channel.find('#');
-	std::string channelName;
 
-	if (found == 0)
-		channelName = channel;
-	else if (found == std::string::npos)
-		channelName = "#" + channel;
-	else 
-		channelName = "";
-	std::cout << "channel name is " << channelName << std::endl;
-	return (channelName);
+	if (channel.size() < 50 && found == 0)
+	{
+		if (channel.find(',') == std::string::npos && channel.find(':') == std::string::npos)
+			return true;
+	}
+	return false;
 }
 
 static void topicMessage(Channel *channel, Client *client)
@@ -166,11 +163,10 @@ static int clientErrorChecks(Client *client, std::map<std::string, Channel*> &ch
 {
 	std::string hostname = client->getHostName();
 	bool invited = false;
-	std::vector <std::string> invitedClients;
 
 	if (channelName.empty())
 	{
-		send(client->getClientFd(), "Wrong channel Name. Write such as ex) #chat or chat", 52, 0);
+		send(client->getClientFd(), "Wrong channel Name. Write such as ex) #chat", 44, 0);
 		return (-1);
 	}
 	if(client->getRegisteration() <= 2)
@@ -190,16 +186,15 @@ static int clientErrorChecks(Client *client, std::map<std::string, Channel*> &ch
 		{
 			if (it->second->getMode().find('i') != std::string::npos)
 			{
-				invitedClients = it->second->getInvitedList();
 				std::vector<std::string>::iterator it2;
-				for (it2=invitedClients.begin(); it2!=invitedClients.end(); it2++)
+				for (it2=it->second->getInvitedList().begin(); it2!=it->second->getInvitedList().end(); it2++)
 				{
 					if (*it2 == client->getNickName())
 						invited = true;
 				}
 				if (invited == false)
 				{
-					send(client->getClientFd(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).c_str(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).length(), 0);
+					(client->getClientFd(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).c_str(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).length(), 0);
 					return (-1);
 				}
 			}
@@ -237,15 +232,15 @@ int cmdJoin(Message &msg, Client *client, std::map<std::string, Channel*> &chann
 		send(client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);
 		return (-1);
 	}
-	if (msg.trailing.size() > 0)
-		return (-1);	
-	if (msg.params.size() == 0 && msg.trailing.empty() == true)
+	if (msg.params.size() == 0 && msg.trailing.size() == 0)
 	{
-		if (msg.trailing_flag == 0)
-			send(client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);
+		// send(client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);
 		return (-1);
 	}
-	channelName = findChannelName(msg.params[0]);
+	if (validChannelName(msg.params[0]) == false)
+		return (-1);
+	channelName = msg.params[0];
+	std::cout << "channel name is " << channelName << std::endl;
 	if (clientErrorChecks(client, channels, channelName) == -1)
 		return (-1);
 	if (channels.size() == 0)
