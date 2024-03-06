@@ -40,18 +40,15 @@ static void sendTopicMsg(std::string message, Channel *channel, Client *client, 
     }
     if(channel->getTopic().empty() == false)
     {
-        std::cout << "commeee" << std::endl;
-        send(client->getClientFd(), RPL_TOPIC(client->getHostName(), client->getNickName(), channel->getChannelName(), channel->getTopic()).c_str(), \
-        RPL_TOPIC(client->getHostName(), client->getNickName(), 
-        channel->getChannelName(), channel->getTopic()).length(), 0);
-    }
-    else
-    {
         std::cout << "zoorra" << std::endl;
         send(client->getClientFd(), RPL_NOTOPIC(client->getHostName(), client->getNickName(), channel->getChannelName()).c_str(),\
         RPL_NOTOPIC(client->getHostName(), client->getNickName(), \
         channel->getChannelName()).length(), 0);
     }
+    std::cout << "commeee" << std::endl;
+    send(client->getClientFd(), RPL_TOPIC(client->getHostName(), client->getNickName(), channel->getChannelName(), channel->getTopic()).c_str(), \
+    RPL_TOPIC(client->getHostName(), client->getNickName(), 
+    channel->getChannelName(), channel->getTopic()).length(), 0);
 }
 
 int cmdTopic(Message &msg, Client *client, std::map<std::string, Channel*> &channels)
@@ -90,6 +87,7 @@ int cmdTopic(Message &msg, Client *client, std::map<std::string, Channel*> &chan
         }
         else
         {
+            std::cout << "Are you comming here" << std::endl;
             topic_message.append(": Clearing the topic on the channel \r\n");
             if(channelIt->second->getTopic().empty() == false)
             {
