@@ -77,6 +77,7 @@ int Server::pollLoop()
 {
 	int poll_count;
 	this->_pollfdCount = this->_pfds.size();
+	std::ofstream log("log.txt");
 
 	while(serverShutdown == false)
 	{
@@ -97,7 +98,7 @@ int Server::pollLoop()
 				}
 				else
 				{
-					if(recieveMsg(this->_pfds[i].fd, i) == -1)
+					if(recieveMsg(this->_pfds[i].fd, i, log) == -1)
 						continue;
 				}
 			}
@@ -107,7 +108,7 @@ int Server::pollLoop()
 				{
 					if (this->_pfds[i].fd == getClientId())
 					{
-						if (sendMsg(this->_pfds[i].fd) == -1)
+						if (sendMsg(this->_pfds[i].fd, log) == -1)
 							continue;
 					}
 				}
@@ -167,7 +168,7 @@ int Server::acceptPendingConnections()
 	return (0);
 }
 
-int Server::recieveMsg(int client_fd, int i)
+int Server::recieveMsg(int client_fd, int i, std::ofstream &log)
 {
 	char buf[512];
 	int readcount;
@@ -192,7 +193,7 @@ int Server::recieveMsg(int client_fd, int i)
 	else
 	{
 		setClientId(client_fd);
-		if (setMessage(static_cast<std::string>(buf)) == -1)
+		if (setMessage(static_cast<std::string>(buf), log) == -1)
 			return (-1);
 		if(findCommand(client_fd) == -1)
 			return(-1);
@@ -300,7 +301,7 @@ std::string extractInput(std::map<int, Client *> _clients, int client_fd)
 	return (input);
 }
 
-int Server::sendMsg(int client_fd)
+int Server::sendMsg(int client_fd, std::ofstream &log)
 {
 	std::string message;
 
@@ -328,6 +329,7 @@ int Server::sendMsg(int client_fd)
 	}
 	_clients[client_fd]->setSendbuf("");
 	std::cout<< "sending>>> " << message << std::endl;
+	log << "sending>>> " << message << std::endl;
 	return (0);
 }
 
@@ -394,6 +396,11 @@ Server::~Server()
 	{
 		delete it2->second;
 	}
+	const std::string filename = "log.txt";
+	if (std::remove(filename.c_str()) != 0)
+	{
+		std::cerr << "Error in removing log file" << std::endl;
+	}
 }
 
 int Server::getClientId()
@@ -411,7 +418,7 @@ std::vector<std::string> &Server::getNicknames()
 	return(this->_nicknames);
 }
 
-int Server::setMessage(std::string msg)
+int Server::setMessage(std::string msg, std::ofstream &log)
 {
 	// size_t index = 0;
 
@@ -422,6 +429,7 @@ int Server::setMessage(std::string msg)
 		if(key == this->_clientId)
 		{
 			it->second->addReadbuf(msg);
+			log << "Receiving<<< " << msg << std::endl;
 			msg.clear();
 			if (it->second->getReadbuf().find('\n') == std::string::npos)
 				return (-1);
