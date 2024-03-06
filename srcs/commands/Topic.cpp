@@ -38,14 +38,6 @@ static void sendTopicMsg(std::string message, Channel *channel, Client *client, 
             send(it->second->getClientFd(), message.c_str(), message.length(), 0);
         }
     }
-    if(channel->getTopic().empty() == false)
-    {
-        std::cout << "zoorra" << std::endl;
-        send(client->getClientFd(), RPL_NOTOPIC(client->getHostName(), client->getNickName(), channel->getChannelName()).c_str(),\
-        RPL_NOTOPIC(client->getHostName(), client->getNickName(), \
-        channel->getChannelName()).length(), 0);
-    }
-    std::cout << "commeee" << std::endl;
     send(client->getClientFd(), RPL_TOPIC(client->getHostName(), client->getNickName(), channel->getChannelName(), channel->getTopic()).c_str(), \
     RPL_TOPIC(client->getHostName(), client->getNickName(), 
     channel->getChannelName(), channel->getTopic()).length(), 0);
@@ -80,21 +72,8 @@ int cmdTopic(Message &msg, Client *client, std::map<std::string, Channel*> &chan
     topic_message = TOPIC_MESSAGE(USER(client->getNickName(),client->getUserName(),client->getIPaddress()), channelIt->second->getChannelName());
     if(msg.trailing_flag == 1)
     {
-        if(msg.trailing.empty() == false)
-        {
-            topic_message.append(msg.trailing + " \r\n");
-            channelIt->second->setTopic(msg.trailing);
-        }
-        else
-        {
-            std::cout << "Are you comming here" << std::endl;
-            topic_message.append(": Clearing the topic on the channel \r\n");
-            if(channelIt->second->getTopic().empty() == false)
-            {
-                std::string new_topic = "";
-                channelIt->second->setTopic(new_topic);
-            }
-        }
+        topic_message.append(msg.trailing + " \r\n");
+        channelIt->second->setTopic(msg.trailing);
     }
     sendTopicMsg(topic_message,channelIt->second, client, msg.trailing_flag);
     return(0);
