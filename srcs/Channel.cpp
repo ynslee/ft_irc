@@ -35,7 +35,7 @@ const std::string&	Channel::getChannelName() { return _channel; }
 
 const std::string&	Channel::getChannelKey() { return _channelKey; }
 
-std::string&	Channel::getTopic() { return _topic; }
+const std::string&	Channel::getTopic() { return _topic; }
 
 const std::string&	Channel::getMode() { return _mode; }
 
