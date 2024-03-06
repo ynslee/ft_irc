@@ -2,7 +2,8 @@ NAME = ircserv
 
 SRC = main.cpp SetServer.cpp Client.cpp SetServer_utils.cpp Message.cpp Channel.cpp commands/Pass.cpp commands/Cap.cpp \
 commands/User.cpp commands/Motd.cpp commands/Nick.cpp commands/Welcome.cpp commands/Quit.cpp commands/Oper.cpp \
-commands/Join.cpp commands/Privmsg.cpp commands/Kick.cpp commands/Mode.cpp commands/Ping.cpp commands/Invite.cpp
+commands/Join.cpp commands/Privmsg.cpp commands/Kick.cpp commands/Mode.cpp commands/Ping.cpp commands/Invite.cpp \
+commands/Topic.cpp
 
 DIR_SRCS = srcs/
 DIR_OBJS = objs/
