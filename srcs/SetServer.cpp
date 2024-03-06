@@ -77,7 +77,6 @@ int Server::pollLoop()
 {
 	int poll_count;
 	this->_pollfdCount = this->_pfds.size();
-	// std::cout << this->_pollfdCount << std::endl;
 
 	while(serverShutdown == false)
 	{
@@ -205,10 +204,10 @@ int Server::recieveMsg(int client_fd, int i)
 
 int Server::findCommand(int client_fd)
 {
-	while (1)
+	while (serverShutdown == false)
 	{
-		if (_clients[client_fd]->getReadbuf().empty())
-			return (0);
+		if (_clients[client_fd]->getReadbuf().empty() == true)
+			return (-1);
 		std::string input = extractInput(_clients, client_fd);
 		Message msg(input);
 

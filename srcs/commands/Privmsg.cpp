@@ -8,8 +8,8 @@
  *
  *  we are only hanlding nickname or channel. Here, channel syntax should be '#<channel>.
  *  PRIVMSG is used to send private messages between users, as well as to send messages to channels.
- *
- *
+ *  IN IRC, user/operator does not have a right to send message to all the clients in the server therefore, we don't implement that.
+ * 	
  *  Numeric replies:
  *   ERR_NOSUCHNICK (401)
  *   ERR_NOSUCHSERVER (402)
@@ -64,37 +64,21 @@ static int privmsgClient(Message &msg, Client *client, std::map<int, Client*> &c
 	std::string username = client->getUserName();
 	std::string text = msg.trailing;
 
+	std::string message = " " + nickname + " PRIVMSG " + client->getNickName() + " :" + text + "\r\n";
+	std::string usermessage;
+	
 	std::map<int, Client*>::iterator it;
 	for (it=clients.begin(); it!=clients.end(); it++)
 	{
 		if(it->second->getNickName() == nickname)
 		{
-			send(it->second->getClientFd(), RPL_PRIVMSG(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), msg.params[0], text).c_str(), RPL_PRIVMSG(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), msg.params[0], text).length(), 0);
+			usermessage =  ":" + USER(nickname, it->second->getUserName(), it->second->getIPaddress());
+			usermessage += message;
+			send(it->second->getClientFd(), usermessage.c_str(), usermessage.length(), 0);
 			return (0);
 		}
 	}
 	send(client->getClientFd(), ERR_NOSUCHNICK(nickname).c_str(), ERR_NOSUCHNICK(nickname).length(), 0);
-	return (-1);
-}
-
-static int privmsgServer(Message &msg, Client *client, std::map<int, Client*> &clients)
-{
-	std::string serverName = msg.params[0];
-	std::string hostname = client->getHostName();
-	std::string nickname = client->getNickName();
-	std::string username = client->getUserName();
-	std::string text = msg.trailing;
-
-	std::map<int, Client*>::iterator it;
-	for (it=clients.begin(); it!=clients.end(); it++)
-	{
-		if(it->second->getHostName() == hostname)
-		{
-			send(it->second->getClientFd(), RPL_PRIVMSG(USER(nickname, username, client->getIPaddress()), msg.params[0], msg.trailing).c_str(), RPL_PRIVMSG(USER(nickname, username, client->getIPaddress()), msg.params[0], msg.trailing).length(), 0);
-			return (0);
-		}
-	}
-	send(client->getClientFd(), ERR_NOSUCHSERVER(hostname, serverName).c_str(), ERR_NOSUCHSERVER(hostname, serverName).length(), 0);
 	return (-1);
 }
 
@@ -116,11 +100,6 @@ int cmdPrivmsg(Message &msg, Client *client, std::map<std::string, Channel*> &ch
 		{
 			send(client->getClientFd(), ERR_TOOMANYTARGETS(client->getHostName()).c_str(), ERR_TOOMANYTARGETS(client->getHostName()).length(), 0);
 			return (-1);
-		}
-		else if (msg.params[0].find('.') != std::string::npos)
-		{
-			if (privmsgServer(msg, client, clients) == -1)
-				return (-1);
 		}
 		else if (msg.params[0].find('.') == std::string::npos && msg.params[0][0] != '#')
 		{

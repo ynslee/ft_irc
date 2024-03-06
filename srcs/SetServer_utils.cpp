@@ -3,7 +3,37 @@
 
 void Server::closeClient(int i, int fd)
 {
+    std::string channelname;
+    std::string nickname;
+    std::map<std::string, Client *>	clientlist;
+    bool found = false;
+
 	close(fd);
+    std::map<int, Client*>::iterator it3;
+    for(it3=_clients.begin(); it3!=_clients.end(); it3++)
+    {
+        if (it3->second->getClientFd() == fd)
+        {
+            nickname = it3->second->getNickName();
+            break;
+        }
+    }
+    if (nickname.empty() == false)
+    {
+        std::map<std::string, Channel*>::iterator it;
+        for(it=_channels.begin(); it!=_channels.end(); it++)
+        {
+            clientlist = it->second->getClientList();
+            std::map<std::string, Client*>::iterator it2;
+            for (it2=clientlist.begin(); it2!=clientlist.end(); it2++)
+            {
+                if (it2->second->getNickName() == nickname)
+                    found = true;
+            }
+            if (found == true)
+                it->second->removeFromChannel(nickname);
+        }
+    }
 	this->_pfds[i] = this->_pfds[this->_pollfdCount - 1];
 	// we have to remove from the client when we have it
 	this->_pollfdCount--;
