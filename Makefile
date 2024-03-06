@@ -10,18 +10,21 @@ DIR_OBJS = objs/
 OBJS = $(SRC:%.cpp=${DIR_OBJS}%.o)
 HEADER = Server.hpp
 
-FLAGS = -Wall -Wextra -Werror -MMD -MP -g3 -c -std=c++11 #-fsanitize=address
+DEP = $(OBJS:%.o=%.d)
+
+FLAGS = -Wall -Wextra -Werror -MMD -MP -g3 -c -std=c++11
 CC = c++
 INCLUDES = -I includes/
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-		$(CC) $^ -o $@
+		$(CC) $^ -o $@ -fsanitize=address
 
 ${OBJS} : ${DIR_OBJS}%.o : ${DIR_SRCS}%.cpp
-	mkdir -p ${DIR_OBJS}/commands
+	mkdir -p ${@D}
 	${CC} ${FLAGS} ${INCLUDES} $< -o $@
+-include ${DEP}
 
 clean:
 	rm -rf ${DIR_OBJS}
