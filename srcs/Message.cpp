@@ -46,7 +46,9 @@ Message::Message(std::string input)
 		}
 		else if (index >= 1 && token[0] == ':' && command.empty() == false)
 		{
+			// std::cout << token << std::endl;
 			std::string trail = token.substr(1);
+			std::cout << trail << std::endl;
 			std::string temp;
 			getline(iss, temp, '\r');
 			trail += temp;

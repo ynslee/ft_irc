@@ -3,6 +3,18 @@
 #include "../../includes/Reply.hpp"
 #include "../../includes/Common.hpp"
 
+/**
+ * @brief The MODE command is provided so that users may query and change the
+characteristics of a channel.  For more details on available modes
+and their uses, see "Internet Relay Chat: Channel Management" [IRC-
+CHAN].  Note that there is a maximum limit of three (3) changes per
+command for modes that take a parameter.
+
+[CLIENT] MODE #Finnish +o Kilroy	//Command to give 'chanop' privileges to Kilroy on channel #Finnish.
+[CLIENT] MODE #42 +k oulu			//Command to set the channel key to "oulu".
+[CLIENT] MODE #eu-opers +l 10		//Command to set the limit for the number of users on channel "#eu-opers" to 10.
+*/
+
 void	changeUserLimit(Message &msg, Channel *channel)
 {
 	if (msg.params[1][0] == '+' && !msg.params[2].empty())
@@ -30,6 +42,13 @@ void	changeUserLimit(Message &msg, Channel *channel)
 
 int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &channels)
 {
+	std::string hostname = Client->getHostName();
+
+	if (Client->getWelcomeSent() != 1)
+	{
+		send(Client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);
+		return (-1);
+	}
 	if (msg.params[0][0] == '#' && msg.params.size() > 1)
 	{
 		std::map<std::string, Channel*>::iterator it;

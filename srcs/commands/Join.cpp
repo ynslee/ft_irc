@@ -37,7 +37,8 @@ static void topicMessage(Channel *channel, Client *client)
 {
 	if (channel->getTopic().empty() == false)
 		client->addSendbuf(RPL_TOPIC(client->getHostName(), client->getNickName(), channel->getChannelName(), channel->getTopic()));
-	client->addSendbuf(RPL_NOTOPIC(client->getHostName(), client->getNickName(), channel->getChannelName()));
+	else
+		client->addSendbuf(RPL_NOTOPIC(client->getHostName(), client->getNickName(), channel->getChannelName()));
 }
 
 static void successfulJoinMessage(Client *client, std::string channelName, std::map<std::string, Client*> &clientList, std::string nick)
@@ -187,16 +188,15 @@ static int clientErrorChecks(Client *client, std::map<std::string, Channel*> &ch
 		{
 			if (it->second->getMode().find('i') != std::string::npos)
 			{
-				invitedClients = it->second->getInvitedList();
 				std::vector<std::string>::iterator it2;
-				for (it2=invitedClients.begin(); it2!=invitedClients.end(); it2++)
+				for (it2=it->second->getInvitedList().begin(); it2!=it->second->getInvitedList().end(); it2++)
 				{
 					if (*it2 == client->getNickName())
 						invited = true;
 				}
 				if (invited == false)
 				{
-					send(client->getClientFd(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).c_str(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).length(), 0);
+					(client->getClientFd(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).c_str(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).length(), 0);
 					return (-1);
 				}
 			}
@@ -245,6 +245,7 @@ int cmdJoin(Message &msg, Client *client, std::map<std::string, Channel*> &chann
 	if (validChannelName(msg.params[0]) == false)
 		return (-1);
 	channelName = msg.params[0];
+	std::cout << "channel name is " << channelName << std::endl;
 	if (clientErrorChecks(client, channels, channelName) == -1)
 		return (-1);
 	if (channels.size() == 0)

@@ -32,6 +32,7 @@ void messageToChannelClients(Message &msg, std::string nickname, std::map<std::s
 		{
 			std::string message = RPL_PRIVMSG(USER(nickname, it->second->getUserName(), it->second->getIPaddress()), msg.params[0], msg.trailing);
 			std::cout << "message is: "	<< message << std::endl;
+			// it->second->setSendbuf(message);
 			send(it->second->getClientFd(), message.c_str(), message.length(), 0);
 		}
 	}
@@ -84,6 +85,11 @@ static int privmsgClient(Message &msg, Client *client, std::map<int, Client*> &c
 
 int cmdPrivmsg(Message &msg, Client *client, std::map<std::string, Channel*> &channels, std::map<int, Client*> &clients)
 {
+	if (client->getWelcomeSent() != 1)
+	{
+		send(client->getClientFd(), ERR_NOTREGISTERED(client->getHostName()).c_str(), ERR_NOTREGISTERED(client->getHostName()).length(), 0);
+		return (-1);
+	}
 	if (msg.params.size() == 0)
 	{
 		send(client->getClientFd(), ERR_NORECIPIENT(client->getHostName()).c_str(), ERR_NORECIPIENT(client->getHostName()).length(), 0);
