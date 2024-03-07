@@ -21,6 +21,7 @@ static void sendInviteMsg(std::string message, std::map<int, Client*> &clients, 
     {
         if(it->second->getNickName() == invited_nick)
         {
+            // it->second->setSendbuf(message);
             send(it->second->getClientFd(), message.c_str(), message.length(), 0);
             return ;
         }
@@ -30,6 +31,11 @@ static void sendInviteMsg(std::string message, std::map<int, Client*> &clients, 
 int cmdInvite(Message &msg, Client *client,  std::map<std::string, Channel*> &channels,  std::vector<std::string> &nick_names, std::map<int, Client*> &clients)
 {
     std::string hostname = client->getHostName();
+    if (client->getWelcomeSent() != 1)
+	{
+		send(client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);
+		return (-1);
+	}
     if(msg.params.size() < 2)
     {
         send(client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);

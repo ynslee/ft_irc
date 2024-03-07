@@ -40,7 +40,7 @@ int cmdMotd(Message &msg, Client *Client)
 	std::istringstream iss(readline);
 	std::string motd_line;
 
-	if (Client->getRegisteration() != 3)
+	if (Client->getWelcomeSent() != 1)
 	{
 		send(Client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);
 		return (-1);
