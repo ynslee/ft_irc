@@ -30,6 +30,7 @@ static void sendQuitMsg(std::string message, Client *client, Channel *channel)
     {
         if(client != NULL && it->first == client->getNickName())
             continue;
+        // it->second->setSendbuf(message);
         send(it->second->getClientFd(), message.c_str(), message.length(), 0);
     }
     channel->removeFromChannel(client->getNickName());

@@ -35,6 +35,7 @@ static void sendTopicMsg(std::string message, Channel *channel, Client *client, 
         {
             if(client != NULL && it->first == client->getNickName())
                 continue;
+            // it->second->setSendbuf(message);
             send(it->second->getClientFd(), message.c_str(), message.length(), 0);
         }
     }
@@ -46,6 +47,11 @@ static void sendTopicMsg(std::string message, Channel *channel, Client *client, 
 int cmdTopic(Message &msg, Client *client, std::map<std::string, Channel*> &channels)
 {
     std::string hostname = client->getHostName();
+    if (client->getWelcomeSent() != 1)
+	{
+		send(client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);
+		return (-1);
+	}
     if(msg.params.size() < 1)
     {
         send(client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);

@@ -42,6 +42,13 @@ void	changeUserLimit(Message &msg, Channel *channel)
 
 int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &channels)
 {
+	std::string hostname = Client->getHostName();
+
+	if (Client->getWelcomeSent() != 1)
+	{
+		send(Client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);
+		return (-1);
+	}
 	if (msg.params[0][0] == '#' && msg.params.size() > 1)
 	{
 		std::map<std::string, Channel*>::iterator it;
