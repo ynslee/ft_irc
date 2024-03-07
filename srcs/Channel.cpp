@@ -77,6 +77,10 @@ void	Channel::removeOperator(std::string clientNickName)
 			std::cout << _clientOrder.front()->getNickName() << " is the new operator of the channel" << std::endl;
 		}
 	}
+	// else
+	// {
+	// 	std::vector<Client*>::iterator it = std::find(_operators.begin(), _operators.end(), clientNickName);
+	// }
 }
 
 void	Channel::setChannelKey(std::string password)

@@ -38,11 +38,10 @@ static void sendQuitMsg(std::string message, Client *client, Channel *channel)
 
 void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &channels,  std::vector<std::string> &nick_names)
 {
-
     std::string quit_message;
     quit_message = QUIT_MESSAGE(Client->getNickName(), Client->getUserName(), Client->getIPaddress());
     if(msg.trailing.empty() == false)
-        quit_message.append(msg.trailing + "\r\n");
+        quit_message.append(msg.trailing + " as the reason \r\n");
     else
         quit_message.append("\r\n");
     std::vector<std::string>::iterator it;
@@ -63,7 +62,9 @@ void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &chan
         }
     }
     std::vector<std::string>::iterator iter = std::find(nick_names.begin(),nick_names.end(), Client->getNickName());
-    nick_names.erase(iter);
+    if(iter != nick_names.end())
+        nick_names.erase(iter);
     close(Client->getClientFd());
+    delete(Client);
     return ;
 }

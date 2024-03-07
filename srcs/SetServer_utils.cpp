@@ -1,7 +1,7 @@
 
 #include "../includes/Server.hpp"
 
-void Server::closeClient(int i, int fd)
+void Server::closeClient(int i, int fd, Client *client)
 {
     std::string channelname;
     std::string nickname;
@@ -38,6 +38,7 @@ void Server::closeClient(int i, int fd)
 	// we have to remove from the client when we have it
 	this->_pollfdCount--;
 	_clients.erase(fd);
+    delete(client);
 }
 
 
