@@ -188,17 +188,19 @@ static int clientErrorChecks(Client *client, std::map<std::string, Channel*> &ch
 		{
 			if (it->second->getMode().find('i') != std::string::npos)
 			{
+				invitedClients = it->second->getInvitedList();
 				std::vector<std::string>::iterator it2;
-				for (it2=it->second->getInvitedList().begin(); it2!=it->second->getInvitedList().end(); it2++)
+				for (it2=invitedClients.begin(); it2!=invitedClients.end(); it2++)
 				{
 					if (*it2 == client->getNickName())
 						invited = true;
 				}
 				if (invited == false)
 				{
-					(client->getClientFd(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).c_str(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).length(), 0);
+					send(client->getClientFd(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).c_str(), ERR_INVITEONLYCHAN(client->getUserName(), channelName).length(), 0);
 					return (-1);
 				}
+			}
 			}
 			else if (it->second->getClientList().size() == static_cast<size_t>(it->second->getUserLimit()))
 			{
