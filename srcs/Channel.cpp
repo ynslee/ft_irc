@@ -52,13 +52,57 @@ void	Channel::addToChannel(Client &client)
 void	Channel::removeFromChannel(const std::string &nick)
 {
 	_clientList.erase(nick);
-	removeOperator(nick);
+	removeOperatorQuit(nick);
 	_useramount--;
 }
 
 void	Channel::addOperator(std::string clientNickName)
 {
-	_operators.push_back(clientNickName);
+	std::vector<std::string>::iterator it = std::find(_operators.begin(), _operators.end(), clientNickName);
+	if(it == _operators.end())
+		_operators.push_back(clientNickName);
+}
+
+void	Channel::removeOperatorQuit(std::string clientNickName)
+{
+	std::vector<std::string>::iterator it = std::find(_operators.begin(), _operators.end(), clientNickName);
+	if(it != _operators.end())
+	{
+		_operators.erase(it);
+		if(_operators.empty() == true && _clientOrder.size() > 1)
+		{
+			std::vector<Client*>::iterator iter;
+			for(iter = _clientOrder.begin(); iter != _clientOrder.end(); iter++)
+			{
+				if((*iter)->getNickName() == clientNickName)
+				{
+					_clientOrder.erase(iter);
+					break;
+				}
+			}
+			_clientOrder.front()->setIsOperator(true);
+			_operators.push_back(_clientOrder.front()->getNickName());
+			std::cout << _clientOrder.front()->getNickName() << " is the new operator of the channel" << std::endl;
+		}
+	}
+	else
+	{
+		std::vector<Client*>::iterator iter2;
+		for(iter2 = _clientOrder.begin(); iter2 != _clientOrder.end(); iter2++)
+		{
+			if((*iter2)->getNickName() == clientNickName)
+			{
+				_clientOrder.erase(iter2);
+				break;
+			}
+		}
+	}
+	// std::vector<std::string>::iterator operators;
+	// for(operators = _operators.begin(); operators != _operators.end(); operators++)
+	// {
+	// 	std::cout << "OPERATOR: " << *operators << std::endl;
+	// }
+	return ;
 }
 
 void	Channel::removeOperator(std::string clientNickName)
@@ -67,30 +111,30 @@ void	Channel::removeOperator(std::string clientNickName)
 	if(it != _operators.end())
 	{
 		_operators.erase(it);
-		if(!_operators.empty())
-			std::cout << _operators.back() << "is the new operator of the channel" << std::endl;
-		else if(_clientOrder.size() > 1)
+		if(_operators.empty() == true && _clientOrder.size() > 1)
 		{
-			_clientOrder.erase(_clientOrder.begin());
+			std::vector<Client*>::iterator iter;
+			for(iter = _clientOrder.begin(); iter != _clientOrder.end(); iter++)
+			{
+				if((*iter)->getNickName() == clientNickName)
+				{
+					_clientOrder.erase(iter);
+					break;
+				}
+			}
 			_clientOrder.front()->setIsOperator(true);
 			_operators.push_back(_clientOrder.front()->getNickName());
 			std::cout << _clientOrder.front()->getNickName() << " is the new operator of the channel" << std::endl;
 		}
 	}
-	else
+		std::vector<std::string>::iterator operators;
+	for(operators = _operators.begin(); operators != _operators.end(); operators++)
 	{
-		std::vector<Client*>::iterator iter;
-		for(iter = _clientOrder.begin(); iter != _clientOrder.end(); iter++)
-		{
-			if((*iter)->getNickName() == clientNickName)
-			{
-				_clientOrder.erase(iter);
-				break;
-			}
-		}
+		std::cout << "OPERATOR: " << *operators << std::endl;
 	}
 	return ;
 }
+
 
 void	Channel::setChannelKey(std::string password)
 {

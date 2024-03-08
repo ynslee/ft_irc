@@ -1,0 +1,278 @@
+Receiving<<< CAP LS 302
+JOIN :
+
+Receiving<<< PASS 1
+
+Receiving<<< NICK yoonslee
+USER hello hello localhost :Yoonseon Lee
+
+sending>>> :c1r5p4.hive.fi 001 yoonslee :Welcome to the Internet Relay Network 🐾TYCHUNEN SERVER🐾!yoonslee@::ffff:127.0.0.1
+:c1r5p4.hive.fi 002 yoonslee :Your host is 🐾TYCHUNEN SERVER🐾, running version 1.0
+:c1r5p4.hive.fi 003 yoonslee :This server was created 2024-03-08.13:47:21
+:c1r5p4.hive.fi 004 v1.0 +i +itkol
+:c1r5p4.hive.fi 375 * :- yoonslee Message of the day - 
+:c1r5p4.hive.fi 372 yoonslee :(`-')                          (`-').->           <-. (`-')_  (`-')  _<-. (`-')_ 
+:c1r5p4.hive.fi 372 yoonslee :( OO).->       .->   _         (OO )__      .->      \( OO) ) ( OO).-/   \( OO) )
+:c1r5p4.hive.fi 372 yoonslee :/    '._   ,--.'  ,-.\-,-----.,--. ,'-',--.(,--.  ,--./ ,--/ (,------.,--./ ,--/ 
+:c1r5p4.hive.fi 372 yoonslee :|'--...__)(`-')'.'  / |  .--./|  | |  ||  | |(`-')|   \ |  |  |  .---'|   \ |  | 
+:c1r5p4.hive.fi 372 yoonslee :`--.  .--'(OO \    / /_) (`-')|  `-'  ||  | |(OO )|  . '|  |)(|  '--. |  . '|  |)
+:c1r5p4.hive.fi 372 yoonslee :   |  |    |  /   /) ||  |OO )|  .-.  ||  | | |  \|  |\    |  |  .--' |  |\    | 
+:c1r5p4.hive.fi 372 yoonslee :   |  |    `-/   /` (_'  '--'\|  | |  |\  '-'(_ .'|  | \   |  |  `---.|  | \   | 
+:c1r5p4.hive.fi 372 yoonslee :   `--'      `--'      `-----'`--' `--' `-----'   `--'  `--'  `------'`--'  `--' 
+:c1r5p4.hive.fi 372 yoonslee : (`-').->(`-')  _   (`-')       (`-') (`-')  _   (`-')                			     
+:c1r5p4.hive.fi 372 yoonslee : ( OO)_  ( OO).-/<-.(OO )      _(OO ) ( OO).-/<-.(OO )                			     
+:c1r5p4.hive.fi 372 yoonslee :(_)--\_)(,------.,------,),--.(_/,-.\(,------.,------,)               			     
+:c1r5p4.hive.fi 372 yoonslee :/    _ / |  .---'|   /`. '\   \ / (_/ |  .---'|   /`. '               			     
+:c1r5p4.hive.fi 372 yoonslee :\_..`--.(|  '--. |  |_.' | \   /   / (|  '--. |  |_.' |               			     
+:c1r5p4.hive.fi 372 yoonslee :.-._)   \|  .--' |  .   .'_ \     /_) |  .--' |  .   .'               			     
+:c1r5p4.hive.fi 372 yoonslee :\       /|  `---.|  |\  \ \-'\   /    |  `---.|  |\  \                			     
+:c1r5p4.hive.fi 372 yoonslee : `-----' `------'`--' '--'    `-'     `------'`--' '--'               			     
+:c1r5p4.hive.fi 376 yoonslee :End of /MOTD command.
+:yoonslee MODE yoonslee :+i
+
+Receiving<<< MODE yoonslee +i
+
+Receiving<<< pass 1
+Receiving<<< 
+
+Receiving<<< nick chuchi
+Receiving<<< 
+
+Receiving<<< PING c1r5p4.hive.fi
+
+Receiving<<< user 0 0 0
+Receiving<<< 
+
+sending>>> :c1r5p4.hive.fi 001 chuchi :Welcome to the Internet Relay Network 🐾TYCHUNEN SERVER🐾!chuchi@::ffff:127.0.0.1
+:c1r5p4.hive.fi 002 chuchi :Your host is 🐾TYCHUNEN SERVER🐾, running version 1.0
+:c1r5p4.hive.fi 003 chuchi :This server was created 2024-03-08.13:47:30
+:c1r5p4.hive.fi 004 v1.0 +i +itkol
+:c1r5p4.hive.fi 375 * :- chuchi Message of the day - 
+:c1r5p4.hive.fi 372 chuchi :(`-')                          (`-').->           <-. (`-')_  (`-')  _<-. (`-')_ 
+:c1r5p4.hive.fi 372 chuchi :( OO).->       .->   _         (OO )__      .->      \( OO) ) ( OO).-/   \( OO) )
+:c1r5p4.hive.fi 372 chuchi :/    '._   ,--.'  ,-.\-,-----.,--. ,'-',--.(,--.  ,--./ ,--/ (,------.,--./ ,--/ 
+:c1r5p4.hive.fi 372 chuchi :|'--...__)(`-')'.'  / |  .--./|  | |  ||  | |(`-')|   \ |  |  |  .---'|   \ |  | 
+:c1r5p4.hive.fi 372 chuchi :`--.  .--'(OO \    / /_) (`-')|  `-'  ||  | |(OO )|  . '|  |)(|  '--. |  . '|  |)
+:c1r5p4.hive.fi 372 chuchi :   |  |    |  /   /) ||  |OO )|  .-.  ||  | | |  \|  |\    |  |  .--' |  |\    | 
+:c1r5p4.hive.fi 372 chuchi :   |  |    `-/   /` (_'  '--'\|  | |  |\  '-'(_ .'|  | \   |  |  `---.|  | \   | 
+:c1r5p4.hive.fi 372 chuchi :   `--'      `--'      `-----'`--' `--' `-----'   `--'  `--'  `------'`--'  `--' 
+:c1r5p4.hive.fi 372 chuchi : (`-').->(`-')  _   (`-')       (`-') (`-')  _   (`-')                			     
+:c1r5p4.hive.fi 372 chuchi : ( OO)_  ( OO).-/<-.(OO )      _(OO ) ( OO).-/<-.(OO )                			     
+:c1r5p4.hive.fi 372 chuchi :(_)--\_)(,------.,------,),--.(_/,-.\(,------.,------,)               			     
+:c1r5p4.hive.fi 372 chuchi :/    _ / |  .---'|   /`. '\   \ / (_/ |  .---'|   /`. '               			     
+:c1r5p4.hive.fi 372 chuchi :\_..`--.(|  '--. |  |_.' | \   /   / (|  '--. |  |_.' |               			     
+:c1r5p4.hive.fi 372 chuchi :.-._)   \|  .--' |  .   .'_ \     /_) |  .--' |  .   .'               			     
+:c1r5p4.hive.fi 372 chuchi :\       /|  `---.|  |\  \ \-'\   /    |  `---.|  |\  \                			     
+:c1r5p4.hive.fi 372 chuchi : `-----' `------'`--' '--'    `-'     `------'`--' '--'               			     
+:c1r5p4.hive.fi 376 chuchi :End of /MOTD command.
+:chuchi MODE chuchi :+i
+
+Receiving<<< CAP LS 302
+
+Receiving<<< JOIN :
+
+Receiving<<< PASS 1
+
+Receiving<<< NICK yoonslee
+USER hello hello localhost :Yoonseon Lee
+
+Receiving<<< NICK yoonslee_
+
+sending>>> :c1r5p4.hive.fi 001 yoonslee_ :Welcome to the Internet Relay Network 🐾TYCHUNEN SERVER🐾!yoonslee_@::ffff:127.0.0.1
+:c1r5p4.hive.fi 002 yoonslee_ :Your host is 🐾TYCHUNEN SERVER🐾, running version 1.0
+:c1r5p4.hive.fi 003 yoonslee_ :This server was created 2024-03-08.13:47:37
+:c1r5p4.hive.fi 004 v1.0 +i +itkol
+:c1r5p4.hive.fi 375 * :- yoonslee_ Message of the day - 
+:c1r5p4.hive.fi 372 yoonslee_ :(`-')                          (`-').->           <-. (`-')_  (`-')  _<-. (`-')_ 
+:c1r5p4.hive.fi 372 yoonslee_ :( OO).->       .->   _         (OO )__      .->      \( OO) ) ( OO).-/   \( OO) )
+:c1r5p4.hive.fi 372 yoonslee_ :/    '._   ,--.'  ,-.\-,-----.,--. ,'-',--.(,--.  ,--./ ,--/ (,------.,--./ ,--/ 
+:c1r5p4.hive.fi 372 yoonslee_ :|'--...__)(`-')'.'  / |  .--./|  | |  ||  | |(`-')|   \ |  |  |  .---'|   \ |  | 
+:c1r5p4.hive.fi 372 yoonslee_ :`--.  .--'(OO \    / /_) (`-')|  `-'  ||  | |(OO )|  . '|  |)(|  '--. |  . '|  |)
+:c1r5p4.hive.fi 372 yoonslee_ :   |  |    |  /   /) ||  |OO )|  .-.  ||  | | |  \|  |\    |  |  .--' |  |\    | 
+:c1r5p4.hive.fi 372 yoonslee_ :   |  |    `-/   /` (_'  '--'\|  | |  |\  '-'(_ .'|  | \   |  |  `---.|  | \   | 
+:c1r5p4.hive.fi 372 yoonslee_ :   `--'      `--'      `-----'`--' `--' `-----'   `--'  `--'  `------'`--'  `--' 
+:c1r5p4.hive.fi 372 yoonslee_ : (`-').->(`-')  _   (`-')       (`-') (`-')  _   (`-')                			     
+:c1r5p4.hive.fi 372 yoonslee_ : ( OO)_  ( OO).-/<-.(OO )      _(OO ) ( OO).-/<-.(OO )                			     
+:c1r5p4.hive.fi 372 yoonslee_ :(_)--\_)(,------.,------,),--.(_/,-.\(,------.,------,)               			     
+:c1r5p4.hive.fi 372 yoonslee_ :/    _ / |  .---'|   /`. '\   \ / (_/ |  .---'|   /`. '               			     
+:c1r5p4.hive.fi 372 yoonslee_ :\_..`--.(|  '--. |  |_.' | \   /   / (|  '--. |  |_.' |               			     
+:c1r5p4.hive.fi 372 yoonslee_ :.-._)   \|  .--' |  .   .'_ \     /_) |  .--' |  .   .'               			     
+:c1r5p4.hive.fi 372 yoonslee_ :\       /|  `---.|  |\  \ \-'\   /    |  `---.|  |\  \                			     
+:c1r5p4.hive.fi 372 yoonslee_ : `-----' `------'`--' '--'    `-'     `------'`--' '--'               			     
+:c1r5p4.hive.fi 376 yoonslee_ :End of /MOTD command.
+:yoonslee_ MODE yoonslee_ :+i
+
+Receiving<<< MODE yoonslee_ +i
+
+Receiving<<< CAP LS 302
+
+Receiving<<< JOIN :
+
+Receiving<<< PASS 1
+
+Receiving<<< NICK yoonslee
+USER hello hello localhost :Yoonseon Lee
+
+Receiving<<< NICK yoonslee_
+
+Receiving<<< NICK yoonslee1
+
+sending>>> :c1r5p4.hive.fi 001 yoonslee1 :Welcome to the Internet Relay Network 🐾TYCHUNEN SERVER🐾!yoonslee1@::ffff:127.0.0.1
+:c1r5p4.hive.fi 002 yoonslee1 :Your host is 🐾TYCHUNEN SERVER🐾, running version 1.0
+:c1r5p4.hive.fi 003 yoonslee1 :This server was created 2024-03-08.13:47:40
+:c1r5p4.hive.fi 004 v1.0 +i +itkol
+:c1r5p4.hive.fi 375 * :- yoonslee1 Message of the day - 
+:c1r5p4.hive.fi 372 yoonslee1 :(`-')                          (`-').->           <-. (`-')_  (`-')  _<-. (`-')_ 
+:c1r5p4.hive.fi 372 yoonslee1 :( OO).->       .->   _         (OO )__      .->      \( OO) ) ( OO).-/   \( OO) )
+:c1r5p4.hive.fi 372 yoonslee1 :/    '._   ,--.'  ,-.\-,-----.,--. ,'-',--.(,--.  ,--./ ,--/ (,------.,--./ ,--/ 
+:c1r5p4.hive.fi 372 yoonslee1 :|'--...__)(`-')'.'  / |  .--./|  | |  ||  | |(`-')|   \ |  |  |  .---'|   \ |  | 
+:c1r5p4.hive.fi 372 yoonslee1 :`--.  .--'(OO \    / /_) (`-')|  `-'  ||  | |(OO )|  . '|  |)(|  '--. |  . '|  |)
+:c1r5p4.hive.fi 372 yoonslee1 :   |  |    |  /   /) ||  |OO )|  .-.  ||  | | |  \|  |\    |  |  .--' |  |\    | 
+:c1r5p4.hive.fi 372 yoonslee1 :   |  |    `-/   /` (_'  '--'\|  | |  |\  '-'(_ .'|  | \   |  |  `---.|  | \   | 
+:c1r5p4.hive.fi 372 yoonslee1 :   `--'      `--'      `-----'`--' `--' `-----'   `--'  `--'  `------'`--'  `--' 
+:c1r5p4.hive.fi 372 yoonslee1 : (`-').->(`-')  _   (`-')       (`-') (`-')  _   (`-')                			     
+:c1r5p4.hive.fi 372 yoonslee1 : ( OO)_  ( OO).-/<-.(OO )      _(OO ) ( OO).-/<-.(OO )                			     
+:c1r5p4.hive.fi 372 yoonslee1 :(_)--\_)(,------.,------,),--.(_/,-.\(,------.,------,)               			     
+:c1r5p4.hive.fi 372 yoonslee1 :/    _ / |  .---'|   /`. '\   \ / (_/ |  .---'|   /`. '               			     
+:c1r5p4.hive.fi 372 yoonslee1 :\_..`--.(|  '--. |  |_.' | \   /   / (|  '--. |  |_.' |               			     
+:c1r5p4.hive.fi 372 yoonslee1 :.-._)   \|  .--' |  .   .'_ \     /_) |  .--' |  .   .'               			     
+:c1r5p4.hive.fi 372 yoonslee1 :\       /|  `---.|  |\  \ \-'\   /    |  `---.|  |\  \                			     
+:c1r5p4.hive.fi 372 yoonslee1 : `-----' `------'`--' '--'    `-'     `------'`--' '--'               			     
+:c1r5p4.hive.fi 376 yoonslee1 :End of /MOTD command.
+:yoonslee1 MODE yoonslee1 :+i
+
+Receiving<<< WHOIS yoonslee
+
+Receiving<<< MODE yoonslee1 +i
+
+Receiving<<< CAP LS 302
+
+Receiving<<< JOIN :
+
+Receiving<<< PASS 1
+NICK yoonslee
+
+Receiving<<< USER hello hello localhost :Yoonseon Lee
+
+Receiving<<< NICK yoonslee_
+
+Receiving<<< NICK yoonslee1
+
+Receiving<<< NICK yoonslee2
+
+sending>>> :c1r5p4.hive.fi 001 yoonslee2 :Welcome to the Internet Relay Network 🐾TYCHUNEN SERVER🐾!yoonslee2@::ffff:127.0.0.1
+:c1r5p4.hive.fi 002 yoonslee2 :Your host is 🐾TYCHUNEN SERVER🐾, running version 1.0
+:c1r5p4.hive.fi 003 yoonslee2 :This server was created 2024-03-08.13:47:43
+:c1r5p4.hive.fi 004 v1.0 +i +itkol
+:c1r5p4.hive.fi 375 * :- yoonslee2 Message of the day - 
+:c1r5p4.hive.fi 372 yoonslee2 :(`-')                          (`-').->           <-. (`-')_  (`-')  _<-. (`-')_ 
+:c1r5p4.hive.fi 372 yoonslee2 :( OO).->       .->   _         (OO )__      .->      \( OO) ) ( OO).-/   \( OO) )
+:c1r5p4.hive.fi 372 yoonslee2 :/    '._   ,--.'  ,-.\-,-----.,--. ,'-',--.(,--.  ,--./ ,--/ (,------.,--./ ,--/ 
+:c1r5p4.hive.fi 372 yoonslee2 :|'--...__)(`-')'.'  / |  .--./|  | |  ||  | |(`-')|   \ |  |  |  .---'|   \ |  | 
+:c1r5p4.hive.fi 372 yoonslee2 :`--.  .--'(OO \    / /_) (`-')|  `-'  ||  | |(OO )|  . '|  |)(|  '--. |  . '|  |)
+:c1r5p4.hive.fi 372 yoonslee2 :   |  |    |  /   /) ||  |OO )|  .-.  ||  | | |  \|  |\    |  |  .--' |  |\    | 
+:c1r5p4.hive.fi 372 yoonslee2 :   |  |    `-/   /` (_'  '--'\|  | |  |\  '-'(_ .'|  | \   |  |  `---.|  | \   | 
+:c1r5p4.hive.fi 372 yoonslee2 :   `--'      `--'      `-----'`--' `--' `-----'   `--'  `--'  `------'`--'  `--' 
+:c1r5p4.hive.fi 372 yoonslee2 : (`-').->(`-')  _   (`-')       (`-') (`-')  _   (`-')                			     
+:c1r5p4.hive.fi 372 yoonslee2 : ( OO)_  ( OO).-/<-.(OO )      _(OO ) ( OO).-/<-.(OO )                			     
+:c1r5p4.hive.fi 372 yoonslee2 :(_)--\_)(,------.,------,),--.(_/,-.\(,------.,------,)               			     
+:c1r5p4.hive.fi 372 yoonslee2 :/    _ / |  .---'|   /`. '\   \ / (_/ |  .---'|   /`. '               			     
+:c1r5p4.hive.fi 372 yoonslee2 :\_..`--.(|  '--. |  |_.' | \   /   / (|  '--. |  |_.' |               			     
+:c1r5p4.hive.fi 372 yoonslee2 :.-._)   \|  .--' |  .   .'_ \     /_) |  .--' |  .   .'               			     
+:c1r5p4.hive.fi 372 yoonslee2 :\       /|  `---.|  |\  \ \-'\   /    |  `---.|  |\  \                			     
+:c1r5p4.hive.fi 372 yoonslee2 : `-----' `------'`--' '--'    `-'     `------'`--' '--'               			     
+:c1r5p4.hive.fi 376 yoonslee2 :End of /MOTD command.
+:yoonslee2 MODE yoonslee2 :+i
+
+Receiving<<< WHOIS yoonslee
+
+Receiving<<< MODE yoonslee2 +i
+
+Receiving<<< PING c1r5p4.hive.fi
+
+Receiving<<< WHOIS yoonslee
+
+Receiving<<< JOIN #hello
+
+sending>>> :yoonslee!~hello@::ffff:127.0.0.1 JOIN #hello * :Yoonseon Lee
+:c1r5p4.hive.fi 332 yoonslee #hello :Welcome to 🐾TYCHUNEN SERVER🐾 support | Not a channel for politics, drama, fights | FAQ and guides: please ask Pets around you | Usable commands: MODE, INVITE, QUIT, PRIVMSG, KICK, TOPIC
+:c1r5p4.hive.fi 353 hello = #hello :yoonslee
+:c1r5p4.hive.fi 366 hello #hello :End of /NAMES list.
+
+Receiving<<< MODE #hello
+
+Receiving<<< PING c1r5p4.hive.fi
+
+Receiving<<< join #hello
+
+sending>>> :chuchi!~0@::ffff:127.0.0.1 JOIN #hello * :0
+:c1r5p4.hive.fi 332 chuchi #hello :Welcome to 🐾TYCHUNEN SERVER🐾 support | Not a channel for politics, drama, fights | FAQ and guides: please ask Pets around you | Usable commands: MODE, INVITE, QUIT, PRIVMSG, KICK, TOPIC
+:c1r5p4.hive.fi 353 0 = #hello :chuchi yoonslee
+:c1r5p4.hive.fi 366 0 #hello :End of /NAMES list.
+
+Receiving<<< PING c1r5p4.hive.fi
+
+Receiving<<< JOIN #hello
+
+sending>>> :yoonslee_!~hello@::ffff:127.0.0.1 JOIN #hello * :Yoonseon Lee
+:c1r5p4.hive.fi 332 yoonslee_ #hello :Welcome to 🐾TYCHUNEN SERVER🐾 support | Not a channel for politics, drama, fights | FAQ and guides: please ask Pets around you | Usable commands: MODE, INVITE, QUIT, PRIVMSG, KICK, TOPIC
+:c1r5p4.hive.fi 353 hello = #hello :yoonslee_ chuchi yoonslee
+:c1r5p4.hive.fi 366 hello #hello :End of /NAMES list.
+
+Receiving<<< MODE #hello
+
+Receiving<<< MODE #hello +o chuchi
+
+Receiving<<< PING c1r5p4.hive.fi
+
+Receiving<<< mode #hello -o yoonslee
+
+Receiving<<< PING c1r5p4.hive.fi
+
+Receiving<<< PING c1r5p4.hive.fi
+
+Receiving<<< MODE #hello +ichuchi
+
+Receiving<<< PING c1r5p4.hive.fi
+
+Receiving<<< JOIN #hello
+
+sending>>> :yoonslee1!~hello@::ffff:127.0.0.1 JOIN #hello * :Yoonseon Lee
+:c1r5p4.hive.fi 332 yoonslee1 #hello :Welcome to 🐾TYCHUNEN SERVER🐾 support | Not a channel for politics, drama, fights | FAQ and guides: please ask Pets around you | Usable commands: MODE, INVITE, QUIT, PRIVMSG, KICK, TOPIC
+:c1r5p4.hive.fi 353 hello = #hello :yoonslee1 chuchi yoonslee yoonslee_
+:c1r5p4.hive.fi 366 hello #hello :End of /NAMES list.
+
+Receiving<<< MODE #hello
+
+Receiving<<< JOIN #hello
+
+sending>>> :yoonslee2!~hello@::ffff:127.0.0.1 JOIN #hello * :Yoonseon Lee
+:c1r5p4.hive.fi 332 yoonslee2 #hello :Welcome to 🐾TYCHUNEN SERVER🐾 support | Not a channel for politics, drama, fights | FAQ and guides: please ask Pets around you | Usable commands: MODE, INVITE, QUIT, PRIVMSG, KICK, TOPIC
+:c1r5p4.hive.fi 353 hello = #hello :yoonslee2 chuchi yoonslee yoonslee1 yoonslee_
+:c1r5p4.hive.fi 366 hello #hello :End of /NAMES list.
+
+Receiving<<< MODE #hello
+
+Receiving<<< mode #hello +o yoonslee
+
+Receiving<<< PING c1r5p4.hive.fi
+
+Receiving<<< MODE #hello +o chuchi
+
+Receiving<<< MODE #hello
+
+Receiving<<< PRIVMSG #hello :quit
+
+Receiving<<< PING c1r5p4.hive.fi
+
+Receiving<<< QUIT :leaving
+
+Receiving<<< MODE #hello
+
+Receiving<<< PING c1r5p4.hive.fi
+
+Receiving<<< PING c1r5p4.hive.fi
+
+Receiving<<< quit
+Receiving<<< 
+
