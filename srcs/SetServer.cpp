@@ -215,11 +215,11 @@ int Server::findCommand(int client_fd)
 		int i = getCommandType(msg.command);
 		switch(i)
 		{
-			case command::CAP:
-			{
-				cmdCap(msg, _clients[client_fd]);
-				break ;
-			}
+			// case command::CAP:
+			// {
+			// 	cmdCap(msg, _clients[client_fd]);
+			// 	break ;
+			// }
 			case command::PASS:
 				if(cmdPass(msg, _clients[client_fd], this->_password) == -1)
 					return(-1);
