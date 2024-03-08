@@ -58,6 +58,12 @@ void	Channel::removeFromChannel(const std::string &nick)
 
 void	Channel::addOperator(std::string clientNickName)
 {
+	if (_operators.size() == 0)
+	{
+		_operators.push_back(clientNickName);
+		std::cout << "Now " << clientNickName << " is the operator of the channel" << std::endl;
+		return ;
+	}
 	std::vector<std::string>::iterator it = std::find(_operators.begin(), _operators.end(), clientNickName);
 	if(it == _operators.end())
 	{
@@ -77,20 +83,20 @@ void	Channel::removeOperatorQuit(std::string clientNickName)
 	if(it != _operators.end())
 	{
 		_operators.erase(it);
+		std::vector<Client*>::iterator iter;
+		for(iter = _clientOrder.begin(); iter != _clientOrder.end(); iter++)
+		{
+			if((*iter)->getNickName() == clientNickName)
+			{
+				_clientOrder.erase(iter);
+				break;
+			}
+		}
 		if(_operators.empty() == true && _clientOrder.size() > 1)
 		{
-			std::vector<Client*>::iterator iter;
-			for(iter = _clientOrder.begin(); iter != _clientOrder.end(); iter++)
-			{
-				if((*iter)->getNickName() == clientNickName)
-				{
-					_clientOrder.erase(iter);
-					break;
-				}
-			}
-			_clientOrder.front()->setIsOperator(true);
-			_operators.push_back(_clientOrder.front()->getNickName());
-			std::cout << _clientOrder.front()->getNickName() << " is the new operator of the channel" << std::endl;
+			std::string nickname = _clientOrder.front()->getNickName();
+			_operators.push_back(nickname);
+			std::cout << nickname << " is the new operator of the channel" << std::endl;
 		}
 	}
 	else
@@ -124,7 +130,6 @@ void	Channel::removeOperator(std::string clientNickName)
 		_operators.erase(it);
 		if(_operators.empty() == true && _clientOrder.size() > 1)
 		{
-			_clientOrder.front()->setIsOperator(true);
 			_operators.push_back(_clientOrder.front()->getNickName());
 			std::cout << _clientOrder.front()->getNickName() << " is the new operator of the channel" << std::endl;
 		}
