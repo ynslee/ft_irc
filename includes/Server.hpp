@@ -60,7 +60,7 @@ class Server
 		int recieveMsg(int new_fd, int i, std::ofstream &log);
 		int sendMsg(int send_fd, std::ofstream &log);
 		int pollLoop();
-		void closeClient(int i, int fd);
+		void closeClient(int i, int fd, Client *client);
 		int setMessage(std::string msg, std::ofstream &log);
 		int findCommand(int client_fd);
 		int getCommandType(std::string command);

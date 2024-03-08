@@ -1,7 +1,7 @@
 
 #include "../includes/Server.hpp"
 
-void Server::closeClient(int i, int fd)
+void Server::closeClient(int i, int fd, Client *client)
 {
     std::string channelname;
     std::string nickname;
@@ -9,35 +9,24 @@ void Server::closeClient(int i, int fd)
     bool found = false;
 
 	close(fd);
-    std::map<int, Client*>::iterator it3;
-    for(it3=_clients.begin(); it3!=_clients.end(); it3++)
+    std::map<std::string, Channel*>::iterator it;
+    for(it=_channels.begin(); it!=_channels.end(); it++)
     {
-        if (it3->second->getClientFd() == fd)
+        clientlist = it->second->getClientList();
+        std::map<std::string, Client*>::iterator it2;
+        for (it2=clientlist.begin(); it2!=clientlist.end(); it2++)
         {
-            nickname = it3->second->getNickName();
-            break;
+            if (it2->second->getNickName() == client->getNickName())
+                found = true;
         }
-    }
-    if (nickname.empty() == false)
-    {
-        std::map<std::string, Channel*>::iterator it;
-        for(it=_channels.begin(); it!=_channels.end(); it++)
-        {
-            clientlist = it->second->getClientList();
-            std::map<std::string, Client*>::iterator it2;
-            for (it2=clientlist.begin(); it2!=clientlist.end(); it2++)
-            {
-                if (it2->second->getNickName() == nickname)
-                    found = true;
-            }
-            if (found == true)
-                it->second->removeFromChannel(nickname);
-        }
+        if (found == true)
+            it->second->removeFromChannel(client->getNickName());
     }
 	this->_pfds[i] = this->_pfds[this->_pollfdCount - 1];
 	// we have to remove from the client when we have it
 	this->_pollfdCount--;
 	_clients.erase(fd);
+    delete(client);
 }
 
 
