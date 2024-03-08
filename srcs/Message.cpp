@@ -48,7 +48,6 @@ Message::Message(std::string input)
 		{
 			// std::cout << token << std::endl;
 			std::string trail = token.substr(1);
-			std::cout << trail << std::endl;
 			std::string temp;
 			getline(iss, temp, '\r');
 			trail += temp;

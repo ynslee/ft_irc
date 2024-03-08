@@ -208,7 +208,6 @@ static int clientErrorChecks(Client *client, std::map<std::string, Channel*> &ch
 				return (-1);
 			}
 		}
-	}
 	return (0);
 }
 
@@ -242,6 +241,11 @@ int cmdJoin(Message &msg, Client *client, std::map<std::string, Channel*> &chann
 	{
 		if (msg.trailing_flag == 0)
 			send(client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);
+		return (-1);
+	}
+	if (msg.params[0].size() == 1 && msg.params[0].compare("#") == 0)
+	{
+		send(client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);
 		return (-1);
 	}
 	if (validChannelName(msg.params[0]) == false)
