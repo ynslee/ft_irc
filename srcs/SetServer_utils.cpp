@@ -63,8 +63,14 @@ int Server::getCommandType(std::string command)
 
 }
 
-void Server::removeClientfromPoll(int fd)
+void Server::removeClientfromPollAndMap(int fd)
 {
+    std::map<int, Client*>::iterator it = _clients.find(fd);
+    if (it != _clients.end())
+    {
+        delete it->second;
+        _clients.erase(it);
+    }
     for(int i = 0; i < this->_pollfdCount; i++)
 	{				
         if(this->_pfds[i].fd == fd)

@@ -66,7 +66,7 @@ class Server
 		int getCommandType(std::string command);
 		const std::string &getServerName() const;
 		std::vector<std::string> &getNicknames();
-		void removeClientfromPoll(int fd);
+		void removeClientfromPollAndMap(int fd);
 		std::map<std::string, Channel*> &getChannels();
 		std::map<int, Client*> &getClients();
 		bool ChannelExists(std::map<std::string, Channel*> &channels, std::string &channelName);
