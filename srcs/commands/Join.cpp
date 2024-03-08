@@ -208,7 +208,6 @@ static int clientErrorChecks(Client *client, std::map<std::string, Channel*> &ch
 				return (-1);
 			}
 		}
-	}
 	return (0);
 }
 
