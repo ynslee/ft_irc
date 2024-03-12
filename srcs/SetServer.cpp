@@ -277,7 +277,7 @@ int Server::findCommand(int client_fd)
 			case command::QUIT:
 			{
 				cmdQuit(msg, _clients[client_fd],_channels, getNicknames());
-				removeClientfromPoll(client_fd);
+				removeClientfromPollAndMap(client_fd);
 				return(0);
 			}
 			case command::PING:

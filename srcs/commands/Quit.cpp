@@ -33,6 +33,13 @@ static void sendQuitMsg(std::string message, Client *client, Channel *channel)
         // it->second->setSendbuf(message);
         send(it->second->getClientFd(), message.c_str(), message.length(), 0);
     }
+    std::map<std::string, Client *>::iterator it2;
+    for(it2 = clients_list.begin(); it != clients_list.end() ; ++it2)
+    {
+        if(client != NULL && it2->first == client->getNickName())
+            clients_list.erase(it2);
+        send(it2->second->getClientFd(), message.c_str(), message.length(), 0);
+    }
     channel->removeFromChannel(client->getNickName());
 }
 
@@ -40,6 +47,7 @@ static void sendQuitMsg(std::string message, Client *client, Channel *channel)
 void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &channels,  std::vector<std::string> &nick_names)
 {
     std::string quit_message;
+    std::vector<std::string>invitelist;
     quit_message = QUIT_MESSAGE(Client->getNickName(), Client->getUserName(), Client->getIPaddress());
     if (msg.params.size() > 0)
         return ;
@@ -55,6 +63,7 @@ void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &chan
         if(channelIt != channels.end())
         {
             sendQuitMsg(quit_message,Client,channelIt->second);
+            invitelist = channelIt->second->getInvitedList();
             if(channelIt->second->getClientList().size() == 0)
             {
                 std::cout << "Channel " << channelIt->second->getChannelName() << " deleted ";
@@ -67,7 +76,9 @@ void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &chan
     std::vector<std::string>::iterator iter = std::find(nick_names.begin(),nick_names.end(), Client->getNickName());
     if(iter != nick_names.end())
         nick_names.erase(iter);
+    std::vector<std::string>::iterator iter2 = std::find(invitelist.begin(), invitelist.end(), Client->getNickName());
+    if(iter2 != invitelist.end())
+        invitelist.erase(iter2);
     close(Client->getClientFd());
-    delete(Client);
-    return ;
+    return;
 }

@@ -42,6 +42,7 @@ class Channel
 		// void							removeFromKicked(std::string &nick);
 		void							addOperator(std::string clientNickName);
 		void							removeOperator(std::string operatoName);
+		void							removeOperatorQuit(std::string clientNickName);
 		void							setChannelKey(std::string password);
 		void							setTopic(std::string& newTopic);
 		void							setMode(std::string mode, Client *client);
