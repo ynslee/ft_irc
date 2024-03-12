@@ -92,7 +92,7 @@ void	Channel::removeOperatorQuit(std::string clientNickName)
 				break;
 			}
 		}
-		if(_operators.empty() == true && _clientOrder.size() > 1)
+		if(_operators.empty() == true && _clientOrder.size() >= 1)
 		{
 			std::string nickname = _clientOrder.front()->getNickName();
 			_operators.push_back(nickname);
