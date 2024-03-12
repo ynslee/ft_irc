@@ -106,6 +106,11 @@ void	Client::setMaxChannels(void)
 	_maxChannels++;
 }
 
+void	Client::unsetMaxChannels(void)
+{
+	_maxChannels--;
+}
+
 const int	&Client::getClientFd(void){return(_clientFd);}
 const std::string	&Client::getServerName(void){return(_serverName);}
 const std::string	&Client::getNickName(void){return(_nickname);}

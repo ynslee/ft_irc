@@ -36,6 +36,7 @@ static void sendKickMsg(std::string message, Client *client, Client *client_kick
     std::vector<std::string>::iterator iter2 = std::find(invitelist.begin(), invitelist.end(), client->getNickName());
     if(iter2 != invitelist.end())
         invitelist.erase(iter2);
+    client->unsetMaxChannels();
 }
 
 int cmdKick(Message &msg, Client *client,  std::map<std::string, Channel*> &channels)
