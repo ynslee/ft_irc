@@ -31,6 +31,11 @@ static void sendKickMsg(std::string message, Client *client, Client *client_kick
     channel->removeFromChannel(client_kicked->getNickName());
     std::vector<std::string>::iterator iter = std::find(client_kicked->getChannelsJoined().begin(), client_kicked->getChannelsJoined().end(), channel->getChannelName());
     client_kicked->getChannelsJoined().erase(iter);
+    std::vector<std::string>invitelist;
+    invitelist = channel->getInvitedList();
+    std::vector<std::string>::iterator iter2 = std::find(invitelist.begin(), invitelist.end(), client->getNickName());
+    if(iter2 != invitelist.end())
+        invitelist.erase(iter2);
 }
 
 int cmdKick(Message &msg, Client *client,  std::map<std::string, Channel*> &channels)
