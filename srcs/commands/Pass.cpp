@@ -39,6 +39,7 @@ int cmdPass(Message &msg, Client *Client, std::string password)
 	else
 	{
 		std::cout << "THIS WHERE I SHOULD BE" << std::endl;
+		std::cout << "clientFD: " << Client->getClientFd() << std::endl;
 		send(Client->getClientFd(), ERR_PASSWDMISMATCH(hostname).c_str(), ERR_PASSWDMISMATCH(hostname).length(), 0);
 		// send(Client->getClientFd(), ERR_PASSWDMISMATCH(), strlen(ERR_PASSWDMISMATCH()), 0);
 		return (-1);

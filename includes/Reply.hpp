@@ -8,6 +8,8 @@
 # define ERR_NEEDMOREPARAMS(hostname)(":" + hostname + " 461 * :Not enough parameters" + "\r\n")
 # define ERR_ALREADYREGISTRED(hostname)(":" + hostname + " 462 * :You may not reregister" + "\r\n")
 # define ERR_PASSWDMISMATCH(servername)(":" + servername + " 464 * :Password incorrect" + "\r\n")
+# define ERR_RESTRICTED(servername)(":" + servername + " 484 :Your connection is restricted!" + "\r\n")
+# define ERR_RESTRICTED(servername)(":" + servername + " 484 :Your connection is restricted!" + "\r\n")
 // # define ERR_PASSWDMISMATCH()("Password incorrect\r\n")
 # define ERR_NONICKNAMEGIVEN(hostname)(":" + hostname + " 431 * :No nickname given" + "\r\n")
 # define ERR_ERRONEUSNICKNAME(hostname, nick)(":" + hostname + " 432 * " + nick + " :Erroneus nickname" + "\r\n")
