@@ -75,7 +75,10 @@ int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 					else if (msg.params[1][1] == 'o')
 					{
 						if (msg.params[1][0] == '+')
+						{
 							it->second->addOperator(msg.params[2]);
+							// send(Client->getClientFd(), RPL_YOURECHANOPER(Client->getHostName(), Client->getNickName(), channelName).c_str(), RPL_YOURECHANOPER(Client->getHostName(), Client->getNickName(), channelName).length(), 0);
+						}
 						if (msg.params[1][0] == '-')
 							it->second->removeOperator(msg.params[2]);
 					}
