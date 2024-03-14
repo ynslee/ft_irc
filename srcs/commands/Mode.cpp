@@ -15,6 +15,32 @@ command for modes that take a parameter.
 [CLIENT] MODE #eu-opers +l 10		//Command to set the limit for the number of users on channel "#eu-opers" to 10.
 */
 
+static void	sendOperatorMessage(Message &msg, std::map<std::string, Client*> &clientList, Channel *channel)
+{
+	std::string client = msg.params[2];
+	std::string channelName = msg.params[0];
+
+	std::map<std::string, Client*>::iterator it;
+	for (it=clientList.begin(); it!=clientList.end(); it++)
+	{
+		if (it->first == client)
+		{
+			if (msg.params[1][0] == '+')
+			{
+				channel->addOperator(msg.params[2]);
+				send(it->second->getClientFd(), RPL_YOURECHANOPER(it->second->getHostName(), client, channelName).c_str(), \
+				RPL_YOURECHANOPER(it->second->getHostName(), client, channelName).length(), 0);
+			}
+			if (msg.params[1][0] == '-')
+			{
+				channel->removeOperator(msg.params[2]);
+				send(it->second->getClientFd(), RPL_YOURENOTCHANOPER(it->second->getHostName(), client, channelName).c_str(), \
+				RPL_YOURENOTCHANOPER(it->second->getHostName(), client, channelName).length(), 0);
+			}
+		}
+	}
+}
+
 void	changeUserLimit(Message &msg, Channel *channel)
 {
 	if (msg.params[1][0] == '+' && !msg.params[2].empty())
@@ -49,6 +75,11 @@ int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 		send(Client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);
 		return (-1);
 	}
+	if (msg.params.empty() == true)
+	{
+		send(Client->getClientFd(), ERR_NEEDMOREPARAMS(hostname).c_str(), ERR_NEEDMOREPARAMS(hostname).length(), 0);
+		return (-1);
+	}
 	if (msg.params[0][0] == '#' && msg.params.size() > 1)
 	{
 		std::map<std::string, Channel*>::iterator it;
@@ -74,10 +105,13 @@ int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 					}
 					else if (msg.params[1][1] == 'o')
 					{
-						if (msg.params[1][0] == '+')
-							it->second->addOperator(msg.params[2]);
-						if (msg.params[1][0] == '-')
-							it->second->removeOperator(msg.params[2]);
+						sendOperatorMessage(msg, it->second->getClientList(), it->second);
+						// if (msg.params[1][0] == '+')
+						// {
+						// 	it->second->addOperator(msg.params[2]);
+						// }
+						// if (msg.params[1][0] == '-')
+						// 	it->second->removeOperator(msg.params[2]);
 					}
 					else if (msg.params[1][1] == 'l')
 						changeUserLimit(msg, it->second);
