@@ -15,7 +15,6 @@
  */
 int cmdPass(Message &msg, Client *Client, std::string password)
 {
-	std::cout << "CMINFG TO PASS" << std::endl;
 	std::string hostname = Client->getHostName();
 	std::string servername = Client->getServerName();
 
@@ -31,17 +30,13 @@ int cmdPass(Message &msg, Client *Client, std::string password)
 	}
 	else if (msg.params[0] == password)
 	{
-		std::cout << "IM HERE BISH" << std::endl;
-		// Client->setSendbuf("Password correct!\r\n"); // from server to client
 		Client->setRegisteration(1);
+		Client->setCorrectPass(true);
 		return (0);
 	}
 	else
 	{
-		std::cout << "THIS WHERE I SHOULD BE" << std::endl;
-		std::cout << "clientFD: " << Client->getClientFd() << std::endl;
-		send(Client->getClientFd(), ERR_PASSWDMISMATCH(hostname).c_str(), ERR_PASSWDMISMATCH(hostname).length(), 0);
-		// send(Client->getClientFd(), ERR_PASSWDMISMATCH(), strlen(ERR_PASSWDMISMATCH()), 0);
+		send(Client->getClientFd(), ERR_PASSWDMISMATCH(servername).c_str(), ERR_PASSWDMISMATCH(servername).length(), 0);
 		return (-1);
 	}
 

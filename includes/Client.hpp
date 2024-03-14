@@ -26,6 +26,7 @@ class Client{
 		int				_welcomeSent;
 		bool			_isOperator;
 		int				_maxChannels;
+		bool			_correctPass;
 		Client();
 		Client(Client const &other);
 		Client	&operator=(Client const &other);
@@ -49,6 +50,7 @@ class Client{
 		void	setIsOperator(bool status);
 		void	setNewChannel(std::string channel_name);
 		void 	setMaxChannels(void);
+		void	setCorrectPass(bool status);
 		const int	&getClientFd(void);
 		const std::string	&getServerName(void);
 		const std::string	&getNickName(void);
@@ -65,6 +67,7 @@ class Client{
 		const int	&getWelcomeSent(void);
 		const bool 	&getOperatorStatus(void);
 		const int	&getMaxChannels(void);
+		const bool	&getCorrectPass(void);
 		std::vector<std::string> &getChannelsJoined();
 		bool goodModeFLag(std::string modeFlag);
 		void addSendbuf(std::string buf);
