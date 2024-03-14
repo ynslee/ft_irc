@@ -53,7 +53,7 @@
 # define RPL_MYINFO(hostname, version, usermodes, channelmodes)(":" + hostname + " 004 " + version + " " + usermodes + " "+ channelmodes + "\r\n")
 # define RPL_MODE(nickname, mode)(":" + nickname + " MODE " + nickname + " :" + mode + "\r\n")
 # define RPL_YOUREOPER(hostname, username)(":" + hostname + " 381 " + username + " :You are now an IRC operator " + "\r\n")
-// # define RPL_YOURECHANOPER(username, channel)(": username + " is now an operator on channel " + channel + \r\n")
+# define RPL_YOURECHANOPER(hostname, username, channel)(":" + hostname + " 381 " + username + " You are now an operator on channel " + channel + "\r\n")
 # define RPL_JOIN(USER, channel, realname)(USER + " JOIN " + channel + " * :" + realname + "\r\n")
 # define RPL_NAMREPLY(hostname, username, channel, nicklist) (":" + hostname + " 353 " + username + " = " + channel + " :" + nicklist + "\r\n")
 # define RPL_ENDOFNAMES(hostname, username, channel) (":" + hostname + " 366 " + username + " " + channel + " :End of /NAMES list.\r\n")
