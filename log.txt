@@ -1,0 +1,87 @@
+Receiving<<< CAP LS 302
+JOIN :
+
+Receiving<<< PASS m
+
+Receiving<<< NICK jhusso
+USER jhusso jhusso localhost :Josefina Husso
+
+Receiving<<< CAP LS 302
+JOIN :
+
+Receiving<<< PASS moo
+
+Receiving<<< NICK jhusso
+USER jhusso jhusso localhost :Josefina Husso
+
+Receiving<<< CAP LS 302
+
+Receiving<<< JOIN :
+
+Receiving<<< PASS moi
+
+Receiving<<< NICK jhusso
+USER jhusso jhusso localhost :Josefina Husso
+
+sending>>> :c1r5p7.hive.fi 001 jhusso :Welcome to the Internet Relay Network 🐾TYCHUNEN SERVER🐾!jhusso@::ffff:127.0.0.1
+:c1r5p7.hive.fi 002 jhusso :Your host is 🐾TYCHUNEN SERVER🐾, running version 1.0
+:c1r5p7.hive.fi 003 jhusso :This server was created 2024-03-14.09:32:24
+:c1r5p7.hive.fi 004 v1.0 +i +itkol
+:c1r5p7.hive.fi 375 * :- jhusso Message of the day - 
+:c1r5p7.hive.fi 372 jhusso :(`-')                          (`-').->           <-. (`-')_  (`-')  _<-. (`-')_ 
+:c1r5p7.hive.fi 372 jhusso :( OO).->       .->   _         (OO )__      .->      \( OO) ) ( OO).-/   \( OO) )
+:c1r5p7.hive.fi 372 jhusso :/    '._   ,--.'  ,-.\-,-----.,--. ,'-',--.(,--.  ,--./ ,--/ (,------.,--./ ,--/ 
+:c1r5p7.hive.fi 372 jhusso :|'--...__)(`-')'.'  / |  .--./|  | |  ||  | |(`-')|   \ |  |  |  .---'|   \ |  | 
+:c1r5p7.hive.fi 372 jhusso :`--.  .--'(OO \    / /_) (`-')|  `-'  ||  | |(OO )|  . '|  |)(|  '--. |  . '|  |)
+:c1r5p7.hive.fi 372 jhusso :   |  |    |  /   /) ||  |OO )|  .-.  ||  | | |  \|  |\    |  |  .--' |  |\    | 
+:c1r5p7.hive.fi 372 jhusso :   |  |    `-/   /` (_'  '--'\|  | |  |\  '-'(_ .'|  | \   |  |  `---.|  | \   | 
+:c1r5p7.hive.fi 372 jhusso :   `--'      `--'      `-----'`--' `--' `-----'   `--'  `--'  `------'`--'  `--' 
+:c1r5p7.hive.fi 372 jhusso : (`-').->(`-')  _   (`-')       (`-') (`-')  _   (`-')                			     
+:c1r5p7.hive.fi 372 jhusso : ( OO)_  ( OO).-/<-.(OO )      _(OO ) ( OO).-/<-.(OO )                			     
+:c1r5p7.hive.fi 372 jhusso :(_)--\_)(,------.,------,),--.(_/,-.\(,------.,------,)               			     
+:c1r5p7.hive.fi 372 jhusso :/    _ / |  .---'|   /`. '\   \ / (_/ |  .---'|   /`. '               			     
+:c1r5p7.hive.fi 372 jhusso :\_..`--.(|  '--. |  |_.' | \   /   / (|  '--. |  |_.' |               			     
+:c1r5p7.hive.fi 372 jhusso :.-._)   \|  .--' |  .   .'_ \     /_) |  .--' |  .   .'               			     
+:c1r5p7.hive.fi 372 jhusso :\       /|  `---.|  |\  \ \-'\   /    |  `---.|  |\  \                			     
+:c1r5p7.hive.fi 372 jhusso : `-----' `------'`--' '--'    `-'     `------'`--' '--'               			     
+:c1r5p7.hive.fi 376 jhusso :End of /MOTD command.
+:jhusso MODE jhusso :+i
+
+Receiving<<< MODE jhusso +i
+
+Receiving<<< PING c1r5p7.hive.fi
+
+Receiving<<< pass m
+
+Receiving<<< pass moi
+
+Receiving<<< nick husso
+
+Receiving<<< user mo mo mo
+
+sending>>> :c1r5p7.hive.fi 001 husso :Welcome to the Internet Relay Network 🐾TYCHUNEN SERVER🐾!husso@::ffff:127.0.0.1
+:c1r5p7.hive.fi 002 husso :Your host is 🐾TYCHUNEN SERVER🐾, running version 1.0
+:c1r5p7.hive.fi 003 husso :This server was created 2024-03-14.09:32:56
+:c1r5p7.hive.fi 004 v1.0 +i +itkol
+:c1r5p7.hive.fi 375 * :- husso Message of the day - 
+:c1r5p7.hive.fi 372 husso :(`-')                          (`-').->           <-. (`-')_  (`-')  _<-. (`-')_ 
+:c1r5p7.hive.fi 372 husso :( OO).->       .->   _         (OO )__      .->      \( OO) ) ( OO).-/   \( OO) )
+:c1r5p7.hive.fi 372 husso :/    '._   ,--.'  ,-.\-,-----.,--. ,'-',--.(,--.  ,--./ ,--/ (,------.,--./ ,--/ 
+:c1r5p7.hive.fi 372 husso :|'--...__)(`-')'.'  / |  .--./|  | |  ||  | |(`-')|   \ |  |  |  .---'|   \ |  | 
+:c1r5p7.hive.fi 372 husso :`--.  .--'(OO \    / /_) (`-')|  `-'  ||  | |(OO )|  . '|  |)(|  '--. |  . '|  |)
+:c1r5p7.hive.fi 372 husso :   |  |    |  /   /) ||  |OO )|  .-.  ||  | | |  \|  |\    |  |  .--' |  |\    | 
+:c1r5p7.hive.fi 372 husso :   |  |    `-/   /` (_'  '--'\|  | |  |\  '-'(_ .'|  | \   |  |  `---.|  | \   | 
+:c1r5p7.hive.fi 372 husso :   `--'      `--'      `-----'`--' `--' `-----'   `--'  `--'  `------'`--'  `--' 
+:c1r5p7.hive.fi 372 husso : (`-').->(`-')  _   (`-')       (`-') (`-')  _   (`-')                			     
+:c1r5p7.hive.fi 372 husso : ( OO)_  ( OO).-/<-.(OO )      _(OO ) ( OO).-/<-.(OO )                			     
+:c1r5p7.hive.fi 372 husso :(_)--\_)(,------.,------,),--.(_/,-.\(,------.,------,)               			     
+:c1r5p7.hive.fi 372 husso :/    _ / |  .---'|   /`. '\   \ / (_/ |  .---'|   /`. '               			     
+:c1r5p7.hive.fi 372 husso :\_..`--.(|  '--. |  |_.' | \   /   / (|  '--. |  |_.' |               			     
+:c1r5p7.hive.fi 372 husso :.-._)   \|  .--' |  .   .'_ \     /_) |  .--' |  .   .'               			     
+:c1r5p7.hive.fi 372 husso :\       /|  `---.|  |\  \ \-'\   /    |  `---.|  |\  \                			     
+:c1r5p7.hive.fi 372 husso : `-----' `------'`--' '--'    `-'     `------'`--' '--'               			     
+:c1r5p7.hive.fi 376 husso :End of /MOTD command.
+:husso MODE husso :+i
+
+Receiving<<< QUIT :leaving
+

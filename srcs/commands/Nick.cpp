@@ -44,7 +44,13 @@ int isValidnick(std::string new_nick)
 int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names)
 {
     std::string hostname = Client->getHostName();
+    std::string servername = Client->getServerName();
 
+	if (Client->getCorrectPass() == false)
+	{
+		send(Client->getClientFd(), ERR_RESTRICTED(servername).c_str(), ERR_RESTRICTED(servername).length(), 0);
+		return (-1);
+	}
     if(Client->getRegisteration() == 0)
     {
         send(Client->getClientFd(), ERR_NOTREGISTERED(hostname).c_str(), ERR_NOTREGISTERED(hostname).length(), 0);
