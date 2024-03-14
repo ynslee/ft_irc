@@ -111,6 +111,12 @@ void	Client:: setCorrectPass(bool status)
 	_correctPass = status;
 }
 
+void	Client::unsetMaxChannels(void)
+{
+	if(_maxChannels > 0)
+		_maxChannels--;
+}
+
 const int	&Client::getClientFd(void){return(_clientFd);}
 const std::string	&Client::getServerName(void){return(_serverName);}
 const std::string	&Client::getNickName(void){return(_nickname);}

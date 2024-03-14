@@ -51,6 +51,7 @@ class Client{
 		void	setNewChannel(std::string channel_name);
 		void 	setMaxChannels(void);
 		void	setCorrectPass(bool status);
+		void	unsetMaxChannels(void);
 		const int	&getClientFd(void);
 		const std::string	&getServerName(void);
 		const std::string	&getNickName(void);
