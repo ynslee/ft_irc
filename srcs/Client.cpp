@@ -108,7 +108,8 @@ void	Client::setMaxChannels(void)
 
 void	Client::unsetMaxChannels(void)
 {
-	_maxChannels--;
+	if(_maxChannels > 0)
+		_maxChannels--;
 }
 
 const int	&Client::getClientFd(void){return(_clientFd);}
