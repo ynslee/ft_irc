@@ -9,7 +9,7 @@ Client::Client(){};
  * @param new_fd socket fd
  * @param _mode mode for USER, CHANNEL
  */
-Client::Client(int new_fd): _clientFd(new_fd), _serverName("🐾TYCHUNEN SERVER🐾"), _nickname(""), _mode("+i"), _operatorPassword("TYCHUNEN"),_isRegistered(0), _welcomeSent(0), _isOperator(false), _maxChannels(0)
+Client::Client(int new_fd): _clientFd(new_fd), _serverName("🐾TYCHUNEN SERVER🐾"), _nickname(""), _mode("+i"), _operatorPassword("TYCHUNEN"),_isRegistered(0), _welcomeSent(0), _isOperator(false), _maxChannels(0), _correctPass(false)
 {
 	std::vector<std::string>	_channelsJoined;
 }
@@ -106,6 +106,11 @@ void	Client::setMaxChannels(void)
 	_maxChannels++;
 }
 
+void	Client:: setCorrectPass(bool status)
+{
+	_correctPass = status;
+}
+
 void	Client::unsetMaxChannels(void)
 {
 	if(_maxChannels > 0)
@@ -128,6 +133,8 @@ const int	&Client::getRegisteration(void){return(_isRegistered);}
 const int &Client::getWelcomeSent(void){return(_welcomeSent);}
 const bool &Client::getOperatorStatus(void){return(_isOperator);}
 const int	&Client::getMaxChannels(void){return(_maxChannels);}
+const bool	&Client::getCorrectPass(void){return (_correctPass);}
+
 std::vector<std::string> &Client::getChannelsJoined(void){return(this->_channelsJoined);}
 
 bool Client::goodModeFLag(std::string modeFlag)
