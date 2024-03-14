@@ -3,11 +3,11 @@
 #include "../../includes/Reply.hpp"
 
 /**
- * @brief The INVITE command  is used to invite a user to a channel. The parameter <nickname> is the nickname of the person to be invited to the 
+ * @brief The INVITE command  is used to invite a user to a channel. The parameter <nickname> is the nickname of the person to be invited to the
  * target channel <channel>.
  * Syntax: INVITE <nickname> <channel>
  *
- * When the invite is successful, the server MUST send a RPL_INVITING numeric to the command issuer, 
+ * When the invite is successful, the server MUST send a RPL_INVITING numeric to the command issuer,
  * and an INVITE message, with the issuer as <source>, to the target user. Other channel members SHOULD NOT be notified.
  *
  *
