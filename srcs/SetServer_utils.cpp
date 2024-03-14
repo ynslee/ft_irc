@@ -12,10 +12,10 @@ void Server::closeClient(int i, int fd, Client *client)
     for(it=_channels.begin(); it!=_channels.end(); it++)
     {
         clientlist = it->second->getClientList();
-        if (clientlist.size() == 0)
-            continue;
-        else
-        {
+        // if (clientlist.size() == 0)
+        //     continue;
+        // else
+        // {
             std::map<std::string, Client*>::iterator it2;
             for (it2=clientlist.begin(); it2!=clientlist.end(); it2++)
             {
@@ -27,7 +27,7 @@ void Server::closeClient(int i, int fd, Client *client)
             }
             if (found == true)
                 it->second->removeFromChannel(client->getNickName());
-        }
+        // }
     }
 	this->_pfds[i] = this->_pfds[this->_pollfdCount - 1];
 	// we have to remove from the client when we have it
