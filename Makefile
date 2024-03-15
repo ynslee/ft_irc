@@ -29,6 +29,7 @@ ${OBJS} : ${DIR_OBJS}%.o : ${DIR_SRCS}%.cpp
 
 clean:
 	rm -rf ${DIR_OBJS}
+	if [ -f log.txt ]; then rm log.txt; fi
 
 fclean: clean
 	   rm -f $(NAME)
