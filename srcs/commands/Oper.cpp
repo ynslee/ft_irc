@@ -36,7 +36,7 @@ int cmdOper(Message &msg, Client *Client)
         // send(Client->getClientFd(), ERR_PASSWDMISMATCH(), strlen(ERR_PASSWDMISMATCH()), 0);
         return(-1);
     }
-    else if(msg.params[0] != Client->getUserName())
+    else if(msg.params[0] != Client->getNickName())
     {
         send(Client->getClientFd(), ERR_NOOPERHOST(hostname).c_str(), ERR_NOOPERHOST(hostname).length(), 0);
         return(-1);
