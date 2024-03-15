@@ -180,6 +180,7 @@ int Server::recieveMsg(int client_fd, int i, std::ofstream &log)
 		if (errno != EWOULDBLOCK) // no data to read
 		{
 			// std::cerr << "Error in recv()" << std::endl;
+			std::cout << "Errno EWOULDBLOCK activated" << std::endl;
 			closeClient(i, client_fd, _clients[client_fd]);
 			return (-1);
 		}

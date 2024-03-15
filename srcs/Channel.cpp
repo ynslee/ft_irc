@@ -51,6 +51,9 @@ void	Channel::addToChannel(Client &client)
 
 void	Channel::removeFromChannel(const std::string &nick)
 {
+	std::vector<std::string>::iterator iter2 = std::find(_invitedList.begin(), _invitedList.end(), nick);
+    if(iter2 != _invitedList.end())
+    	_invitedList.erase(iter2);
 	_clientList.erase(nick);
 	removeOperatorQuit(nick);
 	_useramount--;
@@ -242,4 +245,3 @@ bool Channel::isChannelFlag(std::string flag)
 		return true;
 	return false;
 }
-
