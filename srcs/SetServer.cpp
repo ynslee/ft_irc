@@ -152,6 +152,7 @@ int Server::acceptPendingConnections()
 	{
 		send(new_fd, "[IRCSERV] You cannot join, the server is already full", 53, 0);
 		close(new_fd);
+		return (0);
 	}
 	inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof(s));
 	std::cout << "New conection from " << s << " on socket :" << new_fd << std::endl;
@@ -175,30 +176,34 @@ int Server::recieveMsg(int client_fd, int i, std::ofstream &log)
 	int readcount;
 
 	memset(buf, 0, sizeof(buf));
+	printf("recieveMsg1\n"); //rm later
 	readcount = recv(client_fd, buf, sizeof(buf), 0);
 	if (readcount < 0)
 	{
 		if (errno != EWOULDBLOCK) // no data to read
 		{
 			// std::cerr << "Error in recv()" << std::endl;
-			std::cout << "Errno EWOULDBLOCK that is not EWOULDBLOCK activated" << std::endl;
+			std::cout << "Errno that is not EWOULDBLOCK activated" << std::endl;
 			closeClient(i, client_fd, _clients[client_fd]);
 			return (-1);
 		}
 	}
 	else if (readcount == 0)
 	{
-		std::cerr << "Peer has closed connection" << std::endl;
+		std::cout << "Peer has closed connection" << std::endl; //cerr
 		closeClient(i, client_fd, _clients[client_fd]);
 		return (0);
 	}
 	else
 	{
+		printf("recieveMsg2\n"); //rm later
 		setClientId(client_fd);
 		if (setMessage(static_cast<std::string>(buf), log) == -1)
 			return (-1);
+		printf("recieveMsg3\n"); //rm later
 		if(findCommand(client_fd) == -1)
 			return(-1);
+		printf("recieveMsg4\n"); //rm later
 		// std::cout << "received<< " << buf << std::endl;
 		return (0);
 	}
@@ -207,6 +212,7 @@ int Server::recieveMsg(int client_fd, int i, std::ofstream &log)
 
 int Server::findCommand(int client_fd)
 {
+	printf("findCommand1\n"); //rm later
 	while (serverShutdown == false)
 	{
 		if (_clients[client_fd]->getReadbuf().empty() == true)

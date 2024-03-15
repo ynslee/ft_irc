@@ -44,9 +44,10 @@ void Server::closeClient(int i, int fd, Client *client)
         _nicknames.erase(it4);
 	this->_pollfdCount--;
 	_clients.erase(fd);
-    _pfds.erase(i + _pfds.begin());
+    _pfds.erase(_pfds.begin() + i);
 	close(fd);
     delete(client);
+    client = NULL; //added later, rm?
 }
 
 
@@ -82,22 +83,27 @@ int Server::getCommandType(std::string command)
     return (INVALID);
 
 }
-
+// modified. check later
 void Server::removeClientfromPollAndMap(int fd)
 {
     std::map<int, Client*>::iterator it = _clients.find(fd);
     if (it != _clients.end())
     {
         delete it->second;
+        it->second = NULL;
         _clients.erase(it);
     }
-    for(int i = 0; i < this->_pollfdCount; i++)
+    else
+        return ;
+    int i = 0;
+    for(std::vector<pollfd>::iterator it = _pfds.begin(); i < this->_pollfdCount && it!= _pfds.end(); i++, it++)
 	{				
         if(this->_pfds[i].fd == fd)
         {
-            this->_pfds[i] = this->_pfds[this->_pollfdCount - 1];
+            // this->_pfds[i] = this->_pfds[this->_pollfdCount - 1];
+            _pfds.erase(it);
             _pollfdCount--;
-            _clients.erase(fd);
+            // _clients.erase(fd);
             break ;
         }
     }
