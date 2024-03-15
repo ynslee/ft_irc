@@ -73,10 +73,9 @@ void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &chan
             }
         }
     }
-    // std::vector<std::string>::iterator iter = std::find(nick_names.begin(),nick_names.end(), Client->getNickName());
-    // if(iter != nick_names.end())
-    //     nick_names.erase(iter);
-    (void)nick_names;
+    std::vector<std::string>::iterator iter = std::find(nick_names.begin(),nick_names.end(), Client->getNickName());
+    if(iter != nick_names.end())
+        nick_names.erase(iter);
     close(Client->getClientFd());
     return;
 }
