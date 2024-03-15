@@ -33,7 +33,6 @@ int cmdOper(Message &msg, Client *Client)
     else if(msg.params[1] != password)
     {
         send(Client->getClientFd(), ERR_PASSWDMISMATCH(servername).c_str(), ERR_PASSWDMISMATCH(servername).length(), 0);
-        // send(Client->getClientFd(), ERR_PASSWDMISMATCH(), strlen(ERR_PASSWDMISMATCH()), 0);
         return(-1);
     }
     else if(msg.params[0] != Client->getNickName())
