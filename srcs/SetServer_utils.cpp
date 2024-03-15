@@ -8,15 +8,14 @@ void Server::closeClient(int i, int fd, Client *client)
     std::map<std::string, Client *>	clientlist;
     bool found = false;
 
-	close(fd);
     std::map<std::string, Channel*>::iterator it;
     for(it=_channels.begin(); it!=_channels.end(); it++)
     {
         clientlist = it->second->getClientList();
-        // if (clientlist.size() == 0)
-        //     continue;
-        // else
-        // {
+        if (clientlist.size() == 0)
+            continue;
+        else
+        {
             std::cout << "clientlist size: " << clientlist.size() << std::endl;
             std::cout << "client nickname: " << client->getNickName() << std::endl;
             std::map<std::string, Client*>::iterator it2;
@@ -40,9 +39,10 @@ void Server::closeClient(int i, int fd, Client *client)
                 }
                 std::cout << std::endl;
             }   
-        // }
+        }
     }
     std::vector<std::string>::iterator it4 = std::find(_nicknames.begin(), _nicknames.end(), client->getNickName());
+    if (it4 != _nicknames.end())
         _nicknames.erase(it4);
 	this->_pollfdCount--;
 	_clients.erase(fd);

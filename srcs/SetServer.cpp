@@ -69,6 +69,7 @@ int Server::serverSetup()
 	poll_fd.fd = socketfd;
 	poll_fd.events = POLLIN;
 	this->_pfds.push_back(poll_fd);
+	_pollfdCount = 1;
 	std::cout << "listener socket is :" <<this->_pfds[0].fd << std::endl;
 	return (0);
 }
@@ -76,7 +77,6 @@ int Server::serverSetup()
 int Server::pollLoop()
 {
 	int poll_count;
-	this->_pollfdCount = this->_pfds.size();
 	std::ofstream log("log.txt");
 
 	while(serverShutdown == false)
@@ -164,7 +164,8 @@ int Server::acceptPendingConnections()
 	}
 	_clients[new_fd]->setHostName(hostname);
 	std::cout << "host name is" << hostname << std::endl;
-	this->_pollfdCount = this->_pfds.size();
+	this->_pollfdCount++;
+	std::cout << "poll count is ; " << this->_pollfdCount << std::endl;
 	return (0);
 }
 
