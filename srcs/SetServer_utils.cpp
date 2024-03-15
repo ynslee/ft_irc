@@ -12,34 +12,32 @@ void Server::closeClient(int i, int fd, Client *client)
     for(it=_channels.begin(); it!=_channels.end(); it++)
     {
         clientlist = it->second->getClientList();
-        if (clientlist.size() == 0)
-            continue;
-        else
+        // if (clientlist.size() == 0)
+        //     continue;
+        // else
+        // {
+        std::map<std::string, Client*>::iterator it2;
+        for (it2=clientlist.begin(); it2!=clientlist.end(); it2++)
         {
-            std::cout << "clientlist size: " << clientlist.size() << std::endl;
-            std::cout << "client nickname: " << client->getNickName() << std::endl;
-            std::map<std::string, Client*>::iterator it2;
-            for (it2=clientlist.begin(); it2!=clientlist.end(); it2++)
+            if (it2->second->getNickName() == client->getNickName())
             {
-                if (it2->second->getNickName() == client->getNickName())
-                {
-                    found = true;
-                    clientlist.erase(it2);
-                    break;
-                }
+                found = true;
+                clientlist.erase(it2);
+                break;
             }
-            if (found == true)
-            {
-                std::cout << "found client in channel" << std::endl;
-                it->second->removeFromChannel(client->getNickName());
-                std::map<std::string, Client*>::iterator it3;
-                for (it3=clientlist.begin(); it3!=clientlist.end(); it3++)
-                {
-                    std::cout << "client list after client left: " << it3->second->getNickName();
-                }
-                std::cout << std::endl;
-            }   
         }
+        if (found == true)
+        {
+            // std::cout << "found client in channel" << std::endl;
+            it->second->removeFromChannel(client->getNickName());
+            // std::map<std::string, Client*>::iterator it3;
+            // for (it3=clientlist.begin(); it3!=clientlist.end(); it3++)
+            // {
+            //     std::cout << "client list after client left: " << it3->second->getNickName();
+            // }
+            // std::cout << std::endl;
+        }
+        // }
     }
     std::vector<std::string>::iterator it4 = std::find(_nicknames.begin(), _nicknames.end(), client->getNickName());
     if (it4 != _nicknames.end())
