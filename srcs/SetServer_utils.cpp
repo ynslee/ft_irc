@@ -16,23 +16,35 @@ void Server::closeClient(int i, int fd, Client *client)
         //     continue;
         // else
         // {
-            std::map<std::string, Client*>::iterator it2;
-            for (it2=clientlist.begin(); it2!=clientlist.end(); it2++)
+        std::map<std::string, Client*>::iterator it2;
+        for (it2=clientlist.begin(); it2!=clientlist.end(); it2++)
+        {
+            if (it2->second->getNickName() == client->getNickName())
             {
-                if (it2->second->getNickName() == client->getNickName())
-                {
-                    found = true;
-                    break;
-                }
+                found = true;
+                clientlist.erase(it2);
+                break;
             }
-            if (found == true)
-                it->second->removeFromChannel(client->getNickName());
+        }
+        if (found == true)
+        {
+            // std::cout << "found client in channel" << std::endl;
+            it->second->removeFromChannel(client->getNickName());
+            // std::map<std::string, Client*>::iterator it3;
+            // for (it3=clientlist.begin(); it3!=clientlist.end(); it3++)
+            // {
+            //     std::cout << "client list after client left: " << it3->second->getNickName();
+            // }
+            // std::cout << std::endl;
+        }
         // }
     }
-	this->_pfds[i] = this->_pfds[this->_pollfdCount - 1];
-	// we have to remove from the client when we have it
+    std::vector<std::string>::iterator it4 = std::find(_nicknames.begin(), _nicknames.end(), client->getNickName());
+    if (it4 != _nicknames.end())
+        _nicknames.erase(it4);
 	this->_pollfdCount--;
 	_clients.erase(fd);
+    _pfds.erase(i + _pfds.begin());
 	close(fd);
     delete(client);
 }

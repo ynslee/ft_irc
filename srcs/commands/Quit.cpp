@@ -76,9 +76,6 @@ void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &chan
     std::vector<std::string>::iterator iter = std::find(nick_names.begin(),nick_names.end(), Client->getNickName());
     if(iter != nick_names.end())
         nick_names.erase(iter);
-    std::vector<std::string>::iterator iter2 = std::find(invitelist.begin(), invitelist.end(), Client->getNickName());
-    if(iter2 != invitelist.end())
-        invitelist.erase(iter2);
     close(Client->getClientFd());
     return;
 }

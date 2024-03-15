@@ -41,20 +41,30 @@ static void topicMessage(Channel *channel, Client *client)
 		client->addSendbuf(RPL_NOTOPIC(client->getHostName(), client->getNickName(), channel->getChannelName()));
 }
 
-static void successfulJoinMessage(Client *client, std::string channelName, std::map<std::string, Client*> &clientList, std::string nick)
+static void successfulJoinMessage(Client *client, std::string channelName, Channel *channel, std::string nick)
 {
-	std::string nicklist = nick;
+	std::string nicklist;
+	std::string prefixNick;
 
+	if(channel->isOperator(nick) == true)
+		nicklist = "@" + nick;
+	else
+		nicklist = nick;
 	std::map<std::string, Client*>::iterator it;
-	if (clientList.empty() == false)
+	if (channel->getClientList().empty() == false)
 	{
-		for (it=clientList.begin(); it!=clientList.end(); it++)
+		for (it=channel->getClientList().begin(); it!=channel->getClientList().end(); it++)
 		{
 			if (it->first.compare(nick) != 0)
 			{
 				// it->second->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
-				send(it->second->getClientFd(), RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()).c_str(), RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()).length(), 0);
-				nicklist += " " + it->second->getNickName();
+				prefixNick = it->second->getNickName();
+				if (channel->isOperator(prefixNick) == true)
+					prefixNick = "@" + it->second->getNickName();
+				else
+					prefixNick = it->second->getNickName();
+				send(it->second->getClientFd(), RPL_JOIN(USER(prefixNick, client->getUserName(), client->getIPaddress()), channelName, client->getRealName()).c_str(), RPL_JOIN(USER(prefixNick, client->getUserName(), client->getIPaddress()), channelName, client->getRealName()).length(), 0);
+				nicklist += " " + prefixNick;
 			}
 		}
 	}
@@ -99,7 +109,7 @@ static int joinExistingServerWithoutKey(std::map<std::string, Channel*> &channel
 				channels[channelName]->addOperator(client->getNickName());
 			it->second->addToChannel(*client);
 			topicMessage(channels[channelName], client);
-			successfulJoinMessage(client, channelName, channels[channelName]->getClientList(), client->getNickName());
+			successfulJoinMessage(client, channelName, channels[channelName], client->getNickName());
 			printJoinMessage(client, channelName);
 			return (0);
 		}
@@ -112,7 +122,7 @@ static int joinExistingServerWithoutKey(std::map<std::string, Channel*> &channel
 	client->setNewChannel(channelName);
 	client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
 	// topicMessage(channels[channelName], client);
-	successfulJoinMessage(client, channelName, channels[channelName]->getClientList(), client->getNickName());
+	successfulJoinMessage(client, channelName, channels[channelName], client->getNickName());
 	printJoinMessage(client, channelName);
 	return (0);
 }
@@ -135,7 +145,7 @@ static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels,
 					channels[channelName]->addOperator(client->getNickName());
 				it->second->addToChannel(*client);
 				topicMessage(channels[channelName], client);
-				successfulJoinMessage(client, channelName, channels[channelName]->getClientList(), client->getNickName());
+				successfulJoinMessage(client, channelName, channels[channelName], client->getNickName());
 				printJoinMessage(client, channelName);
 				return (0);
 			}
@@ -155,7 +165,7 @@ static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels,
 	client->setNewChannel(channelName);
 	client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
 	// topicMessage(channels[channelName], client);
-	successfulJoinMessage(client, channelName, channels[channelName]->getClientList(), client->getNickName());
+	successfulJoinMessage(client, channelName, channels[channelName], client->getNickName());
 	printJoinMessage(client, channelName);
 	return (0);
 }
@@ -269,7 +279,7 @@ int cmdJoin(Message &msg, Client *client, std::map<std::string, Channel*> &chann
 			client->setMaxChannels();
 			client->setNewChannel(channelName);
 			topicMessage(channels[channelName], client);
-			successfulJoinMessage(client, channelName, channels[channelName]->getClientList(), client->getNickName());
+			successfulJoinMessage(client, channelName, channels[channelName], client->getNickName());
 			printJoinMessage(client, channelName);
 			return (0);
 		}
