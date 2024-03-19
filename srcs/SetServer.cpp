@@ -152,6 +152,7 @@ int Server::acceptPendingConnections()
 	{
 		send(new_fd, "[IRCSERV] You cannot join, the server is already full", 53, 0);
 		close(new_fd);
+		return (0);
 	}
 	inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof(s));
 	std::cout << "New conection from " << s << " on socket :" << new_fd << std::endl;
@@ -181,13 +182,14 @@ int Server::recieveMsg(int client_fd, int i, std::ofstream &log)
 		if (errno != EWOULDBLOCK) // no data to read
 		{
 			// std::cerr << "Error in recv()" << std::endl;
+			std::cout << "Errno that is not EWOULDBLOCK activated" << std::endl;
 			closeClient(i, client_fd, _clients[client_fd]);
 			return (-1);
 		}
 	}
 	else if (readcount == 0)
 	{
-		std::cerr << "Peer has closed connection" << std::endl;
+		std::cout << "Peer has closed connection" << std::endl; //cerr
 		closeClient(i, client_fd, _clients[client_fd]);
 		return (0);
 	}
