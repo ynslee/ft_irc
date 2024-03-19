@@ -1,25 +1,25 @@
 #include "../../includes/Commands.hpp"
 #include "../../includes/Server.hpp"
 
-/**
- * @brief Indicates that the client wants to join the given channel(s), each channel using the given key for it.
- * 	The server receiving the command checks whether or not the client can join the given channel,
- * 	and processes the request.
- *
- * 	While a client is joined to a channel, they receive all relevant information about
- * 	that channel including who are in the channel and the commands that could be used in the channel.
- * 	They receive all PRIVMSG and when someone joins to the channel, and they also
- * 	receive QUIT messages from other clients joined to the same channel (to let them
- * 	know those users have left the channel and the network).
- *
- *
- *  Examples:
- * 	[CLIENT]  JOIN #foobar
- *  [SERVER] ; join channel #foobar.
- *
- * 	[CLIENT]  JOIN #foo foobar
- * 	[SERVER]; join channel #foo using key "foobar".
- */
+// /**
+//  * @brief Indicates that the client wants to join the given channel(s), each channel using the given key for it.
+//  * 	The server receiving the command checks whether or not the client can join the given channel,
+//  * 	and processes the request.
+//  *
+//  * 	While a client is joined to a channel, they receive all relevant information about
+//  * 	that channel including who are in the channel and the commands that could be used in the channel.
+//  * 	They receive all PRIVMSG and when someone joins to the channel, and they also
+//  * 	receive QUIT messages from other clients joined to the same channel (to let them
+//  * 	know those users have left the channel and the network).
+//  *
+//  *
+//  *  Examples:
+//  * 	[CLIENT]  JOIN #foobar
+//  *  [SERVER] ; join channel #foobar.
+//  *
+//  * 	[CLIENT]  JOIN #foo foobar
+//  * 	[SERVER]; join channel #foo using key "foobar".
+//  */
 
 static bool validChannelName(std::string channel)
 {
@@ -43,14 +43,16 @@ static void topicMessage(Channel *channel, Client *client)
 
 static void successfulJoinMessage(Client *client, std::string channelName, Channel *channel, std::string nick)
 {
-	std::string nicklist;
-	std::string prefixNick;
+	std::string nickList;
 	std::map<std::string, Client*> &clientList = channel->getClientList();
+	std::string prefixNick;
+	std::string clientNick;
 
 	if(channel->isOperator(nick) == true)
-		nicklist = "@" + nick;
+		nickList = "@" + nick;
 	else
-		nicklist = nick;
+		nickList = nick;
+	clientNick = nickList;
 	std::map<std::string, Client*>::iterator it;
 	if (clientList.empty() == false)
 	{
@@ -58,18 +60,18 @@ static void successfulJoinMessage(Client *client, std::string channelName, Chann
 		{
 			if (it->first.compare(nick) != 0)
 			{
-				it->second->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
-				prefixNick = it->second->getNickName();
-				if (channel->isOperator(prefixNick) == true)
+				if (channel->isOperator(it->second->getNickName()) == true)
 					prefixNick = "@" + it->second->getNickName();
 				else
 					prefixNick = it->second->getNickName();
-				send(it->second->getClientFd(), RPL_JOIN(USER(prefixNick, client->getUserName(), client->getIPaddress()), channelName, client->getRealName()).c_str(), RPL_JOIN(USER(prefixNick, client->getUserName(), client->getIPaddress()), channelName, client->getRealName()).length(), 0);
-				nicklist += " " + prefixNick;
+				// it->second->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
+				send(it->second->getClientFd(), RPL_JOIN(USER(clientNick, client->getUserName(), client->getIPaddress()), channelName, client->getRealName()).c_str(), RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()).length(), 0);
+				nickList += " " + prefixNick;
 			}
 		}
 	}
-	client->addSendbuf(RPL_NAMREPLY(client->getHostName(), client->getUserName(), channelName, nicklist));
+	std::cout << "nickList is " << nickList << std::endl;
+	client->addSendbuf(RPL_NAMREPLY(client->getHostName(), client->getUserName(), channelName, nickList));
 	client->addSendbuf(RPL_ENDOFNAMES(client->getHostName(), client->getUserName(), channelName));
 }
 
@@ -122,7 +124,7 @@ static int joinExistingServerWithoutKey(std::map<std::string, Channel*> &channel
 	client->setMaxChannels();
 	client->setNewChannel(channelName);
 	client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
-	topicMessage(channels[channelName], client);
+	// topicMessage(channels[channelName], client);
 	successfulJoinMessage(client, channelName, channels[channelName], client->getNickName());
 	printJoinMessage(client, channelName);
 	return (0);
@@ -165,7 +167,7 @@ static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels,
 	client->setMaxChannels();
 	client->setNewChannel(channelName);
 	client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
-	topicMessage(channels[channelName], client);
+	// topicMessage(channels[channelName], client);
 	successfulJoinMessage(client, channelName, channels[channelName], client->getNickName());
 	printJoinMessage(client, channelName);
 	return (0);
