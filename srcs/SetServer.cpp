@@ -208,7 +208,6 @@ int Server::recieveMsg(int client_fd, int i, std::ofstream &log)
 
 int Server::findCommand(int client_fd)
 {
-	printf("findCommand1\n"); //rm later
 	while (serverShutdown == false)
 	{
 		if (_clients[client_fd]->getReadbuf().empty() == true)

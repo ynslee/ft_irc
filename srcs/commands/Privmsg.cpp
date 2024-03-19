@@ -73,7 +73,7 @@ static int privmsgClient(Message &msg, Client *client, std::map<int, Client*> &c
 	{
 		if(it->second->getNickName() == nickname)
 		{
-			usermessage =  ":" + USER(nickname, it->second->getUserName(), it->second->getIPaddress());
+			usermessage =  ":" + USER(client->getNickName(), it->second->getUserName(), it->second->getIPaddress());
 			usermessage += message;
 			send(it->second->getClientFd(), usermessage.c_str(), usermessage.length(), 0);
 			return (0);

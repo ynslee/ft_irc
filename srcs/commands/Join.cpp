@@ -43,32 +43,35 @@ static void topicMessage(Channel *channel, Client *client)
 
 static void successfulJoinMessage(Client *client, std::string channelName, Channel *channel, std::string nick)
 {
-	std::string nicklist;
+	std::string nickList;
+	std::map<std::string, Client*> &clientList = channel->getClientList();
 	std::string prefixNick;
+	std::string clientNick;
 
 	if(channel->isOperator(nick) == true)
-		nicklist = "@" + nick;
+		nickList = "@" + nick;
 	else
-		nicklist = nick;
+		nickList = nick;
+	clientNick = nickList;
 	std::map<std::string, Client*>::iterator it;
-	if (channel->getClientList().empty() == false)
+	if (clientList.empty() == false)
 	{
-		for (it=channel->getClientList().begin(); it!=channel->getClientList().end(); it++)
+		for (it=clientList.begin(); it!=clientList.end(); it++)
 		{
 			if (it->first.compare(nick) != 0)
 			{
-				// it->second->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
-				prefixNick = it->second->getNickName();
-				if (channel->isOperator(prefixNick) == true)
+				if (channel->isOperator(it->second->getNickName()) == true)
 					prefixNick = "@" + it->second->getNickName();
 				else
 					prefixNick = it->second->getNickName();
-				send(it->second->getClientFd(), RPL_JOIN(USER(prefixNick, client->getUserName(), client->getIPaddress()), channelName, client->getRealName()).c_str(), RPL_JOIN(USER(prefixNick, client->getUserName(), client->getIPaddress()), channelName, client->getRealName()).length(), 0);
-				nicklist += " " + prefixNick;
+				// it->second->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
+				send(it->second->getClientFd(), RPL_JOIN(USER(clientNick, client->getUserName(), client->getIPaddress()), channelName, client->getRealName()).c_str(), RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()).length(), 0);
+				nickList += " " + prefixNick;
 			}
 		}
 	}
-	client->addSendbuf(RPL_NAMREPLY(client->getHostName(), client->getUserName(), channelName, nicklist));
+	std::cout << "nickList is " << nickList << std::endl;
+	client->addSendbuf(RPL_NAMREPLY(client->getHostName(), client->getUserName(), channelName, nickList));
 	client->addSendbuf(RPL_ENDOFNAMES(client->getHostName(), client->getUserName(), channelName));
 }
 
