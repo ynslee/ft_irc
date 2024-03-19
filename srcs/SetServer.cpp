@@ -176,7 +176,6 @@ int Server::recieveMsg(int client_fd, int i, std::ofstream &log)
 	int readcount;
 
 	memset(buf, 0, sizeof(buf));
-	printf("recieveMsg1\n"); //rm later
 	readcount = recv(client_fd, buf, sizeof(buf), 0);
 	if (readcount < 0)
 	{
@@ -196,14 +195,11 @@ int Server::recieveMsg(int client_fd, int i, std::ofstream &log)
 	}
 	else
 	{
-		printf("recieveMsg2\n"); //rm later
 		setClientId(client_fd);
 		if (setMessage(static_cast<std::string>(buf), log) == -1)
 			return (-1);
-		printf("recieveMsg3\n"); //rm later
 		if(findCommand(client_fd) == -1)
 			return(-1);
-		printf("recieveMsg4\n"); //rm later
 		// std::cout << "received<< " << buf << std::endl;
 		return (0);
 	}

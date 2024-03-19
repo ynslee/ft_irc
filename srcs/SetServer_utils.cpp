@@ -12,10 +12,6 @@ void Server::closeClient(int i, int fd, Client *client)
     for(it=_channels.begin(); it!=_channels.end(); it++)
     {
         clientlist = it->second->getClientList();
-        // if (clientlist.size() == 0)
-        //     continue;
-        // else
-        // {
         std::map<std::string, Client*>::iterator it2;
         for (it2=clientlist.begin(); it2!=clientlist.end(); it2++)
         {
@@ -37,7 +33,6 @@ void Server::closeClient(int i, int fd, Client *client)
             // }
             // std::cout << std::endl;
         }
-        // }
     }
     std::vector<std::string>::iterator it4 = std::find(_nicknames.begin(), _nicknames.end(), client->getNickName());
     if (it4 != _nicknames.end())
@@ -100,10 +95,8 @@ void Server::removeClientfromPollAndMap(int fd)
 	{				
         if(this->_pfds[i].fd == fd)
         {
-            // this->_pfds[i] = this->_pfds[this->_pollfdCount - 1];
             _pfds.erase(it);
             _pollfdCount--;
-            // _clients.erase(fd);
             break ;
         }
     }
