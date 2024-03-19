@@ -71,10 +71,7 @@ int cmdInvite(Message &msg, Client *client,  std::map<std::string, Channel*> &ch
     }
     std::vector<std::string>::iterator InviteIt = std::find(channelIt->second->getInvitedList().begin(), channelIt->second->getInvitedList().end(), msg.params[0]);
     if(InviteIt != channelIt->second->getInvitedList().end())
-    {
-        std::cout << " is there " << std::endl;
         return (0);
-    }
     channelIt->second->getInvitedList().push_back(msg.params[0]);
     send(client->getClientFd(),RPL_INVITING(hostname,client->getNickName(),msg.params[0],msg.params[1]).c_str(), RPL_INVITING(hostname,client->getNickName(),msg.params[0],msg.params[1]).length(), 0);
     std::string invite_message;
