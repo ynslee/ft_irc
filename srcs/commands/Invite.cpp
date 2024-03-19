@@ -11,7 +11,7 @@
  * and an INVITE message, with the issuer as <source>, to the target user. Other channel members SHOULD NOT be notified.
  *
  *
- * Example :    KICK #Finnish Matthew ; Command to kick Matthew from #Finnish
+ * Example :    INVITE Wiz #foo_bar    ; Invite Wiz to #foo_bar
  */
 
 static void sendInviteMsg(std::string message, std::map<int, Client*> &clients, std::string invited_nick)
@@ -68,6 +68,12 @@ int cmdInvite(Message &msg, Client *client,  std::map<std::string, Channel*> &ch
     {
         send(client->getClientFd(), ERR_USERONCHANNEL(hostname,msg.params[0],msg.params[1]).c_str(), ERR_USERONCHANNEL(hostname,msg.params[0],msg.params[1]).length(), 0);
         return(-1);
+    }
+    std::vector<std::string>::iterator InviteIt = std::find(channelIt->second->getInvitedList().begin(), channelIt->second->getInvitedList().end(), msg.params[0]);
+    if(InviteIt != channelIt->second->getInvitedList().end())
+    {
+        std::cout << " is there " << std::endl;
+        return (0);
     }
     channelIt->second->getInvitedList().push_back(msg.params[0]);
     send(client->getClientFd(),RPL_INVITING(hostname,client->getNickName(),msg.params[0],msg.params[1]).c_str(), RPL_INVITING(hostname,client->getNickName(),msg.params[0],msg.params[1]).length(), 0);
