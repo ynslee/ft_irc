@@ -20,7 +20,7 @@ INCLUDES = -I includes/
 all: $(NAME)
 
 $(NAME): $(OBJS)
-		$(CC) $^ -o $@ -fsanitize=address
+		$(CC) $^ -o $@ #-fsanitize=address
 
 ${OBJS} : ${DIR_OBJS}%.o : ${DIR_SRCS}%.cpp
 	mkdir -p ${@D}

@@ -45,19 +45,20 @@ static void successfulJoinMessage(Client *client, std::string channelName, Chann
 {
 	std::string nicklist;
 	std::string prefixNick;
+	std::map<std::string, Client*> &clientList = channel->getClientList();
 
 	if(channel->isOperator(nick) == true)
 		nicklist = "@" + nick;
 	else
 		nicklist = nick;
 	std::map<std::string, Client*>::iterator it;
-	if (channel->getClientList().empty() == false)
+	if (clientList.empty() == false)
 	{
-		for (it=channel->getClientList().begin(); it!=channel->getClientList().end(); it++)
+		for (it=clientList.begin(); it!=clientList.end(); it++)
 		{
 			if (it->first.compare(nick) != 0)
 			{
-				// it->second->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
+				it->second->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
 				prefixNick = it->second->getNickName();
 				if (channel->isOperator(prefixNick) == true)
 					prefixNick = "@" + it->second->getNickName();
@@ -121,7 +122,7 @@ static int joinExistingServerWithoutKey(std::map<std::string, Channel*> &channel
 	client->setMaxChannels();
 	client->setNewChannel(channelName);
 	client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
-	// topicMessage(channels[channelName], client);
+	topicMessage(channels[channelName], client);
 	successfulJoinMessage(client, channelName, channels[channelName], client->getNickName());
 	printJoinMessage(client, channelName);
 	return (0);
@@ -164,7 +165,7 @@ static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels,
 	client->setMaxChannels();
 	client->setNewChannel(channelName);
 	client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
-	// topicMessage(channels[channelName], client);
+	topicMessage(channels[channelName], client);
 	successfulJoinMessage(client, channelName, channels[channelName], client->getNickName());
 	printJoinMessage(client, channelName);
 	return (0);
