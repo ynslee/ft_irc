@@ -10,9 +10,10 @@
 class Client;
 class Message;
 class Channel;
+class Server;
 
 void cmdCap(Message &msg, Client *Client);
-int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names);
+int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names, Server &server);
 int cmdPass(Message &msg, Client *Client, std::string password);
 void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &channels,  std::vector<std::string> &nick_names);
 int cmdUser(Message &msg, Client *Client);
