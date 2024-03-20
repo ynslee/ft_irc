@@ -229,7 +229,7 @@ int Server::findCommand(int client_fd)
 				break ;
 			case command::NICK:
 			{
-				if(cmdNick(msg,_clients[client_fd], getNicknames()))
+				if(cmdNick(msg,_clients[client_fd], getNicknames(), *this))
 					return(-1);
 				break ;
 			}

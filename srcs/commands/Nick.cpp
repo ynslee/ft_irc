@@ -26,6 +26,22 @@
  * Example : /NICK nickname
  */
 
+static void changeNickinChannels(Client *client, Server &server)
+{
+	//match clients channels to server map->first and modify clientlist and operator list in server to have the new nickname
+	std::vector<std::string>::iterator clientChannels;
+	for (clientChannels = client->getChannelsJoined().begin(); clientChannels != client->getChannelsJoined().end(); clientChannels++)
+	{
+		std::cout << "clientChannels: " << std::endl;
+		std::map<std::string, Channel*>::iterator serverChannels;
+		for (serverChannels = server.getChannels().begin(); serverChannels != server.getChannels().end(); serverChannels++)
+		{
+			std::cout << "serverChannels: " << std::endl;
+			// if (clientChannels == serverChannels)
+		}
+	}
+}
+
 int isValidnick(std::string new_nick)
 {
     if(!std::isalnum(new_nick[0]))
@@ -41,7 +57,7 @@ int isValidnick(std::string new_nick)
     return(0);
 }
 
-int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names)
+int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names, Server &server)
 {
     std::string hostname = Client->getHostName();
     std::string servername = Client->getServerName();
@@ -79,6 +95,9 @@ int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names)
         std::vector<std::string>::iterator it = std::find(nick_names.begin(),nick_names.end(), old_nick);
         nick_names.erase(it);
         nick_names.push_back(new_nick);
+		//operatorlist for cliets channels
+		changeNickinChannels(Client, server);
+		//invited list for all channels
         send(Client->getClientFd(), NICK_REPLY(old_nick,Client->getUserName(),Client->getIPaddress(), new_nick).c_str(), NICK_REPLY(old_nick,Client->getUserName(),Client->getIPaddress(), new_nick).length(),0);
         return(0);
     }
