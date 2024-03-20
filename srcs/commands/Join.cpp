@@ -70,7 +70,6 @@ static void successfulJoinMessage(Client *client, std::string channelName, Chann
 			}
 		}
 	}
-	std::cout << "nickList is " << nickList << std::endl;
 	client->addSendbuf(RPL_NAMREPLY(client->getHostName(), client->getUserName(), channelName, nickList));
 	client->addSendbuf(RPL_ENDOFNAMES(client->getHostName(), client->getUserName(), channelName));
 }
@@ -124,7 +123,7 @@ static int joinExistingServerWithoutKey(std::map<std::string, Channel*> &channel
 	client->setMaxChannels();
 	client->setNewChannel(channelName);
 	client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
-	// topicMessage(channels[channelName], client);
+	topicMessage(channels[channelName], client);
 	successfulJoinMessage(client, channelName, channels[channelName], client->getNickName());
 	printJoinMessage(client, channelName);
 	return (0);
@@ -167,9 +166,26 @@ static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels,
 	client->setMaxChannels();
 	client->setNewChannel(channelName);
 	client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
-	// topicMessage(channels[channelName], client);
+	topicMessage(channels[channelName], client);
 	successfulJoinMessage(client, channelName, channels[channelName], client->getNickName());
 	printJoinMessage(client, channelName);
+	return (0);
+}
+
+static int clientAlreadyInChannel(std::map<std::string, Channel*> &channels, Client *client)
+{
+	std::map<std::string, Channel*>::iterator it;
+	for (it=channels.begin(); it!=channels.end(); it++)
+	{
+		std::string channelName = it->first;
+		std::vector<std::string> channelList = client->getChannelsJoined();
+		std::vector<std::string>::iterator it2;
+		for(it2=channelList.begin(); it2!=channelList.end(); ++it2)
+		{
+			if (*it2 == channelName)
+				return (1);
+		}
+	}
 	return (0);
 }
 
@@ -191,6 +207,8 @@ static int clientErrorChecks(Client *client, std::map<std::string, Channel*> &ch
 	}
 	if (client->getMaxChannels() == 3)
 	{
+		if (clientAlreadyInChannel(channels, client) == 1)
+			return (-1);
 		send(client->getClientFd(), ERR_TOOMANYCHANNELS(client->getUserName(), channelName).c_str(), ERR_TOOMANYCHANNELS(client->getUserName(), channelName).length(), 0);
 		return (-1);
 	}
@@ -264,14 +282,12 @@ int cmdJoin(Message &msg, Client *client, std::map<std::string, Channel*> &chann
 	if (validChannelName(msg.params[0]) == false)
 		return (-1);
 	channelName = msg.params[0];
-	std::cout << "channel name is " << channelName << std::endl;
 	if (clientErrorChecks(client, channels, channelName) == -1)
 		return (-1);
 	if (channels.size() == 0)
 	{
 		if(msg.params.size() <= 2)
 		{
-			std::cout << "beginning of irc. there is no channel" << std::endl;
 			channels.insert(std::make_pair(channelName, new Channel(channelName)));
 			if(channels[channelName]->getClientList().size() == 0)
 				channels[channelName]->addOperator(client->getNickName());

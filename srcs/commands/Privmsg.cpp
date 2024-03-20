@@ -31,7 +31,6 @@ void messageToChannelClients(Message &msg, std::string nickname, std::map<std::s
 		if (it->second->getNickName() != nickname)
 		{
 			std::string message = RPL_PRIVMSG(USER(nickname, it->second->getUserName(), it->second->getIPaddress()), msg.params[0], msg.trailing);
-			std::cout << "message is: "	<< message << std::endl;
 			// it->second->setSendbuf(message);
 			send(it->second->getClientFd(), message.c_str(), message.length(), 0);
 		}
@@ -65,7 +64,7 @@ static int privmsgClient(Message &msg, Client *client, std::map<int, Client*> &c
 	std::string username = client->getUserName();
 	std::string text = msg.trailing;
 
-	std::string message = " " + nickname + " PRIVMSG " + client->getNickName() + " :" + text + "\r\n";
+	std::string message = " PRIVMSG " + nickname + " :" + text + "\r\n";
 	std::string usermessage;
 	
 	std::map<int, Client*>::iterator it;
@@ -73,7 +72,7 @@ static int privmsgClient(Message &msg, Client *client, std::map<int, Client*> &c
 	{
 		if(it->second->getNickName() == nickname)
 		{
-			usermessage =  ":" + USER(client->getNickName(), it->second->getUserName(), it->second->getIPaddress());
+			usermessage = USER(client->getNickName(), it->second->getUserName(), it->second->getIPaddress());
 			usermessage += message;
 			send(it->second->getClientFd(), usermessage.c_str(), usermessage.length(), 0);
 			return (0);
@@ -111,7 +110,7 @@ int cmdPrivmsg(Message &msg, Client *client, std::map<std::string, Channel*> &ch
 		{
 			if (isValidnick(msg.params[0]) == -1)
 			{
-				send(client->getClientFd(), ERR_NOSUCHNICK(client->getNickName()).c_str(), ERR_NOSUCHNICK(client->getNickName()).length(), 0);
+				send(client->getClientFd(), ERR_NOSUCHNICK(msg.params[0]).c_str(), ERR_NOSUCHNICK(msg.params[0]).length(), 0);
 				return (-1);
 			}
 			if (privmsgClient(msg, client, clients) == -1)
