@@ -24,6 +24,8 @@
 - [About](#about)
 - [Getting Started](#getting_started)
 - [Running the server](#running_the_server)
+- [Commands and its usage](#command)
+- [External resources](#sources)
 
 ## 🧐 About <a name = "about"></a>
 
@@ -36,7 +38,7 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 ```
-Git clone the repository 
+git clone the repository 
 ```
 
 ### Installing
@@ -57,9 +59,38 @@ $./ircserv [port_number] [password]
 
 ## 🤖 Running the server <a name = "running_the_server"></a>
 
+### Open a new terminal and use Irssi or netcat to connect
+-  You can use Irssi or netcat command to connect to server. We recommend you to use nc(netcat) command with the flag 'c' so that the communication between server and client is done properly with '\r\n' ending
+
+##### 1\. Irssi
 ```
+$irssi
+$/connect localhost [port_number] [password]
 ```
-### In case if you don't want any philosophers to die
+##### 2\. Netcat
+With netcat, you need to have 'pass', 'nick', 'user' command to connect to server. You need to type 'pass' command first to secure the connection and then you can use either 'nick' or 'user' command to register
+```
+$nc -c localhost [port_number]
+pass [password]
+nick [nickname]
+user [username] * * :[real_name] (real_name is optional)
+```
+## Commands and its usage <a name = "command"></a>
+
+| __Command__        | __Usage__   |
+| -------------  |:-------------:|
+| PASS              | PASS [password] |
+| NICK       |       |
+| USER  |     |
+| MODE  |      |
+| INVITE  |       |
+| JOIN  |      |
+| OPER  |      |
+| PRIVMSG  |       |
+| TOPIC  |      |
+| KICK  |       |
+| QUIT  |    |
+
  
 ## External resources <a name = "sources"></a>
 
