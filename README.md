@@ -91,6 +91,11 @@ user [username] * * :[real_name] (real_name is optional)
 | KICK  |       |
 | QUIT  |    |
 
+## Collaborators
+
+[Yoonseon Lee](https://github.com/ynslee) , [Josefina Husso](https://github.com/hussojo) ,[
+Juan Esteban Pelaez Hoyos](https://github.com/jestebanpelaez18)
+
  
 ## External resources <a name = "sources"></a>
 
