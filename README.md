@@ -31,6 +31,11 @@
 
 Exploring sockets, network programming and IRC protcols and develop our own Inter Relay Chat server from scratch using c++.
 
+## Collaborators
+
+[Yoonseon Lee](https://github.com/ynslee) , [Josefina Husso](https://github.com/hussojo) ,[
+Juan Esteban Pelaez Hoyos](https://github.com/jestebanpelaez18)
+
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
@@ -91,10 +96,6 @@ user [username] * * :[real_name] (real_name is optional)
 | KICK  |       |
 | QUIT  |    |
 
-## Collaborators
-
-[Yoonseon Lee](https://github.com/ynslee) , [Josefina Husso](https://github.com/hussojo) ,[
-Juan Esteban Pelaez Hoyos](https://github.com/jestebanpelaez18)
 
  
 ## External resources <a name = "sources"></a>
