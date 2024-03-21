@@ -2,6 +2,7 @@
 #include "../includes/Client.hpp"
 #include "../includes/Message.hpp"
 #include "../includes/Commands.hpp"
+#include "../includes/Reply.hpp"
 
 void *get_in_addr(struct sockaddr *sa)
 {
@@ -290,7 +291,7 @@ int Server::findCommand(int client_fd)
 			}
 			case command::INVALID:
 			{
-				std::cout << "Invalid command" << std::endl;
+				send(_clients[client_fd]->getClientFd(), ERR_UNKNOWNCOMMAND(this->getServerName(), msg.command).c_str(), ERR_UNKNOWNCOMMAND(this->getServerName(), msg.command).length(), 0);
 				return (-1);
 			}
 		}
