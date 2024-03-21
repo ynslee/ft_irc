@@ -48,8 +48,6 @@ void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &chan
     std::string quit_message;
     std::vector<std::string>invitelist;
     quit_message = QUIT_MESSAGE(Client->getNickName(), Client->getUserName(), Client->getIPaddress());
-    if (msg.params.size() > 0)
-        return ;
     if(msg.trailing.empty() == false)
         quit_message.append(msg.trailing + " as the reason \r\n");
     else
