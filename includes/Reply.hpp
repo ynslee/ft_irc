@@ -37,6 +37,7 @@
 # define ERR_USERNOTINCHANNEL(hostname,nick,channel) (":" + hostname + " 441 " + channel + " " + nick + " :Not on this channel\r\n")
 # define ERR_USERONCHANNEL(hostname,nick,channel) (":" + hostname + " 443 " + channel + " " + nick + " :is already on the channel\r\n")
 # define ERR_RESTRICTED(servername)(":" + servername + " 484 :Your connection is restricted!" + "\r\n")
+# define ERR_UNKNOWNCOMMAND(servername, command)(":" + servername + " 421 " + command + " :Unknown command" + "\r\n")
 
 //NORMAL REPLIES
 # define QUIT_MESSAGE(nick, username, userIP)(":" + nick + "!" + username + "@" + userIP + " QUIT :Quit: ")
