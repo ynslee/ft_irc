@@ -4,16 +4,12 @@
 # include "Common.hpp"
 # include "Commands.hpp"
 
-// if _registeration == 0, then the client is not registered
-// if _registeration == 1, then the client pass is registered
-// if _registeration == 2, then the client pass and nick are registered
-// if _registeration == 3, then the client pass, nick and user are registered
 class Client{
 	private:
 		int				_clientFd;
 		std::string		_serverName;
-		std::string		_readbuf; // buffer reading from client
-		std::string		_sendbuf; // buffer sending to client
+		std::string		_readbuf;
+		std::string		_sendbuf;
 		std::string		_nickname;
 		std::string		_username;
 		std::string		_realname;
@@ -35,7 +31,6 @@ class Client{
 		Client(int new_fd);
 		~Client();
 
-		//write setters getters
 		void	setSocketFd(int new_fd);
 		void	setNickName(std::string new_name);
 		void	setUserName(std::string new_user);

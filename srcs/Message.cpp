@@ -19,13 +19,11 @@ Message::Message(std::string input)
 				size_t pos = token.find('\r');
 				token = token.substr(0, pos);
 				this->command = token;
-				std::cout << " COMMAND ONLY: " << this->command << std::endl;
 				return ;
 			}
 			else
 			{
 				this->command = token;
-				std::cout << "COMMAND: " << this->command << std::endl;
 				index ++;
 				continue ;
 			}
@@ -37,23 +35,19 @@ Message::Message(std::string input)
 				size_t pos = token.find('\r');
 				token = token.substr(0, pos);
 				this->params.push_back(token);
-				std::cout << "PARAM WITH NO TRAILING: " << token << std::endl;
 				return ;
 			}
 			this->params.push_back(token);
-			std::cout << "PARAM: " << token << std::endl;
 			continue ;
 		}
 		else if (index >= 1 && token[0] == ':' && command.empty() == false)
 		{
-			// std::cout << token << std::endl;
 			std::string trail = token.substr(1);
 			std::string temp;
 			getline(iss, temp, '\r');
 			trail += temp;
 			this->trailing = trail;
 			trailing_flag = 1;
-			std::cout << "TRAILING: " << trailing << std::endl;
 		}
 	}
 }

@@ -63,13 +63,11 @@ void	Client::setMode(std::string mode)
 {
 	if (goodModeFLag(mode) == false)
 		send(this->getClientFd(), ERR_UNKNOWNMODE(), strlen(ERR_UNKNOWNMODE()), 0);
-	// std::cout << "**** OLD MODE: " << _mode << std::endl;
 	char modeFlag = mode[1];
 	if (mode[0] == '+' && isChannelFlag(mode) == false)
 		_mode += modeFlag;
 	if (mode[0] == '-' && isChannelFlag(mode) == true)
 		_mode.erase(std::remove(_mode.begin(), _mode.end(), modeFlag), _mode.end());
-	// std::cout << "**** NEW MODE: " << _mode << std::endl;
 }
 
 void	Client::setIPaddress(std::string IP)

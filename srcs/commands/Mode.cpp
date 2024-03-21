@@ -107,12 +107,6 @@ int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 					else if (msg.params[1][1] == 'o')
 					{
 						sendOperatorMessage(msg, it->second->getClientList(), it->second);
-						// if (msg.params[1][0] == '+')
-						// {
-						// 	it->second->addOperator(msg.params[2]);
-						// }
-						// if (msg.params[1][0] == '-')
-						// 	it->second->removeOperator(msg.params[2]);
 						return (0);
 					}
 					else if (msg.params[1][1] == 'l')
@@ -131,5 +125,5 @@ int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 		send(Client->getClientFd(), ERR_NOSUCHCHANNEL(channelName).c_str(), ERR_NOSUCHCHANNEL(channelName).length(), 0);
 		return (-1);
 	}
-	return (0); // if command does not have # before channel name ignore command
+	return (0);
 }

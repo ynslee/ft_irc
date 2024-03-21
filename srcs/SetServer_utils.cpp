@@ -23,16 +23,7 @@ void Server::closeClient(int i, int fd, Client *client)
             }
         }
         if (found == true)
-        {
-            // std::cout << "found client in channel" << std::endl;
             it->second->removeFromChannel(client->getNickName());
-            // std::map<std::string, Client*>::iterator it3;
-            // for (it3=clientlist.begin(); it3!=clientlist.end(); it3++)
-            // {
-            //     std::cout << "client list after client left: " << it3->second->getNickName();
-            // }
-            // std::cout << std::endl;
-        }
     }
     std::vector<std::string>::iterator it4 = std::find(_nicknames.begin(), _nicknames.end(), client->getNickName());
     if (it4 != _nicknames.end())
@@ -42,7 +33,7 @@ void Server::closeClient(int i, int fd, Client *client)
     _pfds.erase(_pfds.begin() + i);
 	close(fd);
     delete(client);
-    client = NULL; //added later, rm?
+    client = NULL;
 }
 
 
@@ -78,7 +69,7 @@ int Server::getCommandType(std::string command)
     return (INVALID);
 
 }
-// modified. check later
+
 void Server::removeClientfromPollAndMap(int fd)
 {
     std::map<int, Client*>::iterator it = _clients.find(fd);

@@ -25,14 +25,12 @@ static void sendKickMsg(std::string message, Client *client, Client *client_kick
     {
         if(client != NULL && it->first == client->getNickName())
             continue;
-		// it->second->setSendbuf(message);
         send(it->second->getClientFd(), message.c_str(), message.length(), 0);
     }
     channel->removeFromChannel(client_kicked->getNickName());
     std::vector<std::string>::iterator iter = std::find(client_kicked->getChannelsJoined().begin(), client_kicked->getChannelsJoined().end(), channel->getChannelName());
     client_kicked->getChannelsJoined().erase(iter);
     std::vector<std::string>::iterator iter2 = std::find(channel->getInvitedList().begin(), channel->getInvitedList().end(), client_kicked->getNickName());
-    std::cout << client_kicked->getNickName() << std::endl;
     if(iter2 != channel->getInvitedList().end())
         channel->getInvitedList().erase(iter2);
     client_kicked->unsetMaxChannels();

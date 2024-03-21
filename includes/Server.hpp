@@ -33,7 +33,6 @@ class Channel;
 		QUIT,
 		PING,
 		INVALID,
-		// what else?
 	};
 
 class Server

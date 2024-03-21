@@ -30,7 +30,6 @@ static void sendQuitMsg(std::string message, Client *client, Channel *channel)
     {
         if(client != NULL && it->first == client->getNickName())
             continue;
-        // it->second->setSendbuf(message);
         send(it->second->getClientFd(), message.c_str(), message.length(), 0);
     }
     std::map<std::string, Client *>::iterator it2;
@@ -66,7 +65,6 @@ void cmdQuit(Message &msg, Client *Client, std::map<std::string, Channel*> &chan
             invitelist = channelIt->second->getInvitedList();
             if(channelIt->second->getClientList().size() == 0)
             {
-                std::cout << "Channel " << channelIt->second->getChannelName() << " deleted ";
                 delete (channelIt->second);
                 channelIt->second = NULL;
                 channels.erase(channelIt);

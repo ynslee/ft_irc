@@ -21,7 +21,6 @@ static void sendInviteMsg(std::string message, std::map<int, Client*> &clients, 
     {
         if(it->second->getNickName() == invited_nick)
         {
-            // it->second->setSendbuf(message);
             send(it->second->getClientFd(), message.c_str(), message.length(), 0);
             return ;
         }
