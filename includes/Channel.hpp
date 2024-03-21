@@ -31,7 +31,7 @@ class Channel
 		const std::string&				getChannelKey();
 		const std::string&					getTopic();
 		const std::string&				getMode();
-		const unsigned int&				getUserLimit();
+		unsigned int&							getUserLimit();
 		void							addToChannel(Client &client);
 		void							removeFromChannel(const std::string &nick);
 		void							addOperator(std::string clientNickName);

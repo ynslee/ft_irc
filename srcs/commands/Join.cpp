@@ -103,6 +103,11 @@ static int joinExistingServerWithoutKey(std::map<std::string, Channel*> &channel
 			}
 			if (checkIfClientExists(it->second->getClientList(), client->getNickName()) == true)
 				return (0);
+			if (channels[channelName]->getUserLimit() == static_cast<unsigned int>(channels[channelName]->getClientList().size()))
+			{
+				send(client->getClientFd(), ERR_CHANNELISFULL(client->getUserName(), channelName).c_str(), ERR_CHANNELISFULL(client->getUserName(), channelName).length(), 0);
+				return (-1);
+			}
 			client->setMaxChannels();
 			client->setNewChannel(channelName);
 			client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
@@ -141,6 +146,11 @@ static int joinExistingServerWithKey(std::map<std::string, Channel *> &channels,
 					return (0);
 				client->setMaxChannels();
 				client->setNewChannel(channelName);
+				if (channels[channelName]->getUserLimit() == static_cast<unsigned int>(channels[channelName]->getClientList().size()))
+				{
+					send(client->getClientFd(), ERR_CHANNELISFULL(client->getUserName(), channelName).c_str(), ERR_CHANNELISFULL(client->getUserName(), channelName).length(), 0);
+					return (-1);
+				}
 				client->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
 				if(channels[channelName]->getClientList().size() == 0)
 					channels[channelName]->addOperator(client->getNickName());
