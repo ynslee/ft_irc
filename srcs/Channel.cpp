@@ -31,7 +31,7 @@ const std::string&	Channel::getTopic() { return _topic; }
 
 const std::string&	Channel::getMode() { return _mode; }
 
-const unsigned int&	Channel::getUserLimit() { return _userLimit; }
+unsigned int&	Channel::getUserLimit() { return _userLimit; }
 
 void	Channel::addToChannel(Client &client)
 {
