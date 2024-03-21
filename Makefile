@@ -80,7 +80,7 @@ all: $(NAME)
 	@echo "$(COLOUR_GREEN)TYCHUNEN SERVER IS READY TO USE$(COLOUR_END)"
 
 $(NAME): $(OBJS)
-	@$(CC) $^ -o $@ -fsanitize=address
+	@$(CC) $^ -o $@ 
 
 ${OBJS} : ${DIR_OBJS}%.o : ${DIR_SRCS}%.cpp
 	@echo "$(COLOUR_BLUE)SERVER IS BUILDING UP NOW ......$(COLOUR_GREY)"
