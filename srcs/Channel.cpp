@@ -8,7 +8,6 @@ Channel::Channel(std::string const &name) : _channel(name), _mode("+nt"), _userL
 {
 
 	std::map<std::string, Client *>	_clientList;
-	// _kickedUsers.clear();
 	std::srand(std::time(0));
 	int randomise = rand();
 	if (randomise % 2 == 0)
@@ -17,14 +16,7 @@ Channel::Channel(std::string const &name) : _channel(name), _mode("+nt"), _userL
 	std::cout << "Channel " << GREEN << _channel << RESET << " created" << std::endl;
 }
 
-Channel::~Channel()
-{
-	// std::map<std::string, Client *>::iterator it;
-	// for (it=_clientList.begin(); it!=_clientList.end(); it++)
-	// {
-	// 	delete it->second;
-	// }
-}
+Channel::~Channel() {}
 
 std::map <std::string, Client *>&	Channel::getClientList() { return _clientList; }
 
@@ -64,19 +56,12 @@ void	Channel::addOperator(std::string clientNickName)
 	if (_operators.size() == 0)
 	{
 		_operators.push_back(clientNickName);
-		std::cout << "Now " << clientNickName << " is the operator of the channel" << std::endl;
 		return ;
 	}
 	std::vector<std::string>::iterator it = std::find(_operators.begin(), _operators.end(), clientNickName);
 	if(it == _operators.end())
 	{
 		_operators.push_back(clientNickName);
-		std::cout << "Now " << clientNickName << " is the operator of the channel" << std::endl;
-	}
-	std::vector<std::string>::iterator operators;
-	for(operators = _operators.begin(); operators != _operators.end(); operators++)
-	{
-		std::cout << "OPERATOR: " << *operators << std::endl;
 	}
 }
 
@@ -99,7 +84,6 @@ void	Channel::removeOperatorQuit(std::string clientNickName)
 		{
 			std::string nickname = _clientOrder.front()->getNickName();
 			_operators.push_back(nickname);
-			std::cout << nickname << " is the new operator of the channel" << std::endl;
 		}
 	}
 	else
@@ -114,15 +98,6 @@ void	Channel::removeOperatorQuit(std::string clientNickName)
 			}
 		}
 	}
-	if (_operators.empty() == false)
-	{
-		std::vector<std::string>::iterator operators;
-		for(operators = _operators.begin(); operators != _operators.end(); operators++)
-		{
-			std::cout << "OPERATOR: " << *operators << std::endl;
-		}
-		return ;
-	}
 }
 
 void	Channel::removeOperator(std::string clientNickName)
@@ -134,13 +109,7 @@ void	Channel::removeOperator(std::string clientNickName)
 		if(_operators.empty() == true && _clientOrder.size() > 1)
 		{
 			_operators.push_back(_clientOrder.front()->getNickName());
-			std::cout << _clientOrder.front()->getNickName() << " is the new operator of the channel" << std::endl;
 		}
-	}
-	std::vector<std::string>::iterator operators;
-	for(operators = _operators.begin(); operators != _operators.end(); operators++)
-	{
-		std::cout << "OPERATOR: " << *operators << std::endl;
 	}
 	return ;
 }
@@ -163,13 +132,11 @@ void	Channel::setMode(std::string mode, Client *client)
 		send(client->getClientFd(), ERR_UNKNOWNMODE(), strlen(ERR_UNKNOWNMODE()), 0);
 		return ;
 	}
-	std::cout << "**** OLD MODE CHANNEL: " << _mode << std::endl;
 	char modeFlag = mode[1];
 	if (mode[0] == '+' && isChannelFlag(mode) == false)
 		_mode += modeFlag;
 	if (mode[0] == '-' && isChannelFlag(mode) == true)
 			_mode.erase(std::remove(_mode.begin(), _mode.end(), modeFlag), _mode.end());
-	std::cout << "**** NEW MODE CHANNEL: " << _mode << std::endl;
 }
 
 void	Channel::setUserLimit(unsigned int newLimit)
@@ -177,7 +144,6 @@ void	Channel::setUserLimit(unsigned int newLimit)
 
 	if (newLimit <= 100)
 		_userLimit = newLimit;
-	std::cout << "In setUSerLimit, newLimit: " << _userLimit << std::endl;
 }
 
 void	Channel::addMode(std::string const mode)
@@ -241,7 +207,7 @@ bool Channel::isChannelFlag(std::string flag)
 	std::string currentMode = this->getMode();
 	size_t pos = 0;
 	pos = currentMode.find(flag[1]);
-	if (pos != 0 && pos != std::string::npos) //flagi loytyy
+	if (pos != 0 && pos != std::string::npos)
 		return true;
 	return false;
 }

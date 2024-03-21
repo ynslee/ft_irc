@@ -35,7 +35,6 @@ static void sendTopicMsg(std::string message, Channel *channel, Client *client, 
         {
             if(client != NULL && it->first == client->getNickName())
                 continue;
-            // it->second->setSendbuf(message);
             send(it->second->getClientFd(), message.c_str(), message.length(), 0);
         }
     }

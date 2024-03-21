@@ -31,7 +31,6 @@ void messageToChannelClients(Message &msg, std::string nickname, std::map<std::s
 		if (it->second->getNickName() != nickname)
 		{
 			std::string message = RPL_PRIVMSG(USER(nickname, it->second->getUserName(), it->second->getIPaddress()), msg.params[0], msg.trailing);
-			// it->second->setSendbuf(message);
 			send(it->second->getClientFd(), message.c_str(), message.length(), 0);
 		}
 	}

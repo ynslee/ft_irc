@@ -5,14 +5,11 @@
 
 class Client;
 
-// _clientlist[channelname] = client class
-//userlimit = user capacity limits in channel
 class Channel
 {
 	private:
 		std::map<std::string, Client *>	_clientList;
-		// std::vector<std::string>		_kickedUsers;
-		std::vector<std::string>		_operators; // nickname
+		std::vector<std::string>		_operators;
 		std::vector<std::string>		_invitedList;
 		std::vector<Client *>           _clientOrder;
 		std::string 					_channel;
@@ -28,7 +25,6 @@ class Channel
 
 		/*getters and setters*/
 		std::map <std::string, Client *>	&getClientList();
-		// std::vector<std::string>&		getKickedUsers();
 		std::vector<std::string>&		getChannelOperators();
 		std::vector<std::string>&		getInvitedList();
 		const std::string&				getChannelName();
@@ -38,8 +34,6 @@ class Channel
 		const unsigned int&				getUserLimit();
 		void							addToChannel(Client &client);
 		void							removeFromChannel(const std::string &nick);
-		// void							addToKicked(std::string &nick);
-		// void							removeFromKicked(std::string &nick);
 		void							addOperator(std::string clientNickName);
 		void							removeOperator(std::string operatoName);
 		void							removeOperatorQuit(std::string clientNickName);

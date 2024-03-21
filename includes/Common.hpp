@@ -40,6 +40,4 @@
 # define RESET "\033[0m"
 # define BOLD "\033[1m"
 
-// should we put all the header includes here too?
-
 #endif

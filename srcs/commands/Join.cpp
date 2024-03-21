@@ -64,7 +64,6 @@ static void successfulJoinMessage(Client *client, std::string channelName, Chann
 					prefixNick = "@" + it->second->getNickName();
 				else
 					prefixNick = it->second->getNickName();
-				// it->second->setSendbuf(RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()));
 				send(it->second->getClientFd(), RPL_JOIN(USER(clientNick, client->getUserName(), client->getIPaddress()), channelName, client->getRealName()).c_str(), RPL_JOIN(USER(client->getNickName(), client->getUserName(), client->getIPaddress()), channelName, client->getRealName()).length(), 0);
 				nickList += " " + prefixNick;
 			}
