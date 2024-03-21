@@ -26,6 +26,36 @@
  * Example : /NICK nickname
  */
 
+static void changeNickinChannels(Client *client, Server &server, std::string old_nick)
+{
+    std::vector<std::string>::iterator it;
+    for(it = client->getChannelsJoined().begin(); it < client->getChannelsJoined().end(); it++)
+    {
+        std::string channel_name = *it;
+        std::map<std::string, Channel*>::iterator channelIt = server.getChannels().find(channel_name);
+        if(channelIt != server.getChannels().end())
+        {
+            if(channelIt->second->isOperator(old_nick) ==  true)
+            {
+                channelIt->second->removeOperator(old_nick);
+                channelIt->second->addOperator(client->getNickName());
+            }
+            channelIt->second->getClientList().insert(std::make_pair(client->getNickName(), (client)));
+            channelIt->second->getClientList().erase(old_nick);
+        }
+    }
+    std::map<std::string, Channel*>::iterator iter2;
+    for(iter2 = server.getChannels().begin(); iter2 != server.getChannels().end(); iter2++)
+    {
+        std::vector<std::string>::iterator inviteIter = std::find(iter2->second->getInvitedList().begin(), iter2->second->getInvitedList().end(), old_nick);
+        if(inviteIter != iter2->second->getInvitedList().end())
+        {
+            iter2->second->getInvitedList().erase(inviteIter);
+            iter2->second->getInvitedList().push_back(client->getNickName());
+        }
+    }
+}
+
 int isValidnick(std::string new_nick)
 {
     if(!std::isalnum(new_nick[0]))
@@ -41,7 +71,7 @@ int isValidnick(std::string new_nick)
     return(0);
 }
 
-int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names)
+int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names, Server &server)
 {
     std::string hostname = Client->getHostName();
     std::string servername = Client->getServerName();
@@ -79,6 +109,7 @@ int cmdNick(Message &msg, Client *Client, std::vector<std::string> &nick_names)
         std::vector<std::string>::iterator it = std::find(nick_names.begin(),nick_names.end(), old_nick);
         nick_names.erase(it);
         nick_names.push_back(new_nick);
+		changeNickinChannels(Client, server, old_nick);
         send(Client->getClientFd(), NICK_REPLY(old_nick,Client->getUserName(),Client->getIPaddress(), new_nick).c_str(), NICK_REPLY(old_nick,Client->getUserName(),Client->getIPaddress(), new_nick).length(),0);
         return(0);
     }

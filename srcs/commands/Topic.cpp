@@ -68,7 +68,7 @@ int cmdTopic(Message &msg, Client *client, std::map<std::string, Channel*> &chan
         send(client->getClientFd(), ERR_NOTONCHANNEL(hostname,msg.params[0]).c_str(), ERR_NOTONCHANNEL(hostname,msg.params[0]).length(), 0);
         return(-1);
     }
-    if((channelIt->second->getMode().find('t') != std::string::npos) && !channelIt->second->isOperator(client->getNickName()))
+    if((channelIt->second->getMode().find('t') != std::string::npos) && !channelIt->second->isOperator(client->getNickName()) && msg.trailing_flag == 1)
     {
         send(client->getClientFd(), ERR_CHANOPRIVSNEEDED(msg.params[0]).c_str(), ERR_CHANOPRIVSNEEDED(msg.params[0]).length(), 0);
         return(-1);

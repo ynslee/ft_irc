@@ -82,10 +82,10 @@ int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 	}
 	if (msg.params[0][0] == '#' && msg.params.size() > 1)
 	{
+		std::string channelName = msg.params[0];
 		std::map<std::string, Channel*>::iterator it;
 		for (it = channels.begin(); it != channels.end(); it++)
 		{
-			std::string channelName = msg.params[0];
 			if (it->first == channelName)
 			{
 				std::string clientNick = Client->getNickName();
@@ -102,11 +102,18 @@ int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 							it->second->setChannelKey(msg.params[2]);
 						if (msg.params[1][0] == '-')
 							it->second->setChannelKey("");
+						return (0);
 					}
 					else if (msg.params[1][1] == 'o')
+					{
 						sendOperatorMessage(msg, it->second->getClientList(), it->second);
+						return (0);
+					}
 					else if (msg.params[1][1] == 'l')
+					{
 						changeUserLimit(msg, it->second);
+						return (0);
+					}
 				}
 				else
 				{
@@ -114,12 +121,9 @@ int cmdMode(Message &msg, Client *Client, std::map<std::string, Channel*> &chann
 					return (0);
 				}
 			}
-			else
-			{
-				send(Client->getClientFd(), ERR_NOSUCHCHANNEL(channelName).c_str(), ERR_NOSUCHCHANNEL(channelName).length(), 0);
-				return (-1);
-			}
 		}
+		send(Client->getClientFd(), ERR_NOSUCHCHANNEL(channelName).c_str(), ERR_NOSUCHCHANNEL(channelName).length(), 0);
+		return (-1);
 	}
-	return (0); // if command does not have # before channel name ignore command
+	return (0);
 }
